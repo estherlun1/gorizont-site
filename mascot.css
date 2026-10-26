@@ -1,0 +1,67 @@
+/* Маскоты и интерактивная режиссура */
+.mascot-host{position:fixed;z-index:80;left:clamp(8px,3vw,42px);bottom:10px;width:clamp(120px,13vw,190px);height:190px;pointer-events:none;display:flex;align-items:flex-end;transition:left .8s ease,bottom .5s ease,opacity .25s ease;}
+.mascot-host.is-hidden{opacity:0;visibility:hidden}
+.mascot-sprite{width:100%;height:100%;background-repeat:no-repeat;background-position:0 100%;background-size:800% 100%;image-rendering:auto;filter:drop-shadow(0 5px 3px #173a3020);transform-origin:bottom center;animation:mascot-idle 2.5s ease-in-out infinite;}
+.mascot-host.bear .mascot-sprite{background-image:url('assets/bear-wave.png');background-size:600% 100%;}
+.mascot-host.bear.walking .mascot-sprite{background-image:url('assets/bear-walk.png');background-size:800% 100%;animation:walk-frames .9s steps(7) infinite;}
+.mascot-host.bear.walk-right .mascot-sprite{background-image:url('assets/bear-walk-right.png');background-size:800% 100%;animation:walk-frames .9s steps(7) infinite;}
+.mascot-host.wolf .mascot-sprite{background-image:url('assets/wolf.png');background-size:auto 104%;background-position:bottom center;}
+.mascot-host.wolf.walking .mascot-sprite{background-image:url('assets/wolf-walk.png');background-size:800% 100%;background-position:0 100%;animation:walk-frames .95s steps(7) infinite;}
+.mascot-host.waving .mascot-sprite{animation:wave-frames 1.1s steps(5) 2,mascot-idle 2.5s 2.2s ease-in-out infinite;}
+.mascot-host.big{width:clamp(300px,48vw,620px);height:clamp(300px,54vw,620px);left:50%;bottom:0;transform:translateX(-50%);}
+.mascot-host.big .mascot-sprite{filter:drop-shadow(0 10px 8px #173a3030)}
+.mascot-bubble{position:absolute;left:calc(100% - 12px);bottom:75px;width:min(320px,62vw);padding:13px 16px;background:#fff;border:2px solid #dbe9d9;border-radius:18px 18px 18px 4px;box-shadow:0 8px 24px #163c3020;color:#183d35;font-size:13px;line-height:1.45;opacity:0;transform:translateY(8px) scale(.97);transition:opacity .25s ease,transform .25s ease;pointer-events:auto;}
+.mascot-bubble.show{opacity:1;transform:none}
+.mascot-bubble strong{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#188277;margin-bottom:3px}
+.mascot-bubble button{border:0;background:#edf6ef;border-radius:50%;width:24px;height:24px;float:right;margin:-4px -6px 0 8px;cursor:pointer;color:#194b41}
+.mascot-host.big .mascot-bubble{left:50%;bottom:calc(100% - 28px);transform:translate(-50%,8px);width:min(390px,78vw);border-radius:18px;text-align:center;font-size:15px}
+.mascot-host.big .mascot-bubble.show{transform:translate(-50%,0)}
+.mascot-host.big .mascot-sprite{background-image:url('assets/bear-wave.png');background-size:600% 100%;animation:wave-frames 1.1s steps(5) 2,mascot-idle 2.5s 2.2s ease-in-out infinite;}
+.mascot-host.wolf.big .mascot-sprite{background-image:url('assets/wolf-walk.png');background-size:800% 100%;animation:walk-frames 1s steps(7) 2,mascot-idle 2.5s 2.2s ease-in-out infinite;}
+.mascot-host.walking{animation:mascot-travel 1.1s ease-in-out;}
+.mascot-host.walking .mascot-bubble{opacity:0!important}
+.mascot-host .mascot-sprite{background-position:0 100%;}
+@keyframes walk-frames{from{background-position:0 100%}to{background-position:100% 100%}}
+@keyframes wave-frames{from{background-position:0 100%}to{background-position:100% 100%}}
+@keyframes mascot-idle{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes mascot-travel{0%{transform:translateX(0)}45%{transform:translateX(22px)}100%{transform:translateX(0)}}
+.mascot-host.big{pointer-events:none}.mascot-host.big .mascot-bubble{pointer-events:auto}
+.parent-gate{margin:72px 0 0;padding:34px 28px;text-align:center;border-radius:24px;background:linear-gradient(120deg,#fff4d9,#f2eafa);box-shadow:0 12px 35px #213e3014}
+.parent-gate h2{font-size:clamp(27px,4vw,42px);margin-bottom:10px}.parent-gate p{margin:0 auto 20px;max-width:560px;line-height:1.55}
+.parent-gate .btn{background:#a35d38}.parent-modal[hidden]{display:none}.parent-modal{position:fixed;inset:0;z-index:150;background:#102b28b8;display:grid;place-items:center;padding:20px}
+.parent-dialog{width:min(500px,100%);background:#fffaf0;border-radius:24px;padding:clamp(24px,5vw,42px);text-align:center;box-shadow:0 24px 80px #0004;animation:dialog-in .25s ease}
+.parent-dialog .parent-emoji{font-size:52px;margin-bottom:8px}.parent-dialog h2{font-size:30px;margin-bottom:14px}.parent-dialog p{line-height:1.55;margin-bottom:20px}.parent-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}.parent-actions button{font:600 14px Inter;border:0;border-radius:12px;padding:13px 18px;cursor:pointer}.parent-confirm{background:#0d5c57;color:#fff}.parent-cancel{background:#e9e6df;color:#263c38}.parent-count{font:700 58px Oswald;color:#0d5c57;margin:12px 0}.parent-dialog .fine{font-size:12px;color:#6a7772;margin-top:14px}
+.parent-gate .btn:focus-visible,.parent-actions button:focus-visible{outline:3px solid #e5a84b;outline-offset:3px}
+@keyframes dialog-in{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+#play .mascot-nudge{display:inline-block;margin-top:14px;font-size:13px;color:#e8fff5}
+#play.mascot-highlight{outline:4px solid #ffd56b;outline-offset:5px;animation:highlight-pulse 1.2s ease-in-out 2}
+@keyframes highlight-pulse{50%{box-shadow:0 0 0 12px #ffd56b35}}
+@media(max-width:600px){.mascot-host{left:4px;bottom:5px;width:118px;height:142px}.mascot-bubble{left:calc(100% - 8px);bottom:54px;width:min(200px,54vw);font-size:12px;padding:10px 12px}.mascot-host.big{width:min(88vw,520px);height:min(92vw,520px)}.parent-gate{padding:28px 20px;margin-top:48px}}
+@media(prefers-reduced-motion:reduce){.mascot-sprite,.mascot-host,.mascot-bubble,.parent-dialog{animation:none!important;transition:none!important}.mascot-host.walking{animation:none!important}}
+
+/* Совместная сцена: Медведь + Волк */
+.mascot-duo-wolf{
+ position:fixed;z-index:79;right:clamp(10px,5vw,72px);bottom:8px;
+ width:clamp(130px,14vw,195px);height:190px;pointer-events:none;
+ opacity:0;transform:translateX(34px) scale(.92);
+ filter:drop-shadow(0 6px 4px #173a3030);
+ transition:opacity .35s ease,transform .55s cubic-bezier(.2,.8,.2,1);
+}
+.mascot-duo-wolf.show{opacity:1;transform:translateX(0) scale(1)}
+.mascot-duo-wolf .duo-sprite{
+ width:100%;height:100%;background:url('assets/wolf.png') bottom center/auto 104% no-repeat;
+ animation:mascot-idle 2.5s ease-in-out infinite;
+}
+.mascot-duo-wolf.walking .duo-sprite{
+ background:url('assets/wolf-walk.png') 0 100%/800% 100% no-repeat;
+ animation:walk-frames .95s steps(7) infinite;
+}
+.mascot-duo-wolf.leaving{opacity:0;transform:translateX(55px) scale(.9)}
+@media(max-width:600px){
+ .mascot-duo-wolf{right:5px;width:128px;height:148px;bottom:5px}
+}
+
+.mascot-duo-wolf .duo-bubble{position:absolute;right:calc(100% - 8px);bottom:92px;width:min(300px,60vw);padding:12px 15px;background:#fff;border:2px solid #dbe9d9;border-radius:18px 18px 4px 18px;box-shadow:0 8px 24px #163c3020;color:#183d35;font-size:13px;line-height:1.45;opacity:0;transform:translateY(8px) scale(.97);transition:opacity .25s ease,transform .25s ease;text-align:left}
+.mascot-duo-wolf .duo-bubble.show{opacity:1;transform:none}
+.mascot-duo-wolf .duo-bubble strong{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#8b5b30;margin-bottom:3px}
+@media(max-width:600px){.mascot-duo-wolf .duo-bubble{right:calc(100% - 4px);bottom:78px;width:min(200px,54vw);font-size:12px}}

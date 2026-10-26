@@ -1,0 +1,34 @@
+/* ===== Один день в Горизонте ===== */
+.tl{list-style:none;padding:0;margin:20px 0 10px;position:relative}
+.tl::before{content:'';position:absolute;left:138px;top:20px;bottom:20px;width:4px;border-radius:2px;background:linear-gradient(#f2b84b,#118d84 45%,#a58be0 75%,#24384f)}
+.ev{display:grid;grid-template-columns:104px 68px 1fr;align-items:start;margin-bottom:18px}
+.ev .t{font:700 20px Oswald,sans-serif;justify-self:end;margin-top:6px;padding:8px 12px;background:#fff;color:var(--deep);border:2px solid var(--c);border-radius:10px;cursor:pointer;transition:background-color .18s ease,color .18s ease,transform .18s ease}
+.ev .t:hover{transform:scale(1.06)}
+.ev.open .t{background:var(--c);color:#fff}
+.dot{justify-self:center;z-index:1;width:46px;height:46px;border-radius:50%;background:#fff;border:4px solid var(--c);display:grid;place-items:center;font-size:22px;margin-top:2px}
+.body{padding-left:8px;min-width:0}
+.head{position:relative;display:flex;align-items:center;gap:14px;min-height:50px;cursor:pointer;padding-right:80px}
+.head h3{font-size:26px}
+.head small{display:block;font-size:13px;color:#5a6b6a;margin-top:4px;line-height:1.35}
+.peek{position:absolute;right:0;bottom:-6px;height:70px;width:auto;transform:rotate(-6deg);pointer-events:none}
+.ev.show .peek{animation:peek .6s .3s both}
+.more{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s ease}
+.ev.open .more{grid-template-rows:1fr}
+.more>div{overflow:hidden}
+.card-ev{margin-top:12px;background:#fff;border-radius:14px;border-left:6px solid var(--c);box-shadow:0 4px 16px #0001;padding:18px 20px}
+.card-ev p{font-size:15px;line-height:1.6;color:#2c3e3c}
+.photos{display:flex;flex-wrap:wrap;gap:12px;margin-top:14px}
+.photos img,.photos .ph{height:170px;width:auto;max-width:100%;border-radius:10px;object-fit:cover}
+.photos .ph{width:230px;display:grid;place-items:center;text-align:center;padding:10px;font-size:13px;color:#4a6a5c;background:linear-gradient(145deg,#cfe4d8,#9fc4b3)}
+.say-m{display:flex;align-items:center;gap:12px;margin-top:16px;background:var(--sand);border-radius:12px;padding:10px 14px;font-size:14px;line-height:1.4}
+.say-m img{height:76px;width:auto;flex:none}
+@keyframes peek{from{transform:translateY(40px) rotate(-6deg);opacity:0}to{transform:rotate(-6deg);opacity:1}}
+@media(max-width:860px){
+ .tl::before{left:88px}
+ .ev{grid-template-columns:62px 54px 1fr}
+ .ev .t{font-size:16px;padding:6px 8px}
+ .dot{width:38px;height:38px;font-size:18px}
+ .head{padding-right:54px}.head h3{font-size:21px}.peek{height:52px}
+ .photos img,.photos .ph{height:130px}.photos .ph{width:100%}
+}
+@media(prefers-reduced-motion:reduce){.more,.ev .t{transition:none}.ev.show .peek{animation:none}}

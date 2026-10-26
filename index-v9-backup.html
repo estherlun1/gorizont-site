@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Горизонт — оздоровительный центр, Клин</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="mascot.css">
+</head>
+<body id="top">
+<div class="wrap">
+ <header>
+  <a class="logo" href="index.html" aria-label="Горизонт — на главную"><img src="assets/logo.svg" alt="Оздоровительный центр Горизонт, Клин"></a>
+  <button class="menu-btn" id="navToggle" aria-label="Открыть меню" aria-expanded="false" aria-controls="mainNav">☰</button>
+  <nav id="mainNav">
+   <a href="#map">Карта</a><a href="guides.html">Вожатые</a><a href="stories.html">Истории</a><a href="#schedule">Расписание</a><a href="album.html">Галерея</a><a href="backpack.html">Рюкзак</a><a href="day.html">Один день</a><a href="#about">О лагере</a>
+  </nav>
+  <div class="age">Возраст<b>0+</b></div>
+ </header>
+
+ <section class="hero">
+  <div>
+   <h1>Твоё лето.<br>Твой горизонт.</h1>
+   <p>Приключения, которые<br>останутся с тобой навсегда.</p>
+   <a class="btn" href="#map">Исследовать лагерь →</a><a class="btn light" href="#schedule">Смотреть расписание</a>
+  </div>
+  <div class="hero-photo">
+   <div class="hero-img" role="img" aria-label="Дети и вожатый обнимаются в кругу"></div>
+   <div class="badge b1">Дальше<br>Больше</div>
+   <div class="badge b2">Друзья<br>Приключения<br>Впечатления</div>
+   <div class="badge b3">Территория твоих открытий</div>
+  </div>
+ </section>
+
+  <section class="play reveal" id="play">
+  <div>
+   <h2>Собери<br>свой рюкзак</h2>
+   <p>Узнай, что нужно взять с собой в лагерь, и проверь себя в игре!</p>
+   <a class="btn white" href="backpack.html">Играть →</a>
+  </div>
+  <div class="play-em" aria-hidden="true">🎒</div>
+ </section>
+
+ <section class="map reveal" id="map">
+  <div>
+   <h2>Карта<br>лагеря</h2>
+   <p>Исследуй каждый уголок и найди своё любимое место.</p>
+   <div class="seg" id="tabs" role="tablist" aria-label="Выбор лагеря">
+    <button class="on" role="tab" data-map="st">Стационарный лагерь</button>
+    <button role="tab" data-map="tent">Палаточный лагерь</button>
+   </div>
+   <button class="btn white sm" id="full">Открыть карту ⌖</button>
+  </div>
+  <div class="map-view">
+   <div class="stage" id="stage"></div>
+   <p class="cap" id="cap"></p>
+   <div class="chips" id="chips"></div>
+   <div class="zoom"><button id="zin" aria-label="Приблизить">+</button><button id="zout" aria-label="Отдалить">−</button><button id="zrs" aria-label="Сбросить масштаб">➤</button></div>
+  </div>
+ </section>
+
+ <section class="album reveal" id="guides">
+  <div><h2>Вожатые<br>и их суперсилы</h2><p>Наши вожатые не просто супер — у каждого своя уникальная сила!</p><a class="btn sm" href="guides.html">Познакомиться со всеми</a></div>
+  <div class="polas">
+   <figure class="pola"><img src="assets/masha.png" alt="Маша" loading="lazy"><span>Маша ⚡</span></figure>
+   <figure class="pola"><img src="assets/danya.png" alt="Даня" loading="lazy"><span>Даня 🧭</span></figure>
+   <figure class="pola"><img src="assets/katya.png" alt="Катя" loading="lazy"><span>Катя 💡</span></figure>
+  </div>
+ </section>
+
+ <section class="legend reveal" id="legends">
+  <div><h2>Истории<br>с Горизонта</h2><p>Волк и Медведь знают о лагере всё — вот что они рассказывают о сменах, дружбе и маленьких победах.</p><a class="btn teal sm" href="stories.html">Читать истории →</a></div>
+  <div class="notes">
+   <div class="note"><img src="assets/wolf.png" alt="Волк — маскот лагеря" loading="lazy"><h3>Волк</h3><small>Хранитель троп и ночных тайн.</small><a href="stories.html">Истории Волка →</a></div>
+   <div class="note"><img src="assets/bear.png" alt="Медведь — маскот лагеря" loading="lazy"><h3>Медведь</h3><small>Знаток леса и его секретов.</small><a href="stories.html">Истории Медведя →</a></div>
+  </div>
+  <div class="stamp">Следуй день за природой</div>
+ </section>
+
+ <section class="sec reveal" id="schedule">
+  <div><h2>Расписание<br>смен</h2><p class="lead">У каждой смены своя тема и своя история. Выбирай лагерь и даты.</p></div>
+  <div>
+   <div class="groups">
+    <div>
+     <h3>Стационарный лагерь</h3>
+     <div class="shifts g2">
+      <article class="shift"><em>1 смена</em><b>«Блогеры на Горизонте: Звёздное лето»</b><time>30.05.2026 – 19.06.2026</time></article>
+      <article class="shift"><em>2 смена</em><b>«Арт-путешествие: Краски лета!»</b><time>21.06.2026 – 11.07.2026</time></article>
+      <article class="shift"><em>3 смена</em><b>«Горизонт собирает друзей»</b><time>14.07.2026 – 03.08.2026</time></article>
+      <article class="shift"><em>4 смена</em><b>«Открывая горизонты будущего»</b><time>05.08.2026 – 25.08.2026</time></article>
+     </div>
+    </div>
+    <div>
+     <h3>Палаточный лагерь</h3>
+     <div class="shifts g3">
+      <article class="shift t"><em>1 смена</em><b>«Будущее начинается с нас»</b><time>16.06.2026 – 22.06.2026</time></article>
+      <article class="shift t"><em>2 смена</em><b>«Мы разные – мы вместе»</b><time>24.06.2026 – 30.06.2026</time></article>
+      <article class="shift t"><em>3 смена</em><b>«Горизонт талантов»</b><time>02.07.2026 – 08.07.2026</time></article>
+      <article class="shift t"><em>4 смена</em><b>«Творческий марафон»</b><time>10.07.2026 – 16.07.2026</time></article>
+      <article class="shift t"><em>5 смена</em><b>«Все мои друзья со мной»</b><time>18.07.2026 – 24.07.2026</time></article>
+      <article class="shift t"><em>6 смена</em><b>«Город мастеров»</b><time>26.07.2026 – 01.08.2026</time></article>
+      <article class="shift t"><em>7 смена</em><b>«Любимая смена Горизонта»</b><time>03.08.2026 – 09.08.2026</time></article>
+     </div>
+    </div>
+   </div>
+   <span class="tag">Каждый день — твоя история</span>
+  </div>
+ </section>
+
+ <section class="sec reveal" id="about">
+  <div><h2>О<br>лагере</h2></div>
+  <div>
+   <p class="lead" style="max-width:640px">«Горизонт» — летний лагерь на природе, где солнце встаёт раньше будильника, а расписание дня решают приключения. Лес, поляны, палатки, костры и сотни новых друзей — всё это ждёт тебя здесь каждое лето.</p>
+   <p class="lead" style="max-width:640px">У нас можно: пройти верёвочный парк, скатиться с тюбинговой горки, станцевать на настоящей сцене, придумать свою рок-группу из картона, сплести браслет дружбы у костра и узнать, что вожатые почти как вторая семья.</p>
+   <p class="lead" style="max-width:640px">Выбирай смену — стационарную или палаточную — и отправляйся открывать свой «Горизонт».</p>
+  </div>
+ </section>
+
+ <section class="album reveal" id="album">
+  <div><h2>Наш<br>фотоальбом</h2><p>Моменты, которые хочется пересматривать снова и снова.</p><a class="btn sm" href="album.html">Смотреть галерею</a></div>
+  <div class="polas">
+   <figure class="pola"><img src="assets/album-fire.jpg" alt="Костёр" loading="lazy"><span>Костёр</span></figure>
+   <figure class="pola"><img src="assets/album-fun.jpg" alt="Развлечения" loading="lazy"><span>Развлечения</span></figure>
+   <figure class="pola"><img src="assets/album-team.jpg" alt="Команда" loading="lazy"><span>Команда</span></figure>
+  </div>
+ </section>
+
+ <footer>
+  <div>
+   <span class="fname">Горизонт</span>
+   <div class="ftag">Муниципальный оздоровительный центр городского округа Клин</div>
+   <div class="soc">
+    <a href="https://vk.ru/gorizont_klin" target="_blank" rel="noopener" aria-label="ВКонтакте">VK</a>
+    <a href="https://t.me/GorizontOfi" target="_blank" rel="noopener" aria-label="Telegram"><svg viewBox="0 0 24 24"><path d="M21.5 3.5 2.6 10.8c-.9.3-.9 1.3 0 1.6l4.7 1.5 1.8 5.6c.2.6 1 .8 1.4.3l2.6-2.5 4.9 3.6c.6.4 1.3.1 1.5-.6L23 4.7c.2-.9-.7-1.5-1.5-1.2zM9.3 13.5l8.4-5.2-6.6 6.2-.3 3.3z"/></svg></a>
+    <a href="https://max.ru/id5020084209_gos" target="_blank" rel="noopener" aria-label="MAX">MAX</a>
+   </div>
+  </div>
+  <div class="par"><b>Для родителей</b><a href="#parent-portal" class="parent-shortcut">Важная информация<br>и документы →</a></div>
+ </footer>
+</div>
+<script src="script.js"></script>
+<script src="nav.js"></script>
+<script src="reveal.js"></script>
+<script src="mascot.js"></script>\n</body>
+</html>

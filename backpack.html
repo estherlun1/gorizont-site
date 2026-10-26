@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Игра «Собери рюкзак» — Горизонт</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">\n<link rel="stylesheet" href="mascot.css">
+<link rel="stylesheet" href="backpack.css">
+<style>
+body{background:#f8f6ef!important}.wrap{width:min(1500px,100%)!important;margin:0 auto!important;padding:18px clamp(12px,3vw,42px)!important;box-sizing:border-box}
+.game-only-bar{display:flex;justify-content:space-between;gap:12px;margin:0 0 18px}
+.game-only-bar a{color:#0d5c57;text-decoration:none;font-weight:800;background:#fff;border:1px solid #c9ddd5;border-radius:999px;padding:10px 16px}
+.page-top{display:none!important}.game{margin-top:0!important}
+</style></head>
+<body>
+<div class="wrap">
+
+ <div class="game-only-bar"><a href="games.html">← Все игры</a><a href="index.html">На главную</a></div>
+ <section class="game" id="game">
+  <div class="pile" id="left" aria-label="Вещи слева"></div>
+
+  <div class="bagcol">
+   <div class="bag" id="bag" aria-label="Рюкзак">
+    <svg viewBox="0 0 280 330" aria-hidden="true">
+     <path d="M95 42Q95 6 140 6T185 42" fill="none" stroke="#0a3f3d" stroke-width="14" stroke-linecap="round"/>
+     <rect x="10" y="30" width="260" height="295" rx="70" fill="#0d5c57"/>
+     <path d="M10 120Q10 30 140 30T270 120Q270 150 240 150H40Q10 150 10 120Z" fill="#a58be0"/>
+     <rect x="40" y="160" width="200" height="140" rx="28" fill="#0a3f3d"/>
+     <rect x="105" y="136" width="70" height="26" rx="8" fill="#ffe38a"/>
+    </svg>
+    <div class="stuff" id="stuff"></div>
+   </div>
+   <div class="side">
+    <div class="prog" role="progressbar" aria-label="Собрано вещей"><i id="bar"></i></div>
+    <p class="cnt">Собрано: <b id="cnt">0</b></p>
+    <div class="say" id="say" aria-live="polite"><img src="assets/wolf.png" alt=""><p id="sayTx"></p></div>
+   </div>
+  </div>
+
+  <div class="pile" id="right" aria-label="Вещи справа"></div>
+ </section>
+
+ <div class="win" id="win" role="dialog" aria-modal="true" aria-labelledby="winT" hidden>
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+  <div class="win-box">
+   <div class="win-em">🎒</div>
+   <h2 id="winT">Рюкзак собран!</h2>
+   <p>Ты готов к Горизонту!</p>
+   <a class="btn" href="index.html#map">Исследовать лагерь →</a>
+   <button class="btn light" id="again" type="button">Собрать ещё раз</button>
+  </div>
+ </div>
+</div>
+<script src="nav.js"></script>
+<script src="backpack.js"></script>
+\n</body>
+</html>
