@@ -157,6 +157,7 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
 .site-footer .parent-site-link{display:inline-flex;align-items:center;white-space:nowrap;padding:13px 20px;border-radius:16px;background:#fa7040;color:#fff;text-decoration:none;font-weight:800;border:0;cursor:pointer;transition:transform .2s,filter .2s}
 .site-footer .parent-site-link:hover{transform:translateY(-2px);filter:brightness(1.06)}
 @media(max-width:650px){.site-footer{align-items:flex-start;flex-direction:column}}
+
 </style>
 <style>
 
@@ -785,6 +786,29 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
   .day-horizon-dots button { min-width: 7px; min-height: 7px; }
 }
 
+/* Карточка без фотографии занимает всю ширину: пустого места под изображение нет. */
+.description.has-photo .desc-photo{display:block;}
+.description.no-photo .desc-photo{display:none;}
+.description.has-photo .desc-content{margin-left:116px;}
+.description.no-photo .desc-content{margin-left:0;}
+.description{box-sizing:border-box;}
+#huntTab{position:absolute;z-index:20;left:50%;bottom:18px;transform:translateX(-50%);border:0;border-radius:24px;background:#fff8e8;color:#3c2a18;box-shadow:0 5px 18px #2b1b1644;padding:10px 18px;cursor:pointer;font-weight:800;}
+#huntTab .hunt-tab-label{display:block;white-space:nowrap;}
+#huntTab .tab-panel{display:none;text-align:left;min-width:250px;}
+#huntTab.open{width:min(360px,92vw);border-radius:18px;}
+#huntTab.open .hunt-tab-label{display:none;}
+#huntTab.open .tab-panel{display:block;}
+.hunt-title,.hunt-copy,.counter{display:block;}
+.hunt-title{font-size:17px;margin-bottom:5px;}
+.hunt-copy{font-size:12px;line-height:1.4;margin-bottom:8px;}
+.hunt-items{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0;}
+.hunt-slot{display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:9px;background:#f1d9a7;border:1px solid #d3ad70;}
+.hunt-slot img{max-width:32px;max-height:32px;object-fit:contain;}
+.hunt-object{position:absolute;z-index:12;width:30px;height:30px;border:0;border-radius:50%;padding:3px;background:#fff6c9aa;cursor:pointer;transform:translate(-50%,-50%);filter:drop-shadow(0 2px 4px #24180c99);}
+.hunt-object img{width:100%;height:100%;object-fit:contain;}
+.hunt-object:hover{transform:translate(-50%,-50%) scale(1.35);}
+@media(max-width:700px){.description.has-photo .desc-content{margin-left:88px;} #huntTab{max-width:92vw;} .hunt-object{width:26px;height:26px;}}
+
 </style>
 </head>
 <body>
@@ -849,19 +873,19 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
   <div class="map-stage" id="mapStage">
     <img class="map-bg" src="assets/map/map.png" alt="Иллюстрированная карта стационарного и палаточного лагерей «Горизонт»">
 
-    <!-- Локации по новой схеме пользователя; координаты заданы относительно изображения карты. -->
-    <button class="map-hit" style="left:9%;top:29%" data-location="Зона спорта стационарного лагеря" data-photo="assets/map/zone-05-stationary-sports.jpg" data-text="Площадка для движения и командных игр на свежем воздухе." aria-label="Зона спорта стационарного лагеря"></button>
-    <button class="map-hit" style="left:24%;top:25%" data-location="Спальный корпус" data-text="Спальный корпус стационарного лагеря." aria-label="Спальный корпус"></button>
-    <button class="map-hit" style="left:30%;top:48%" data-location="Столовая и актовый зал" data-photo="assets/map/zone-04-stationary-dining.jpg" data-text="Здесь проходят общие сборы, мероприятия и приёмы пищи." aria-label="Столовая и актовый зал"></button>
-    <button class="map-hit" style="left:41%;top:53%" data-location="Зона отдыха" data-photo="assets/map/zone-08-rest-area.jpg" data-text="Уголок для спокойного отдыха на свежем воздухе." aria-label="Зона отдыха"></button>
-    <button class="map-hit" style="left:9%;top:64%" data-location="Зона охраны" data-text="Въезд на территорию стационарного лагеря и пост охраны." aria-label="Зона охраны"></button>
-    <button class="map-hit" style="left:54%;top:31%" data-location="Тюбинг" data-photo="assets/map/zone-07-tubing.jpg" data-text="Скорость, виражи и яркие эмоции на тюбинговой трассе!" aria-label="Тюбинг"></button>
-    <button class="map-hit" style="left:66%;top:39%" data-location="Костровая площадка" data-photo="assets/map/zone-02-campfire.jpg" data-text="Место для песен, игр и историй у огня." aria-label="Костровая площадка"></button>
-    <button class="map-hit" style="left:76%;top:28%" data-location="Зона спорта палаточного лагеря" data-photo="assets/map/zone-09-tent-sports.jpg" data-text="Площадка для волейбола и командных игр." aria-label="Зона спорта палаточного лагеря"></button>
-    <button class="map-hit" style="left:94%;top:31%" data-location="Верёвочный городок" data-photo="assets/map/zone-01-rope-park.jpg" data-text="Проверь ловкость и равновесие на верёвочных препятствиях." aria-label="Верёвочный городок"></button>
-    <button class="map-hit" style="left:70%;top:52%" data-location="Палаточный городок" data-photo="assets/map/zone-11-tent-town.jpg" data-text="Палатки, друзья по отряду и жизнь на природе." aria-label="Палаточный городок"></button>
-    <button class="map-hit" style="left:88%;top:52%" data-location="Большой шатёр и столовая" data-photo="assets/map/zone-10-big-tent.jpg" data-text="Просторный шатёр для общих встреч, занятий и приёмов пищи." aria-label="Большой шатёр и столовая"></button>
-    <button class="map-hit" style="left:83%;top:65%" data-location="Зона чистоты" data-text="Душевые и санитарная зона палаточного лагеря." aria-label="Зона чистоты"></button>
+    <!-- Интерактивные метки по расположению со схемы пользователя. -->
+    <button class="map-hit" style="left:12%;top:34%" data-location="Зона спорта" data-photo="assets/map/zone-05-stationary-sports.jpg" data-text="Открытая площадка для движения, спортивных игр и активного отдыха. Здесь можно играть в мяч, тренироваться и проводить командные соревнования на свежем воздухе." aria-label="Зона спорта"></button>
+    <button class="map-hit" style="left:36%;top:32%" data-location="Спальный корпус" data-text="Здесь живут участники смены: отдыхают после насыщенного дня, общаются с друзьями и набираются сил перед новыми приключениями." aria-label="Спальный корпус"></button>
+    <button class="map-hit" style="left:24%;top:51%" data-location="Столовая и актовый зал" data-photo="assets/map/zone-04-stationary-dining.jpg" data-text="Место, где собирается весь лагерь. Здесь проходят общие сборы и мероприятия, а ещё ребята приходят на завтрак, обед и ужин." aria-label="Столовая и актовый зал"></button>
+    <button class="map-hit" style="left:41%;top:56%" data-location="Зона отдыха" data-photo="assets/map/zone-08-rest-area.jpg" data-text="Уютный уголок на свежем воздухе, где можно посидеть с друзьями, поговорить, передохнуть между занятиями и просто насладиться летним днём." aria-label="Зона отдыха"></button>
+    <button class="map-hit" style="left:13%;top:68%" data-location="Зона охраны" data-text="Въезд на территорию лагеря и пост охраны. Здесь контролируют въезд и следят за безопасностью ребят и сотрудников." aria-label="Зона охраны"></button>
+    <button class="map-hit" style="left:58%;top:36%" data-location="Тюбинг" data-photo="assets/map/zone-07-tubing.jpg" data-text="Яркие спуски и виражи на тюбинговой трассе! Можно получить заряд эмоций и попробовать прокатиться ещё раз." aria-label="Тюбинг"></button>
+    <button class="map-hit" style="left:68%;top:46%" data-location="Костровая площадка" data-photo="assets/map/zone-02-campfire.jpg" data-text="Место вечерних встреч у огня: здесь поют песни, играют, делятся историями и создают самые тёплые воспоминания о смене." aria-label="Костровая площадка"></button>
+    <button class="map-hit" style="left:84%;top:32%" data-location="Зона спорта" data-photo="assets/map/zone-09-tent-sports.jpg" data-text="Спортивная площадка палаточного лагеря для волейбола, командных игр и весёлых соревнований на свежем воздухе." aria-label="Зона спорта"></button>
+    <button class="map-hit" style="left:96%;top:36%" data-location="Верёвочный городок" data-photo="assets/map/zone-01-rope-park.jpg" data-text="Верёвочные препятствия, мостики и задания на ловкость. Здесь можно проверить равновесие, смелость и поддержать друзей на маршруте." aria-label="Верёвочный городок"></button>
+    <button class="map-hit" style="left:73%;top:61%" data-location="Палаточный городок" data-photo="assets/map/zone-11-tent-town.jpg" data-text="Жизнь в палатках — это друзья по отряду, самостоятельность, свежий воздух и маленькие ежедневные приключения на природе." aria-label="Палаточный городок"></button>
+    <button class="map-hit" style="left:89%;top:61%" data-location="Большой шатёр и столовая" data-photo="assets/map/zone-10-big-tent.jpg" data-text="Просторный шатёр для общих встреч и занятий. Здесь можно собраться всем вместе и укрыться от солнца или непогоды, а рядом организовано питание." aria-label="Большой шатёр и столовая"></button>
+    <button class="map-hit" style="left:82%;top:75%" data-location="Зона чистоты" data-text="Санитарная зона палаточного лагеря с душевыми и местами для поддержания личной гигиены. Здесь можно освежиться после активного дня." aria-label="Зона чистоты"></button>
 
     <div class="description" id="description" aria-live="polite">
       <button class="close" aria-label="Закрыть" type="button">×</button>
@@ -871,6 +895,16 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
         <p id="descText"></p>
       </div>
     </div>
+    <button id="huntTab" type="button" aria-expanded="false" aria-label="Найди предметы">
+      <span class="hunt-tab-label">НАЙДИ ПРЕДМЕТЫ</span>
+      <span class="tab-panel">
+        <span class="hunt-title">Найди предметы на карте</span>
+        <span class="hunt-copy">Нажимай на спрятанные вещи и собери всю коллекцию!</span>
+        <span class="hunt-items" id="huntItems"></span>
+        <span class="counter" id="counter">Найдено: 0 из 8</span>
+      </span>
+    </button>
+    <div id="celebrationLayer" aria-hidden="true"></div>
   </div>
 </section>
 
@@ -1080,7 +1114,7 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
         btn.classList.add('active');
         descTitle.textContent=btn.dataset.location;
         descText.textContent=btn.dataset.text;
-        if(descPhoto){ if(btn.dataset.photo){descPhoto.src=btn.dataset.photo;descPhoto.alt=btn.dataset.location;} else {descPhoto.removeAttribute('src');descPhoto.alt='';} }
+        if(descPhoto){ if(btn.dataset.photo){descPhoto.src=btn.dataset.photo;descPhoto.alt=btn.dataset.location;plaque.classList.add('has-photo');plaque.classList.remove('no-photo');} else {descPhoto.removeAttribute('src');descPhoto.alt='';plaque.classList.remove('has-photo');plaque.classList.add('no-photo');} }
         plaque.classList.add('show','float');
       });
     });
