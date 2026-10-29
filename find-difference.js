@@ -1,0 +1,11 @@
+// Координаты в процентах от картинки; после утверждения пары их можно уточнить.
+const levels=[{title:'Домик у озера',total:7,spots:[
+{id:1,x:37,y:32,label:'Крыша домика'},{id:2,x:16,y:70,label:'Рюкзак у забора'},{id:3,x:75,y:75,label:'Лодка у причала'},{id:4,x:13,y:10,label:'Птица на ветке'},{id:5,x:17,y:53,label:'Столик у дома'},{id:6,x:92,y:14,label:'Чайки'},{id:7,x:24,y:90,label:'Цветы у камней'}]}];
+let levelIndex=0,found=new Set(),hinted=null;const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];const status=$('#status'),count=$('#found-count'),win=$('#win-panel');
+function render(){const level=levels[levelIndex];$('#level-title').textContent=level.title;$('#total-count').textContent=level.total;count.textContent=found.size;win.hidden=true;$$('.hotspots').forEach(layer=>{layer.innerHTML='';level.spots.forEach(s=>{const b=document.createElement('button');b.className='spot';b.type='button';b.style.left=s.x+'%';b.style.top=s.y+'%';b.setAttribute('aria-label','Проверить отличие: '+s.label);b.title=s.label;b.addEventListener('click',()=>checkSpot(s));layer.appendChild(b);});});syncFound();}
+function checkSpot(s){if(found.has(s.id))return;found.add(s.id);$$('.hotspots .spot').forEach((b,i)=>{if(levels[levelIndex].spots[i]?.id===s.id)b.classList.add('found');});count.textContent=found.size;status.textContent='Отличие найдено! '+s.label+'.';if(found.size===levels[levelIndex].total){status.textContent='Все отличия найдены!';win.hidden=false;}}
+function syncFound(){$$('.hotspots').forEach(layer=>[...layer.children].forEach((b,i)=>{if(levels[levelIndex].spots[i]&&found.has(levels[levelIndex].spots[i].id))b.classList.add('found')}));}
+$('#reset-btn').addEventListener('click',()=>{found.clear();hinted=null;render();status.textContent='Начали заново. Найди все '+levels[levelIndex].total+' отличий.';});
+$('#again-btn').addEventListener('click',()=>{$('#reset-btn').click();win.hidden=true;});
+$('#hint-btn').addEventListener('click',()=>{const left=levels[levelIndex].spots.filter(s=>!found.has(s.id));if(!left.length)return;hinted=left[0];$$('.hotspots .spot').forEach((b,i)=>{if(levels[levelIndex].spots[i]?.id===hinted.id)b.classList.add('hint');});status.textContent='Подсказка: присмотрись к области «'+hinted.label+'».';setTimeout(()=>$$('.spot.hint').forEach(b=>b.classList.remove('hint')),1800);});
+render();
