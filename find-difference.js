@@ -33,6 +33,23 @@ const levels = [
       { id: 6, x: 80.8, y: 79.0, label: 'Книга на столе' },
       { id: 7, x: 94.0, y: 75.8, label: 'Фонарь справа' }
     ]
+  },
+  {
+    title: 'Рыбалка у причала',
+    instruction: 'Найди 7 отличий между картинками',
+    total: 7,
+    imageA: 'assets/find-difference/level-3-a.jpg',
+    imageB: 'assets/find-difference/level-3-b.jpg',
+    alt: 'Дети на рыбацком мостике у озера',
+    spots: [
+      { id: 1, x: 88, y: 80, label: 'Лодка у причала' },
+      { id: 2, x: 8, y: 63, label: 'Рюкзак у дерева' },
+      { id: 3, x: 76, y: 72, label: 'Спасательный круг' },
+      { id: 4, x: 49, y: 73, label: 'Ведро на мостике' },
+      { id: 5, x: 80, y: 55, label: 'Утки на воде' },
+      { id: 6, x: 22, y: 9, label: 'Белка на площадке' },
+      { id: 7, x: 67, y: 34, label: 'Флаг у домика' }
+    ]
   }
 ];
 
