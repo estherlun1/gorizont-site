@@ -672,7 +672,7 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
 /* Legends board */
 #legends { position:relative; display:block; width:100vw; max-width:none; margin:0 0 0 calc(50% - 50vw); padding:0; overflow:hidden; line-height:0; }
 #legends .legends-board { position:relative; display:block; width:100%; margin:0 auto; aspect-ratio:1672/941; background:url('assets/legends/board-bg.png') center/100% 100% no-repeat; transition:transform .22s ease-out; will-change:transform; }
-#legends .legend-polaroid { position:absolute; left:50%; top:53%; width:37%; max-width:620px; height:auto; cursor:pointer; border:0; background:transparent; padding:0; transform:translate(-50%,-50%); transition:transform .28s ease,filter .28s ease; filter:drop-shadow(0 8px 9px #301b1055); z-index:3; }
+#legends .legend-polaroid { position:absolute; left:50%; top:52%; width:56%; max-width:900px; height:auto; cursor:pointer; border:0; background:transparent; padding:0; transform:translate(-50%,-50%); transition:transform .28s ease,filter .28s ease; filter:drop-shadow(0 8px 9px #301b1055); z-index:3; }
 #legends .legend-polaroid:hover,#legends .legend-polaroid:focus-visible { transform:translate(-50%,-53%) scale(1.035); filter:drop-shadow(0 12px 13px #1c100b75); z-index:5; outline:none; }
 #legends .legend-polaroid img { display:block;width:100%;height:auto; }
 #legends .legend-arrow { position:absolute; top:51%; width:6.3%; padding:0; border:0; background:transparent; cursor:pointer; z-index:20; transition:transform .22s ease,filter .22s ease; }
@@ -688,10 +688,10 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
 #legends .legend-modal {position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:22px;z-index:1001;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .25s ease}
 #legends .legend-modal.open,#legends .legend-modal-shade.open {opacity:1;visibility:visible}
 #legends .legend-modal.open {pointer-events:auto}
-#legends .legend-card {position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);width:min(920px,95vw);max-height:min(82vh,720px);overflow:auto;border-radius:26px;background:#fff3d9;box-shadow:0 24px 80px #0007;border:5px solid #e2bd7d; transform:translateY(18px) scale(.97);transition:transform .28s ease}
+#legends .legend-card {position:relative;display:flex;flex-direction:column;width:min(1080px,95vw);max-height:min(92vh,980px);overflow:auto;border-radius:26px;background:#fff3d9;box-shadow:0 24px 80px #0007;border:5px solid #e2bd7d; transform:translateY(18px) scale(.97);transition:transform .28s ease}
 #legends .legend-modal.open .legend-card {transform:translateY(0) scale(1)}
-#legends .legend-photo {width:100%;height:100%;min-height:330px;max-height:650px;object-fit:contain;background:#fff3d9;padding:10px;box-sizing:border-box}
-#legends .legend-copy {padding:clamp(24px,3vw,38px);align-self:center;color:#49301d}
+#legends .legend-photo {display:block;flex:0 0 auto;width:100%;max-width:none;height:auto;max-height:none;min-height:0;object-fit:contain;object-position:center;background:transparent;padding:0;margin:0;box-sizing:border-box}
+#legends .legend-copy {padding:clamp(24px,3vw,38px);align-self:stretch;color:#49301d}
 #legends .legend-copy h2 {font-size:clamp(24px,3vw,34px);line-height:1.1;margin:0 0 10px}
 #legends .legend-copy h3 {font-size:clamp(16px,1.7vw,20px);font-weight:500;line-height:1.35;margin:0 0 18px;color:#936a3d}
 #legends .legend-copy p {font-size:16px;line-height:1.7;margin:0;white-space:pre-line}
@@ -699,12 +699,12 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
 @media(max-width:700px){
  #legends{padding:0;margin-top:0}
  #legends .legends-board{width:100%;aspect-ratio:1672/1100;background-size:100% 100%;background-position:center}
- #legends .legend-polaroid{width:53%;top:55%;max-width:520px;} 
+ #legends .legend-polaroid{width:74%;top:52%;max-width:760px;} 
  #legends .legend-arrow{width:9%;top:55%}
  #legends .legend-arrow.left{left:1%}
  #legends .legend-arrow.right{right:1%}
- #legends .legend-card{grid-template-columns:1fr;max-height:88vh;width:min(520px,94vw);border-width:3px}
- #legends .legend-photo{height:240px;min-height:0}
+ #legends .legend-card{display:flex;flex-direction:column;max-height:92vh;width:min(760px,94vw);border-width:3px}
+ #legends .legend-photo{flex:0 0 auto;width:100%;max-width:none;height:auto;max-height:none;min-height:0;object-fit:contain;padding:0}
  #legends .legend-copy{padding:22px}
  #legends .legend-copy p{font-size:14px}
 }
@@ -1429,6 +1429,7 @@ const stories=[
   title:'След лесного хранителя',
   subtitle:'Тайна, рассказанная у вечернего костра',
   image:'assets/legends/story-moose.png',
+  modalImage:'assets/legends/story-moose-original.png',
   text:'Летом 2022 года, когда наш палаточный лагерь только начинал свою историю, на одном из вечерних огоньков директор Дмитрий Александрович Горячев поделился с нами тайной.\n\nОн рассказал, что по ночам бродит невидимый хранитель здешних мест — то ли величавый лесной лось, то ли благородный олень. Он оставляет свои следы. И если ранним утром найти на лесной тропинке этот след, прикоснуться к нему и загадать самое заветное желание — оно обязательно сбудется.\n\nЧто началось потом, сложно описать словами! Всю оставшуюся смену мы, дети, превратились в настоящих следопытов: на цыпочках обходили каждую полянку, разглядывали каждую мелочь и искали то самое чудо.\n\nИ знаете, мы ведь действительно нашли. Потому что лагерное чудо — это не просто след на земле, а та искренняя вера в сказку, которую взрослые так бережно подарили нам у ночного костра.'
  },
  {
@@ -1436,6 +1437,7 @@ const stories=[
   title:'Вожатское сердце',
   subtitle:'Маленький кусочек Горизонта всегда с тобой',
   image:'assets/legends/story-heart.png',
+  modalImage:'assets/legends/story-heart-original.png',
   text:'Вы замечали, почему вожатые так крепко обнимаются в последний день смены и иногда тайком вытирают слёзы?\n\nЕсть старая сказка о том, что в день разъезда вожатый отламывает от своего сердца по маленькому невидимому кусочку и прячет каждому ребёнку в кармашек куртки или прямо в ладошку.\n\nРебята уезжают домой: в разные города, школы, к своим урокам. Но если осенью или холодной зимой тебе вдруг станет одиноко, грустно или покажется, что опустились руки — просто приложи ладошку к груди и вспомни наш лагерь.\n\nТы сразу почувствуешь лёгкое, тёплое тук-тук. Это бьётся тот самый кусочек вожатского сердца из «Горизонта», который напоминает: «Ты не один. Тебя помнят, любят и очень ждут обратно».'
  }
 ];
@@ -1460,7 +1462,7 @@ function render(){
 }
 function openStory(story){
  const photo=document.getElementById('legendPhoto');
- photo.src=story.image;
+ photo.src=story.modalImage;
  photo.alt=story.title;
  document.getElementById('legendTitle').textContent=story.title;
  document.getElementById('legendSubtitle').textContent=story.subtitle;
