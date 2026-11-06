@@ -625,38 +625,45 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
 </style>
 
 <style id="counselors-block-css">
-.counselors-section{position:relative;width:100%;height:100svh;min-height:700px;overflow:hidden;background:#15251a;isolation:isolate}
-.counselors-stage{position:absolute;inset:0;overflow:hidden}
-.counselors-layer{position:absolute;inset:-1.5%;width:103%;height:103%;object-fit:cover;object-position:center;pointer-events:none;will-change:transform;transform:translate3d(0,0,0) scale(1.015)}
-.c-bg{z-index:1}.c-kids-back{z-index:2}.c-anya{z-index:3}.c-maxim{z-index:4}.c-lera{z-index:5}.c-ilya{z-index:6}.c-fire{z-index:7}.c-kids-front{z-index:8}
-.counselor-hit{position:absolute;z-index:20;padding:0;border:0;background:transparent;cursor:pointer;appearance:none;-webkit-tap-highlight-color:transparent}
-.counselor-hit:focus-visible{outline:3px solid rgba(255,244,185,.9);outline-offset:5px;border-radius:28px}
-.c-hit-anya{left:10%;top:17%;width:27%;height:62%}
-.c-hit-maxim{left:31%;top:22%;width:27%;height:58%}
-.c-hit-lera{left:64%;top:29%;width:24%;height:52%}
-.c-hit-ilya{right:2%;top:9%;width:20%;height:76%}
-.counselors-hint{position:absolute;z-index:19;left:50%;bottom:26px;transform:translateX(-50%);padding:10px 18px;border-radius:999px;background:rgba(35,61,40,.68);color:#fff9df;font:600 14px/1.2 Arial,sans-serif;letter-spacing:.02em;box-shadow:0 8px 25px rgba(0,0,0,.16);pointer-events:none;transition:opacity .4s}
+.counselors-section{position:relative;width:100%;height:100svh;min-height:680px;overflow:hidden;background:#18251e;isolation:isolate}
+.counselors-stage{position:absolute;inset:0;overflow:hidden;isolation:isolate}
+.counselors-layer{position:absolute;display:block;height:auto;max-width:none;pointer-events:none;user-select:none;-webkit-user-drag:none;will-change:transform}
+.counselors-layer.c-anya,.counselors-layer.c-maxim,.counselors-layer.c-lera,.counselors-layer.c-ilya{pointer-events:auto;cursor:pointer}
+.c-bg{z-index:1;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
+.c-kids-back{z-index:3;display:block;left:-1%;top:30%;width:20%;height:auto}
+.c-anya{z-index:6;left:33%;top:16%;width:22.5%;transform:none}
+.c-maxim{z-index:5;left:4%;top:27%;width:49%;transform:none}
+.c-lera{z-index:5;left:47%;top:22%;width:23%;transform:none}
+.c-ilya{z-index:5;left:68%;top:31%;width:24%;transform:none}
+.c-fire{z-index:3;display:block;right:-1%;top:29%;width:20%;height:auto}
+.c-kids-front{z-index:8;left:0;bottom:0;width:100%;height:auto}
+.counselors-stage:before{content:"";position:absolute;inset:0;z-index:3;pointer-events:none}
+.counselors-hint{position:absolute;z-index:19;left:50%;bottom:22px;transform:translateX(-50%);padding:10px 18px;border-radius:999px;background:rgba(35,45,31,.72);color:#fff9df;font:700 14px/1.2 Arial,sans-serif;letter-spacing:.02em;box-shadow:0 8px 25px rgba(0,0,0,.16);pointer-events:none;transition:opacity .4s}
 .counselors-section.is-open .counselors-hint{opacity:0}
-.counselors-shade{position:fixed;inset:0;z-index:100;background:rgba(8,14,9,.68);backdrop-filter:blur(2px);opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
+.counselors-shade{position:fixed;inset:0;z-index:100;background:rgba(8,14,9,.72);backdrop-filter:blur(3px);opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
 .counselors-modal{position:fixed;inset:0;z-index:110;display:flex;align-items:center;justify-content:center;padding:28px;pointer-events:none;opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
-.counselors-modal.open{opacity:1;visibility:visible;pointer-events:auto}
-.counselors-card{position:relative;width:min(1180px,94vw);height:min(760px,88vh);display:grid;grid-template-columns:46% 54%;align-items:center;gap:10px}
+.counselors-modal.open{display:flex;opacity:1;visibility:visible;pointer-events:auto}
+.counselors-card{position:relative;width:min(1180px,94vw);height:min(760px,88vh);display:grid;grid-template-columns:42% 58%;align-items:center;gap:10px}
 .counselors-person-wrap{height:100%;display:flex;align-items:flex-end;justify-content:center;transform:translateY(55px) scale(.82);opacity:0;transition:transform .55s cubic-bezier(.18,.9,.2,1),opacity .4s}
 .counselors-modal.open .counselors-person-wrap{transform:translateY(0) scale(1);opacity:1}
 .counselors-person{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;filter:drop-shadow(0 24px 35px rgba(0,0,0,.38))}
+.counselors-person.is-matvey{transform:scale(1.28);transform-origin:center bottom}
 .counselors-info{max-height:76vh;overflow:auto;padding:38px 42px;background:rgba(255,249,232,.98);border-radius:30px;box-shadow:0 28px 90px rgba(0,0,0,.32);transform:translateY(40px);opacity:0;transition:transform .45s .08s,opacity .45s .08s}
 .counselors-modal.open .counselors-info{transform:translateY(0);opacity:1}
 .counselors-name{margin:0 0 18px;color:#315c39;font-family:Oswald,Arial,sans-serif;font-size:clamp(36px,4.2vw,60px);line-height:1.05}
 .counselors-text{margin:0;font-size:18px;line-height:1.72;color:#332e26}
+.counselors-quote{margin:22px 0 0;padding:16px 20px;border-left:4px solid #f36f3d;background:#fff1d8;border-radius:0 16px 16px 0;color:#5a3b24;font:italic 17px/1.55 Georgia,serif}
 .counselors-close{position:absolute;right:-10px;top:-10px;width:50px;height:50px;border:0;border-radius:50%;background:#fff9e8;color:#315c39;font-size:32px;line-height:1;cursor:pointer;box-shadow:0 10px 28px rgba(0,0,0,.28);z-index:5}
-.counselors-close:hover{transform:scale(1.06)}
 @media(max-width:800px){
- .counselors-section{height:78svh;min-height:570px}
- .counselors-stage{min-width:0}
- .counselors-layer{width:125%;max-width:none;left:-12.5%;right:auto}
- .c-hit-anya{left:5%;top:18%;width:34%;height:60%}.c-hit-maxim{left:28%;top:22%;width:34%;height:57%}.c-hit-lera{left:59%;top:29%;width:31%;height:51%}.c-hit-ilya{right:0;top:10%;width:28%;height:73%}
- .counselors-hint{bottom:15px;font-size:12px;white-space:nowrap}
- .counselors-modal{padding:12px}.counselors-card{width:96vw;height:94vh;grid-template-columns:1fr;grid-template-rows:44% 56%;gap:8px;overflow:auto}.counselors-person-wrap{height:100%;min-height:220px}.counselors-person{max-height:100%;max-width:82%}.counselors-info{max-height:none;padding:25px 22px;border-radius:24px}.counselors-text{font-size:16px;line-height:1.55}.counselors-close{right:4px;top:4px;width:44px;height:44px;font-size:28px}
+ .counselors-section{height:82svh;min-height:620px}
+ .c-bg{object-fit:cover;object-position:center}
+ .c-anya{left:30%;top:16%;width:26%}
+ .c-maxim{left:1%;top:29%;width:57%}
+ .c-lera{left:46%;top:24%;width:30%}
+ .c-ilya{left:67%;top:34%;width:32%}
+ .c-kids-front{width:125%;left:-12.5%}
+ .counselors-hint{bottom:14px;font-size:12px;white-space:nowrap}
+ .counselors-modal{padding:12px}.counselors-card{width:96vw;height:94vh;grid-template-columns:1fr;grid-template-rows:42% 58%;gap:8px;overflow:auto}.counselors-person-wrap{height:100%;min-height:210px}.counselors-person{max-height:100%;max-width:82%}.counselors-info{max-height:none;padding:24px 21px;border-radius:24px}.counselors-text{font-size:16px;line-height:1.55}.counselors-quote{font-size:15px}.counselors-close{right:4px;top:4px;width:44px;height:44px;font-size:28px}
 }
 @media(prefers-reduced-motion:reduce){.counselors-layer,.counselors-person-wrap,.counselors-info{transition:none!important}}
 </style>
@@ -961,19 +968,12 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
 
 <section class="counselors-section" id="guides" aria-label="Вожатые">
   <div class="counselors-stage" id="counselorsStage">
-    <img class="counselors-layer c-bg" src="assets/counselors/bg.png" alt="Костровая площадка">
-    <img class="counselors-layer c-kids-back" src="assets/counselors/kids-back.png" alt="Дети на костровой площадке">
+    <img class="counselors-layer c-bg" src="assets/counselors/bg.png" alt="Закат у озера в лагере Горизонт">
     <img class="counselors-layer c-anya" src="assets/counselors/anya.png" alt="Вожатая Аня">
-    <img class="counselors-layer c-maxim" src="assets/counselors/maxim.png" alt="Вожатый Максим">
-    <img class="counselors-layer c-lera" src="assets/counselors/lera.png" alt="Вожатая Лера">
-    <img class="counselors-layer c-ilya" src="assets/counselors/ilya.png" alt="Вожатый Илья">
-    <img class="counselors-layer c-fire" src="assets/counselors/fire.png" alt="Костёр">
-    <img class="counselors-layer c-kids-front" src="assets/counselors/kids-front.png" alt="Дети у костра">
-
-    <button class="counselor-hit c-hit-anya" data-counselor="anya" aria-label="Открыть историю Ани"></button>
-    <button class="counselor-hit c-hit-maxim" data-counselor="maxim" aria-label="Открыть историю Максима"></button>
-    <button class="counselor-hit c-hit-lera" data-counselor="lera" aria-label="Открыть историю Леры"></button>
-    <button class="counselor-hit c-hit-ilya" data-counselor="ilya" aria-label="Открыть историю Ильи"></button>
+    <img class="counselors-layer c-maxim" src="assets/counselors/matvey.png" alt="Вожатый с гитарой">
+    <img class="counselors-layer c-lera" src="assets/counselors/polina.png" alt="Вожатая Полина">
+    <img class="counselors-layer c-ilya" src="assets/counselors/sonya.png" alt="Вожатая Соня">
+    <img class="counselors-layer c-kids-front" src="assets/counselors/foreground.png" alt="Дети собрались у костра">
     <div class="counselors-hint">нажми на вожатого — познакомимся поближе</div>
   </div>
 </section>
@@ -983,10 +983,9 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
   <div class="counselors-card">
     <button class="counselors-close" id="counselorsClose" type="button" aria-label="Закрыть">×</button>
     <div class="counselors-person-wrap"><img class="counselors-person" id="counselorsPerson" alt=""></div>
-    <article class="counselors-info"><h2 class="counselors-name" id="counselorsName"></h2><p class="counselors-text" id="counselorsText"></p></article>
+    <article class="counselors-info"><h2 class="counselors-name" id="counselorsName"></h2><p class="counselors-text" id="counselorsText"></p><blockquote class="counselors-quote" id="counselorsQuote" hidden></blockquote></article>
   </div>
 </div>
-
 
 <section id="legends" aria-label="Легенды Горизонта">
  <div class="legends-board" id="legendsBoard">
@@ -1354,16 +1353,61 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
   stage.addEventListener('pointerleave',()=>{px=py=0;if(!raf)raf=requestAnimationFrame(render)});
 
   const data={
-    anya:{name:'Аня',img:'assets/counselors/anya-cut.png',text:'Когда-то Аня сама приехала в «Горизонт» ребёнком. Она до сих пор помнит свой первый костёр, песни до темноты и то самое чувство, когда кажется, что смена должна длиться целое лето. Через несколько лет Аня вернулась уже вожатой. Она умеет замечать тех, кто сегодня немного загрустил, первой подойдёт, обнимет и найдёт слова, после которых становится легче. А ещё Аня отлично рисует и умеет так раскрасить лицо перед выступлением, что даже самый обычный костюм превращается в настоящий сценический образ. Говорят, если перед концертом кто-то говорит: «Я не смогу», — Аня просто улыбается: «Сможешь. Давай попробуем вместе».'},
-    maxim:{name:'Максим',img:'assets/counselors/maxim-cut.png',text:'В детстве Максим совсем не собирался становиться вожатым. Однажды родители предложили ему провести лето в лагере, чтобы попробовать себя в работе с детьми. Он согласился почти случайно. А потом случился первый костёр. Максим взял гитару, кто-то начал подпевать, кто-то отбивал ритм по лавке — и он понял, что попал именно туда, куда нужно. Теперь он знает десятки песен, умеет подобрать аккорды практически к любой истории и всегда носит с собой медиатор «на всякий случай». А если ребёнок стесняется выступать перед всеми, Максим садится рядом и говорит: «Давай сначала споём вдвоём».'},
-    lera:{name:'Лера',img:'assets/counselors/lera-cut.png',text:'Когда Лера впервые приехала в «Горизонт», она была уверена, что просто попробует поработать летом. Но лагерь быстро стал для неё местом, куда хочется возвращаться. Лера умеет радоваться так заразительно, что рядом начинают улыбаться даже самые серьёзные ребята. Она всегда знает, кого позвать в игру, кого посадить рядом с костром и кому сейчас особенно нужен тёплый чай. А ещё у Леры есть особый талант — превращать обычные лагерные мелочи в события. Зефир у костра, смешная история, внезапный конкурс или песня, которую все знают наизусть, — с ней всё это почему-то становится приключением.'},
-    ilya:{name:'Илья',img:'assets/counselors/ilya-cut.png',text:'В «Горизонт» Илья попал совсем не случайно. Когда-то сюда приехала его младшая сестра, а через несколько лет Илья решил попробовать себя в роли вожатого. Сначала он думал, что главное в работе — быть сильным, быстрым и уметь таскать тяжёлые вещи. Потом понял, что гораздо важнее другое. Илья умеет поддержать, когда что-то не получилось, спокойно объяснить сложное и первым прийти на помощь. Ну а если после насыщенного дня кому-то особенно хочется домой, Илья просто садится рядом и слушает. Правда, есть у него и суперспособность: обнимать так крепко, что грусть обычно сдаётся первой.'}
+    anya:{name:'Аня',img:'assets/counselors/anya.png',text:'Ещё недавно Аня сидела в отрядном кругу как ребёнок, а летом 2026 года впервые надела вожатский галстук — сразу после выпуска из нашей Школы вожатых. Она пришла в команду со свежим взглядом, бешеной отдачей и невероятным художественным вкусом: Аня превращает любой отрядный уголок или сценический грим в произведение искусства. Она не строит из себя строгого наставника, а становится для детей понимающим старшим другом, с которым не страшно пробовать новое, ошибаться и побеждать.'},
+    maxim:{name:'Матвей',img:'assets/counselors/matvey.png',text:'Абсолютный слэй нашего лагеря! Матвей прошёл путь от любимого вожатого до культорга «Горизонта», и теперь уровень движа зашкаливает на максимуме. Он на одной волне с ребятами: шарит за все актуальные тренды, мемы и звуки из ТикТока, а скучные сценарии обходит за километр. Если на сцене Матвей — зал гарантированно стоит на ушах! Он делает так, чтобы каждое лагерное шоу выглядело как топовый концерт, а каждый ребёнок чувствовал себя главной звездой.'},
+    lera:{name:'Полина',img:'assets/counselors/polina.png',text:'Человек-зажигалка, рядом с которой просто невозможно стоять на месте. Полина знает миллион игр, может раскачать даже самый сонный отряд и превратить уборку комнат в захватывающий квест. Она обожает командные победы и умеет создать такую сплочённость, что к концу смены все становятся лучшими друзьями. Её девиз: «Скучать будем дома, а здесь — зажигаем!»'},
+    ilya:{name:'Соня',img:'assets/counselors/sonya.png',text:'Соня в палаточном лагере с самого первого дня его открытия: каждое лето приезжала сюда ребёнком, а повзрослев, вернулась уже вожатой. Она знает, как развеять любую грусть на вечернем огоньке, а своей улыбкой и танцами умеет зажигать огонь даже в самых робких детских сердцах. Соня искренне верит, что в каждом ребёнке прячется звёздочка, которой просто нужно помочь засиять. А если новичок скучает по дому, она тепло обнимет и тихо скажет: «Не бойся, ты дома».',quote:'Когда-то «Горизонт» зажёг моё сердце, а теперь я каждый день зажигаю этот огонёк в глазах своих детей'}
   };
-  const modal=document.getElementById('counselorsModal'),shade=document.getElementById('counselorsShade'),person=document.getElementById('counselorsPerson'),name=document.getElementById('counselorsName'),text=document.getElementById('counselorsText');
-  function open(k){const p=data[k];if(!p)return;person.src=p.img;person.alt=p.name;name.textContent=p.name;text.textContent=p.text;modal.classList.add('open');shade.style.opacity='1';shade.style.visibility='visible';section.classList.add('is-open');document.body.style.overflow='hidden'}
-  function close(){modal.classList.remove('open');shade.style.opacity='0';shade.style.visibility='hidden';section.classList.remove('is-open');document.body.style.overflow=''}
-  stage.querySelectorAll('.counselor-hit').forEach(b=>b.addEventListener('click',()=>open(b.dataset.counselor)));
-  document.getElementById('counselorsClose').addEventListener('click',close);shade.addEventListener('click',close);document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+  const modal=document.getElementById('counselorsModal');
+  const shade=document.getElementById('counselorsShade');
+  const person=document.getElementById('counselorsPerson');
+  const name=document.getElementById('counselorsName');
+  const text=document.getElementById('counselorsText');
+  const quote=document.getElementById('counselorsQuote');
+  function open(k){
+    const p=data[k]; if(!p) return;
+    person.classList.toggle('is-matvey',k==='maxim');
+    person.src=p.img; person.alt=p.name;
+    name.textContent=p.name; text.textContent=p.text;
+    if(quote){quote.textContent=p.quote||'';quote.hidden=!p.quote;}
+    modal.classList.add('open'); shade.classList.add('open');
+    shade.style.opacity='1'; shade.style.visibility='visible';
+    section.classList.add('is-open'); document.body.style.overflow='hidden';
+  }
+  function close(){
+    modal.classList.remove('open'); shade.classList.remove('open');
+    shade.style.opacity='0'; shade.style.visibility='hidden';
+    section.classList.remove('is-open'); document.body.style.overflow='';
+  }
+  // Bind clicks directly to the four counselor portraits.
+  const hitImages = [
+    {el: stage.querySelector('.c-anya'), key: 'anya'},
+    {el: stage.querySelector('.c-maxim'), key: 'maxim'},
+    {el: stage.querySelector('.c-lera'), key: 'lera'},
+    {el: stage.querySelector('.c-ilya'), key: 'ilya'}
+  ].filter(item => item.el && data[item.key]);
+
+  hitImages.forEach(item=>{
+    item.el.style.pointerEvents='auto';
+    item.el.style.cursor='pointer';
+    item.el.setAttribute('role','button');
+    item.el.setAttribute('tabindex','0');
+    item.el.setAttribute('aria-label','Открыть описание: '+data[item.key].name);
+    item.el.addEventListener('click',e=>{
+      e.preventDefault();
+      e.stopPropagation();
+      open(item.key);
+    });
+    item.el.addEventListener('keydown',e=>{
+      if(e.key==='Enter' || e.key===' '){
+        e.preventDefault();
+        open(item.key);
+      }
+    });
+  });
+  document.getElementById('counselorsClose').addEventListener('click',close);
+  shade.addEventListener('click',close);
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
 })();
 </script>
 
