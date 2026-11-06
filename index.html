@@ -672,8 +672,8 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
 /* Legends board */
 #legends { position:relative; display:block; width:100vw; max-width:none; margin:0 0 0 calc(50% - 50vw); padding:0; overflow:hidden; line-height:0; }
 #legends .legends-board { position:relative; display:block; width:100%; margin:0 auto; aspect-ratio:1672/941; background:url('assets/legends/board-bg.png') center/100% 100% no-repeat; transition:transform .22s ease-out; will-change:transform; }
-#legends .legend-polaroid { position:absolute; width:19%; max-width:330px; height:auto; cursor:pointer; border:0; background:none; padding:0; transform:translate(-50%,-50%) rotate(var(--tilt,0deg)); transition:transform .28s ease,filter .28s ease; filter:drop-shadow(0 5px 4px #301b1040); z-index:2; }
-#legends .legend-polaroid:hover,#legends .legend-polaroid:focus-visible { transform:translate(-50%,-54%) rotate(0deg) scale(1.04); filter:drop-shadow(0 10px 10px #1c100b70); z-index:5; outline:none; }
+#legends .legend-polaroid { position:absolute; left:50%; top:53%; width:37%; max-width:620px; height:auto; cursor:pointer; border:0; background:transparent; padding:0; transform:translate(-50%,-50%); transition:transform .28s ease,filter .28s ease; filter:drop-shadow(0 8px 9px #301b1055); z-index:3; }
+#legends .legend-polaroid:hover,#legends .legend-polaroid:focus-visible { transform:translate(-50%,-53%) scale(1.035); filter:drop-shadow(0 12px 13px #1c100b75); z-index:5; outline:none; }
 #legends .legend-polaroid img { display:block;width:100%;height:auto; }
 #legends .legend-arrow { position:absolute; top:51%; width:6.3%; padding:0; border:0; background:transparent; cursor:pointer; z-index:20; transition:transform .22s ease,filter .22s ease; }
 #legends .legend-arrow:disabled { opacity:.38; cursor:default; filter:grayscale(.3); }
@@ -690,16 +690,16 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
 #legends .legend-modal.open {pointer-events:auto}
 #legends .legend-card {position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);width:min(920px,95vw);max-height:min(82vh,720px);overflow:auto;border-radius:26px;background:#fff3d9;box-shadow:0 24px 80px #0007;border:5px solid #e2bd7d; transform:translateY(18px) scale(.97);transition:transform .28s ease}
 #legends .legend-modal.open .legend-card {transform:translateY(0) scale(1)}
-#legends .legend-photo {width:100%;height:100%;min-height:330px;max-height:650px;object-fit:cover}
+#legends .legend-photo {width:100%;height:100%;min-height:330px;max-height:650px;object-fit:contain;background:#fff3d9;padding:10px;box-sizing:border-box}
 #legends .legend-copy {padding:clamp(24px,3vw,38px);align-self:center;color:#49301d}
 #legends .legend-copy h2 {font-size:clamp(24px,3vw,34px);line-height:1.1;margin:0 0 10px}
 #legends .legend-copy h3 {font-size:clamp(16px,1.7vw,20px);font-weight:500;line-height:1.35;margin:0 0 18px;color:#936a3d}
-#legends .legend-copy p {font-size:16px;line-height:1.7;margin:0}
+#legends .legend-copy p {font-size:16px;line-height:1.7;margin:0;white-space:pre-line}
 #legends .legend-close {position:absolute;right:12px;top:12px;width:42px;height:42px;border:0;border-radius:50%;background:#fff5e4;color:#53351e;font-size:30px;line-height:1;cursor:pointer;box-shadow:0 2px 10px #0002;z-index:2}
 @media(max-width:700px){
  #legends{padding:0;margin-top:0}
  #legends .legends-board{width:100%;aspect-ratio:1672/1100;background-size:100% 100%;background-position:center}
- #legends .legend-polaroid{width:27%;} 
+ #legends .legend-polaroid{width:53%;top:55%;max-width:520px;} 
  #legends .legend-arrow{width:9%;top:55%}
  #legends .legend-arrow.left{left:1%}
  #legends .legend-arrow.right{right:1%}
@@ -1415,42 +1415,74 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
 <script>
 (()=>{
 const board=document.getElementById('legendsBoard'); if(!board)return;
-board.addEventListener('pointermove',e=>{const r=board.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;board.style.transform=`translate3d(${x*-3}px,${y*-2}px,0)`});board.addEventListener('pointerleave',()=>{board.style.transform='translate3d(0,0,0)'});
-const overlayShade=document.getElementById('legendShade'), overlayModal=document.getElementById('legendModal');
+board.addEventListener('pointermove',e=>{
+ const r=board.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+ board.style.transform=`translate3d(${x*-3}px,${y*-2}px,0)`;
+});
+board.addEventListener('pointerleave',()=>{board.style.transform='translate3d(0,0,0)'});
+
+const modal=document.getElementById('legendModal');
+const shade=document.getElementById('legendShade');
 const stories=[
-{key:'first',title:'Первый день',subtitle:'Чемодан ещё в руках, а друзья уже рядом',thumb:'s-arrival-day.jpg',text:'В первый день все немного молчат: незнакомые лица, чужой актовый зал, чемодан на колёсиках между ног. Но проходит буквально час — и вот уже кто-то смеётся в голос, кто-то показывает фокус с телефоном соседа, а кто-то делится наклейками. К вечеру никто уже не помнит, что утром боялся зайти в комнату один. Так начинается каждая смена в «Горизонте» — с чемодана, волнения и первой в жизни лагерной дружбы.'},
-{key:'stage',title:'На сцене',subtitle:'Рок-группа, которую сделали из картона',thumb:'s-stage-rockband.jpg',text:'Гитары — из картона и скотча. Барабаны — из бумажных коробок. Причёски — в два раза больше головы. Отряд репетировал номер «Rock Never Dies» три дня, спорил, кто будет солистом, и переклеивал молнии на костюмах до полуночи. А потом вышел на сцену — и зал взорвался аплодисментами. Мальчик, который на первой репетиции боялся даже держать микрофон, в финале высоко поднял руку и допел последнюю строчку соло.'},
-{key:'ogonek',title:'Огонёк',subtitle:'Разговоры в темноте по кругу',thumb:'s-ogonek-candle.jpg',text:'«Огонёк» — это когда весь отряд садится в круг, свет выключен, и каждый говорит то, что не успел сказать за день: что было смешно, что было трудно, кому хочется сказать спасибо. Именно на огоньках чаще всего звучит фраза «а помните, как в начале смены мы вообще не разговаривали?» — и все понимают, насколько далеко успели зайти вместе.'},
-{key:'boats',title:'Творчество',subtitle:'Корабли воспоминаний',thumb:'s-ogonek-lights.jpg',text:'На финальном огоньке смены вожатые подготовили для своего отряда особенный сюрприз — их ждало море из ткани и гирлянд, а ещё бумага и ручки. Вожатые провели мастер-класс по складыванию корабликов из бумаги, на которых ребята писали впечатления о смене. Так даже самые робкие дети смогли рассказать о том, что им понравилось на смене, а кораблики с детскими рисунками и рассказами остались как память.'},
-{key:'victory',title:'Личная победа',subtitle:'Высота, которая перестала пугать',thumb:'g-swing.jpg',text:'Она боялась высоты с самого детства и на верёвочный парк пошла только потому, что весь отряд шёл вместе. На первом же этапе ноги дрожали, а инструктор терпеливо ждал внизу. До верхней площадки она дошла сама — под крики поддержки друзей снизу. Спустившись, первым делом сказала: «Записывайте меня на следующий заход».'},
-{key:'disco',title:'Дискотека',subtitle:'Синий свет и танцы до отбоя',thumb:'s-night-disco.jpg',text:'Вечерняя дискотека — момент, когда стеснение куда-то исчезает. Никто уже не следит, кто как танцует: важно, что все вместе, музыка гремит, а завтрашний подъём кажется где-то очень далеко. Именно на дискотеках чаще всего случаются знакомства, которые потом продолжаются весь учебный год в переписках «а помнишь Горизонт?».'},
-{key:'farewell',title:'Прощание',subtitle:'Когда вожатый становится почти родным',thumb:'album-hugging.jpg',text:'В последний день смены слёз обычно больше, чем в кино: обнимаются все — и дети, и вожатые. За три недели вожатый успевает стать тем, кто разбудит утром, выслушает вечером и разберётся, если что-то пошло не так — совсем как вторая семья. Прощаясь, ребята обычно обещают одно и то же: «Увидимся на следующей смене» — и почти всегда это обещание сдерживают.'},
-{key:'winter',title:'Зимний Горизонт',subtitle:'Горизонт не заканчивается летом',thumb:'s-winter-tubing.jpg',text:'Кто сказал, что лагерь — это только лето? Зимой та же тюбинговая трасса превращается в снежную горку, а ребята в ярких шапках визжат от восторга точно так же, как в июле. Снег другой, компания та же — дружба, которая случилась на Горизонте, не зависит от сезона.'},
-{key:'games',title:'Игры и конкурсы',subtitle:'Своя «Интуиция» на Горизонте',thumb:'s-talent-jury.jpg',text:'Лагерь играл в собственную версию телешоу — с номерками, тёмными очками и креслом ведущего. Правила порой сочинялись на ходу, а угадывать приходилось не только факты, но и настроение друг друга. Побеждает в таких играх обычно не самый умный или удачливый, а тот, кто громче всех смеётся над собственными ошибками — и в «Горизонте» это отлично умеют все.'},
-{key:'workshop',title:'Мастер-классы',subtitle:'Пульт, который изменил всё лето',thumb:'g-drone.jpg',text:'На мастер-классе по технике девочка впервые в жизни взяла в руки пульт от квадрокоптера — и это оказалось её призванием. Спрашивала мастера обо всём: как устроены моторы, как не падает квадрокоптер, как он распознаёт команды. В последние полчаса мастер-класса она уже сама объясняла технику новичкам — а те слушали её так же внимательно, как она сама слушала в начале.'},
-{key:'traditions',title:'Традиции',subtitle:'Что останется после?',thumb:'album-biser.jpg',text:'Уезжать из лагеря всегда грустно. Поэтому в «Горизонте» есть очень подбадривающая традиция — дарить обнимашки! В конце смены вы обмениваетесь «обнимашками», благодарите друзей и вожатых за время, которое они провели с вами и, конечно, обнимаетесь. Домой с вами едет ожерелье, обвязанное ниточками, каждая из которых хранит память о ком-то ценном, чью-то благодарность и объятие.'}
+ {
+  key:'story-moose',
+  title:'След лесного хранителя',
+  subtitle:'Тайна, рассказанная у вечернего костра',
+  image:'assets/legends/story-moose.png',
+  text:'Летом 2022 года, когда наш палаточный лагерь только начинал свою историю, на одном из вечерних огоньков директор Дмитрий Александрович Горячев поделился с нами тайной.\n\nОн рассказал, что по ночам бродит невидимый хранитель здешних мест — то ли величавый лесной лось, то ли благородный олень. Он оставляет свои следы. И если ранним утром найти на лесной тропинке этот след, прикоснуться к нему и загадать самое заветное желание — оно обязательно сбудется.\n\nЧто началось потом, сложно описать словами! Всю оставшуюся смену мы, дети, превратились в настоящих следопытов: на цыпочках обходили каждую полянку, разглядывали каждую мелочь и искали то самое чудо.\n\nИ знаете, мы ведь действительно нашли. Потому что лагерное чудо — это не просто след на земле, а та искренняя вера в сказку, которую взрослые так бережно подарили нам у ночного костра.'
+ },
+ {
+  key:'story-heart',
+  title:'Вожатское сердце',
+  subtitle:'Маленький кусочек Горизонта всегда с тобой',
+  image:'assets/legends/story-heart.png',
+  text:'Вы замечали, почему вожатые так крепко обнимаются в последний день смены и иногда тайком вытирают слёзы?\n\nЕсть старая сказка о том, что в день разъезда вожатый отламывает от своего сердца по маленькому невидимому кусочку и прячет каждому ребёнку в кармашек куртки или прямо в ладошку.\n\nРебята уезжают домой: в разные города, школы, к своим урокам. Но если осенью или холодной зимой тебе вдруг станет одиноко, грустно или покажется, что опустились руки — просто приложи ладошку к груди и вспомни наш лагерь.\n\nТы сразу почувствуешь лёгкое, тёплое тук-тук. Это бьётся тот самый кусочек вожатского сердца из «Горизонта», который напоминает: «Ты не один. Тебя помнят, любят и очень ждут обратно».'
+ }
 ];
-const positions=[
-[30,34,-4],[50,34,3],[70,34,-3],
-[30,67,3],[50,67,-3],[70,67,4]
-];
-let page=0;
+
+let activeStory=0;
 function render(){
- board.querySelectorAll('.legend-polaroid').forEach(e=>e.remove());
- const start=page*6, items=stories.slice(start,start+6);
- items.forEach((s,i)=>{
-  const pos=positions[i],b=document.createElement('button');b.className='legend-polaroid';b.type='button';b.style.left=pos[0]+'%';b.style.top=pos[1]+'%';b.style.setProperty('--tilt',pos[2]+'deg');b.setAttribute('aria-label','Открыть историю: '+s.title);
-  const im=document.createElement('img');im.src='assets/legends/'+s.key+'.png';im.alt=s.title;b.appendChild(im);b.addEventListener('click',()=>openStory(s));board.appendChild(b);
- });
- const maxPage=Math.ceil(stories.length/6);document.getElementById('legendPrev').disabled=page===0;document.getElementById('legendNext').disabled=page>=maxPage-1;
+ board.querySelectorAll('.legend-polaroid').forEach(el=>el.remove());
+ const story=stories[activeStory];
+ const button=document.createElement('button');
+ button.className='legend-polaroid';
+ button.type='button';
+ button.setAttribute('aria-label','Открыть легенду: '+story.title);
+ const image=document.createElement('img');
+ image.src=story.image;
+ image.alt=story.title;
+ image.draggable=false;
+ button.appendChild(image);
+ button.addEventListener('click',()=>openStory(story));
+ board.appendChild(button);
+ document.getElementById('legendPrev').disabled=activeStory===0;
+ document.getElementById('legendNext').disabled=activeStory===stories.length-1;
 }
-const modal=document.getElementById('legendModal'),shade=document.getElementById('legendShade');
-function openStory(s){document.getElementById('legendPhoto').src='assets/'+s.thumb;document.getElementById('legendPhoto').alt=s.title;document.getElementById('legendTitle').textContent=s.title;document.getElementById('legendSubtitle').textContent=s.subtitle;document.getElementById('legendText').textContent=s.text;modal.classList.add('open');shade.classList.add('open');document.body.style.overflow='hidden'}
-function close(){modal.classList.remove('open');shade.classList.remove('open');document.body.style.overflow=''}
-document.getElementById('legendPrev').addEventListener('click',()=>{if(page>0){page--;render()}});
-document.getElementById('legendNext').addEventListener('click',()=>{if(page<Math.ceil(stories.length/6)-1){page++;render()}});
-document.getElementById('legendClose').addEventListener('click',close);shade.addEventListener('click',close);
-document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+function openStory(story){
+ const photo=document.getElementById('legendPhoto');
+ photo.src=story.image;
+ photo.alt=story.title;
+ document.getElementById('legendTitle').textContent=story.title;
+ document.getElementById('legendSubtitle').textContent=story.subtitle;
+ document.getElementById('legendText').textContent=story.text;
+ modal.classList.add('open');
+ shade.classList.add('open');
+ document.body.style.overflow='hidden';
+}
+function closeStory(){
+ modal.classList.remove('open');
+ shade.classList.remove('open');
+ document.body.style.overflow='';
+}
+document.getElementById('legendPrev').addEventListener('click',()=>{
+ if(activeStory>0){activeStory--;render();}
+});
+document.getElementById('legendNext').addEventListener('click',()=>{
+ if(activeStory<stories.length-1){activeStory++;render();}
+});
+document.getElementById('legendClose').addEventListener('click',closeStory);
+shade.addEventListener('click',closeStory);
+document.addEventListener('keydown',event=>{if(event.key==='Escape')closeStory();});
 render();
 })();
 </script>
