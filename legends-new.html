@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Легенды Горизонта — новая читалка</title>
+<style>
+:root{--gold:#e8bd70;--ink:#422718;--paper:#f8e6bd}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Georgia,"Times New Roman",serif;color:var(--ink)}
+body{background:#29190f}
+.scene{position:relative;min-height:100svh;overflow:hidden;background:#352116}
+.table-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
+.shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(28,15,7,.08),rgba(28,15,7,.25))}
+.heading{position:absolute;z-index:2;top:8.5%;left:50%;transform:translateX(-50%);text-align:center;color:#ffe1a1;text-shadow:0 3px 7px #321708;white-space:nowrap}
+.heading small{display:block;font:700 11px/1.4 Arial,sans-serif;letter-spacing:.28em;text-transform:uppercase;margin-bottom:5px}
+.heading h1{font-size:clamp(27px,4vw,48px);margin:0}
+.desk-stack{position:absolute;z-index:2;width:min(66vw,960px);left:50%;top:52%;transform:translate(-50%,-48%);transition:transform .8s cubic-bezier(.2,.75,.2,1),opacity .5s;filter:drop-shadow(0 20px 18px #1b0e08aa)}
+.stack-img{width:100%;display:block}
+.preview{position:absolute;width:88%;height:80%;left:6%;top:8%;object-fit:contain;filter:drop-shadow(0 8px 8px #4a260c55);transition:transform .35s;cursor:pointer}
+.preview:hover{transform:translateY(-7px) rotate(-.4deg)}
+
+.read-btn{position:absolute;z-index:5;bottom:5.5%;left:50%;transform:translateX(-50%);border:2px solid #f4d18e;border-radius:999px;background:linear-gradient(#9d5527,#673116);color:#fff1d1;padding:14px 34px;font:700 16px Arial,sans-serif;box-shadow:0 5px 0 #3a1d0e,0 9px 18px #160b07aa;cursor:pointer;transition:.2s}
+.read-btn:hover{transform:translateX(-50%) translateY(-3px);filter:brightness(1.12)}
+.reader{position:absolute;z-index:10;inset:0;display:block;visibility:hidden;opacity:0;pointer-events:none;perspective:1800px;background:rgba(21,11,5,.15);transition:opacity .7s ease,visibility 0s linear .7s}
+.reader.open{visibility:visible;opacity:1;pointer-events:auto;transition:opacity .7s ease,visibility 0s}
+.reader .table-bg{filter:brightness(.88) blur(1px);transform:scale(1.02);transition:transform .85s ease,filter .85s ease}
+.reader:after{content:"";position:absolute;inset:0;background:rgba(20,10,4,.28)}
+.reader-top{position:absolute;z-index:3;top:20px;left:26px;right:26px;display:flex;align-items:center;justify-content:space-between;color:#ffedca;font:14px Arial,sans-serif;text-shadow:0 2px 5px #1d0d04}
+.back-btn,.close-btn{border:1px solid #e6bd7b;background:#6b371c;color:#fff0d0;border-radius:30px;padding:10px 17px;cursor:pointer;font:600 14px Arial,sans-serif}
+.reader-book{position:absolute;z-index:2;left:50%;top:51%;width:min(88vw,1450px);transform:translate(-50%,-50%) scale(.88);opacity:0;transition:transform .85s cubic-bezier(.18,.78,.2,1),opacity .6s;filter:drop-shadow(0 24px 28px #140a06aa)}
+.reader.open .reader-book{transform:translate(-50%,-50%) scale(1);opacity:1}.reader.open .table-bg{transform:scale(1.1);filter:brightness(.72) blur(1.5px)}
+.spread{position:relative;width:100%;aspect-ratio:3/2;transform-style:preserve-3d}
+.spread-img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
+.spread-img.base{filter:drop-shadow(0 0 2px #48230f)}
+.flip-page{position:absolute;right:0;top:0;width:50%;height:100%;transform-origin:left center;transform-style:preserve-3d;pointer-events:none}
+.flip-page.turning{animation:turn .85s cubic-bezier(.55,.05,.35,1) forwards}
+.flip-front,.flip-back{position:absolute;inset:0;overflow:hidden;backface-visibility:hidden;background:#f5dfb4}
+.flip-front img,.flip-back img{position:absolute;top:0;width:200%;height:100%;object-fit:fill;max-width:none}
+.flip-front img{left:-100%}
+.flip-back{transform:rotateY(180deg);box-shadow:inset 8px 0 18px #6c3d1b33}
+.flip-back img{left:0}
+@keyframes turn{0%{transform:rotateY(0)}45%{filter:brightness(.82)}100%{transform:rotateY(-180deg)}}
+.reader-controls{position:absolute;z-index:5;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 6vw;pointer-events:none}
+.reader-controls button{pointer-events:auto;width:48px;height:48px;border-radius:50%;border:1px solid #eac27e;background:#7b421fdd;color:#fff0d0;font-size:25px;cursor:pointer;box-shadow:0 4px 10px #170a05aa}
+.reader-controls button:hover{background:#a35a2a}
+
+.corner{position:absolute;z-index:4;top:0;width:50%;height:100%;cursor:pointer}
+.corner.left{left:0}.corner.right{right:0}
+.corner:after{display:none}
+@media(max-width:700px){
+ .heading{top:8%}.desk-stack{width:94vw;top:48%}.read-btn{bottom:8%;padding:12px 25px;font-size:14px}
+ .reader-book{width:98vw;top:49%}.reader-top{top:12px;left:12px;right:12px}.back-btn,.close-btn{padding:8px 11px;font-size:12px}.reader-controls{padding:0 1vw}.reader-controls button{width:42px;height:42px}
+}
+</style>
+</head>
+<body>
+<main class="scene" id="scene">
+ <img class="table-bg" src="assets/legends-reader/table-bg.png" alt="">
+ <div class="shade"></div>
+ <header class="heading"><small>Истории, которые остаются с нами</small><h1>Легенды Горизонта</h1></header>
+ <section class="desk-stack" id="stack" aria-label="Стопка комиксов">
+  <img class="stack-img" src="assets/legends-reader/paper-stack.png" alt="">
+  <img class="preview" id="preview" src="assets/legends-reader/preview-deer.png" alt="Превью комикса">
+ </section>
+ <button class="read-btn" id="read">Читать историю</button>
+ <section class="reader" id="reader" aria-label="Читалка комиксов">
+  <img class="table-bg" src="assets/legends-reader/table-bg.png" alt=""><div class="reader-top"><button class="back-btn" id="back">← К стопке историй</button><button class="close-btn" id="close">Закрыть ✕</button></div>
+  <div class="reader-book"><div class="spread" id="spread">
+   <img class="spread-img base" id="currentSpread" src="assets/legends-reader/comic-deer.png" alt="Комикс">
+   <div class="flip-page" id="flip"><div class="flip-front"><img id="flipFront" src="assets/legends-reader/comic-deer.png" alt=""></div><div class="flip-back"><img id="flipBack" src="assets/legends-reader/comic-heart.png" alt=""></div></div>
+   <div class="corner left" id="prevArea" title="Предыдущая история"></div><div class="corner right" id="nextArea" title="Следующая история"></div>
+  </div></div>
+  <div class="reader-controls"><button id="prev" aria-label="Предыдущая история">‹</button><button id="next" aria-label="Следующая история">›</button></div>
+ </section>
+</main>
+<script>
+const stories=[
+ {title:"След лесного хранителя",preview:"assets/legends-reader/preview-deer.png",comic:"assets/legends-reader/comic-deer.png"},
+ {title:"Вожатское сердце",preview:"assets/legends-reader/preview-heart.png",comic:"assets/legends-reader/comic-heart.png"}
+];
+let active=0, busy=false;
+const $=id=>document.getElementById(id);
+function paint(){
+ $('preview').src=stories[active].preview;
+ $('currentSpread').src=stories[active].comic;
+}
+function openReader(){paint();$('reader').classList.add('open');}
+function closeReader(){$('reader').classList.remove('open');}
+function turn(dir){
+ if(busy)return;
+ const next=active+dir;if(next<0||next>=stories.length)return;
+ busy=true;
+ const current=stories[active].comic, target=stories[next].comic;
+ $('flip').classList.remove('turning');
+ $('flipFront').src=current;
+ $('flipBack').src=target;
+ $('flip').style.display='block';
+ void $('flip').offsetWidth;
+ $('flip').classList.add('turning');
+ setTimeout(()=>{active=next;paint();$('flip').classList.remove('turning');$('flip').style.display='none';busy=false;},870);
+}
+$('read').addEventListener('click',openReader);
+$('back').addEventListener('click',closeReader);
+$('close').addEventListener('click',closeReader);
+$('next').addEventListener('click',()=>turn(1));
+$('prev').addEventListener('click',()=>turn(-1));
+$('nextArea').addEventListener('click',()=>turn(1));
+$('prevArea').addEventListener('click',()=>turn(-1));
+$('preview').addEventListener('click',openReader);
+$('flip').style.display='none';
+document.addEventListener('keydown',e=>{if(!$('reader').classList.contains('open'))return;if(e.key==='Escape')closeReader();if(e.key==='ArrowRight')turn(1);if(e.key==='ArrowLeft')turn(-1);});
+</script>
+</body></html>
