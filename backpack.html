@@ -35,7 +35,7 @@ body{background:#f8f6ef!important}.wrap{width:min(1500px,100%)!important;margin:
    <div class="side">
     <div class="prog" role="progressbar" aria-label="Собрано вещей"><i id="bar"></i></div>
     <p class="cnt">Собрано: <b id="cnt">0</b></p>
-    <div class="say" id="say" aria-live="polite"><img src="assets/wolf.png" alt=""><p id="sayTx"></p></div>
+    <div class="say" id="say" aria-live="polite"><img src="assets/wolf.webp" alt=""><p id="sayTx"></p></div>
    </div>
   </div>
 
@@ -55,5 +55,26 @@ body{background:#f8f6ef!important}.wrap{width:min(1500px,100%)!important;margin:
 </div>
 <script src="nav.js"></script>
 <script src="backpack.js"></script>
-\n</body>
+\n
+<script>
+/* Pause decorative CSS animations in background tabs and distant sections. */
+(() => {
+  const root = document.documentElement;
+  const syncVisibility = () => root.classList.toggle('is-page-hidden', document.hidden);
+  document.addEventListener('visibilitychange', syncVisibility, { passive: true });
+  syncVisibility();
+
+  if (!('IntersectionObserver' in window)) return;
+  const sections = document.querySelectorAll('body > section, main > section');
+  if (!sections.length) return;
+  const observer = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      entry.target.dataset.motionPaused = entry.isIntersecting ? 'false' : 'true';
+    }
+  }, { rootMargin: '120px 0px', threshold: 0 });
+  sections.forEach(section => observer.observe(section));
+})();
+</script>
+
+</body>
 </html>

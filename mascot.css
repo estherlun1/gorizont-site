@@ -2,11 +2,11 @@
 .mascot-host{position:fixed;z-index:80;left:clamp(8px,3vw,42px);bottom:10px;width:clamp(120px,13vw,190px);height:190px;pointer-events:none;display:flex;align-items:flex-end;transition:left .8s ease,bottom .5s ease,opacity .25s ease;}
 .mascot-host.is-hidden{opacity:0;visibility:hidden}
 .mascot-sprite{width:100%;height:100%;background-repeat:no-repeat;background-position:0 100%;background-size:800% 100%;image-rendering:auto;filter:drop-shadow(0 5px 3px #173a3020);transform-origin:bottom center;animation:mascot-idle 2.5s ease-in-out infinite;}
-.mascot-host.bear .mascot-sprite{background-image:url('assets/bear-wave.png');background-size:600% 100%;}
-.mascot-host.bear.walking .mascot-sprite{background-image:url('assets/bear-walk.png');background-size:800% 100%;animation:walk-frames .9s steps(7) infinite;}
-.mascot-host.bear.walk-right .mascot-sprite{background-image:url('assets/bear-walk-right.png');background-size:800% 100%;animation:walk-frames .9s steps(7) infinite;}
-.mascot-host.wolf .mascot-sprite{background-image:url('assets/wolf.png');background-size:auto 104%;background-position:bottom center;}
-.mascot-host.wolf.walking .mascot-sprite{background-image:url('assets/wolf-walk.png');background-size:800% 100%;background-position:0 100%;animation:walk-frames .95s steps(7) infinite;}
+.mascot-host.bear .mascot-sprite{background-image:url('assets/bear-wave.webp');background-size:600% 100%;}
+.mascot-host.bear.walking .mascot-sprite{background-image:url('assets/bear-walk.webp');background-size:800% 100%;animation:walk-frames .9s steps(7) infinite;}
+.mascot-host.bear.walk-right .mascot-sprite{background-image:url('assets/bear-walk-right.webp');background-size:800% 100%;animation:walk-frames .9s steps(7) infinite;}
+.mascot-host.wolf .mascot-sprite{background-image:url('assets/wolf.webp');background-size:auto 104%;background-position:bottom center;}
+.mascot-host.wolf.walking .mascot-sprite{background-image:url('assets/wolf-walk.webp');background-size:800% 100%;background-position:0 100%;animation:walk-frames .95s steps(7) infinite;}
 .mascot-host.waving .mascot-sprite{animation:wave-frames 1.1s steps(5) 2,mascot-idle 2.5s 2.2s ease-in-out infinite;}
 .mascot-host.big{width:clamp(300px,48vw,620px);height:clamp(300px,54vw,620px);left:50%;bottom:0;transform:translateX(-50%);}
 .mascot-host.big .mascot-sprite{filter:drop-shadow(0 10px 8px #173a3030)}
@@ -16,8 +16,8 @@
 .mascot-bubble button{border:0;background:#edf6ef;border-radius:50%;width:24px;height:24px;float:right;margin:-4px -6px 0 8px;cursor:pointer;color:#194b41}
 .mascot-host.big .mascot-bubble{left:50%;bottom:calc(100% - 28px);transform:translate(-50%,8px);width:min(390px,78vw);border-radius:18px;text-align:center;font-size:15px}
 .mascot-host.big .mascot-bubble.show{transform:translate(-50%,0)}
-.mascot-host.big .mascot-sprite{background-image:url('assets/bear-wave.png');background-size:600% 100%;animation:wave-frames 1.1s steps(5) 2,mascot-idle 2.5s 2.2s ease-in-out infinite;}
-.mascot-host.wolf.big .mascot-sprite{background-image:url('assets/wolf-walk.png');background-size:800% 100%;animation:walk-frames 1s steps(7) 2,mascot-idle 2.5s 2.2s ease-in-out infinite;}
+.mascot-host.big .mascot-sprite{background-image:url('assets/bear-wave.webp');background-size:600% 100%;animation:wave-frames 1.1s steps(5) 2,mascot-idle 2.5s 2.2s ease-in-out infinite;}
+.mascot-host.wolf.big .mascot-sprite{background-image:url('assets/wolf-walk.webp');background-size:800% 100%;animation:walk-frames 1s steps(7) 2,mascot-idle 2.5s 2.2s ease-in-out infinite;}
 .mascot-host.walking{animation:mascot-travel 1.1s ease-in-out;}
 .mascot-host.walking .mascot-bubble{opacity:0!important}
 .mascot-host .mascot-sprite{background-position:0 100%;}
@@ -49,11 +49,11 @@
 }
 .mascot-duo-wolf.show{opacity:1;transform:translateX(0) scale(1)}
 .mascot-duo-wolf .duo-sprite{
- width:100%;height:100%;background:url('assets/wolf.png') bottom center/auto 104% no-repeat;
+ width:100%;height:100%;background:url('assets/wolf.webp') bottom center/auto 104% no-repeat;
  animation:mascot-idle 2.5s ease-in-out infinite;
 }
 .mascot-duo-wolf.walking .duo-sprite{
- background:url('assets/wolf-walk.png') 0 100%/800% 100% no-repeat;
+ background:url('assets/wolf-walk.webp') 0 100%/800% 100% no-repeat;
  animation:walk-frames .95s steps(7) infinite;
 }
 .mascot-duo-wolf.leaving{opacity:0;transform:translateX(55px) scale(.9)}

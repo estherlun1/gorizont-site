@@ -7,10 +7,31 @@
 <a class="back-link" href="index.html">← На сайт</a>
 <header class="game-heading"><p class="eyebrow">ИГРЫ ГОРИЗОНТА</p><h1 id="level-title">Домик у озера</h1><p class="instruction">Найди 7 отличий между картинками</p></header>
 <section class="pictures" id="pictures" aria-label="Картинки для сравнения">
-<div class="picture-wrap"><img src="assets/find-difference/level-1-a.jpg" alt="Первая картинка: домик у озера" draggable="false"><span class="picture-label">А</span><div class="hotspots" data-side="a"></div></div>
-<div class="picture-wrap"><img src="assets/find-difference/level-1-b.jpg" alt="Вторая картинка: домик у озера с отличиями" draggable="false"><span class="picture-label">Б</span><div class="hotspots" data-side="b"></div></div>
+<div class="picture-wrap"><img src="assets/find-difference/level-1-a.webp" alt="Первая картинка: домик у озера" draggable="false"><span class="picture-label">А</span><div class="hotspots" data-side="a"></div></div>
+<div class="picture-wrap"><img src="assets/find-difference/level-1-b.webp" alt="Вторая картинка: домик у озера с отличиями" draggable="false"><span class="picture-label">Б</span><div class="hotspots" data-side="b"></div></div>
 </section>
 <p id="status" class="status" aria-live="polite">Удачи! Отличия можно искать на любой из двух картинок.</p>
 <div class="bottom-controls"><div class="wood-counter" aria-live="polite">НАЙДЕНО <strong id="found-count">0</strong> / <span id="total-count">7</span></div><button id="hint-btn" class="wood-button hint-button">Подсказка</button><button id="reset-btn" class="wood-button reset-button">Заново</button></div>
 <section id="win-panel" class="win-panel" hidden><h2 id="win-title">Ура, все отличия найдены!</h2><p id="win-message">Отличная работа!</p><button id="next-level-btn" class="play-again">Следующий уровень →</button><button id="again-btn" class="play-again">Сыграть ещё раз</button></section>
-</main><script src="find-difference.js"></script></body></html>
+</main><script src="find-difference.js"></script>
+<script>
+/* Pause decorative CSS animations in background tabs and distant sections. */
+(() => {
+  const root = document.documentElement;
+  const syncVisibility = () => root.classList.toggle('is-page-hidden', document.hidden);
+  document.addEventListener('visibilitychange', syncVisibility, { passive: true });
+  syncVisibility();
+
+  if (!('IntersectionObserver' in window)) return;
+  const sections = document.querySelectorAll('body > section, main > section');
+  if (!sections.length) return;
+  const observer = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      entry.target.dataset.motionPaused = entry.isIntersecting ? 'false' : 'true';
+    }
+  }, { rootMargin: '120px 0px', threshold: 0 });
+  sections.forEach(section => observer.observe(section));
+})();
+</script>
+
+</body></html>

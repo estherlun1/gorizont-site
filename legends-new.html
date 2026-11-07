@@ -56,19 +56,19 @@ body{background:#29190f}
 </head>
 <body>
 <main class="scene" id="scene">
- <img class="table-bg" src="assets/legends-reader/table-bg.png" alt="">
+ <img class="table-bg" src="assets/legends-reader/table-bg.webp" alt="">
  <div class="shade"></div>
  <header class="heading"><small>Истории, которые остаются с нами</small><h1>Легенды Горизонта</h1></header>
  <section class="desk-stack" id="stack" aria-label="Стопка комиксов">
-  <img class="stack-img" src="assets/legends-reader/paper-stack.png" alt="">
-  <img class="preview" id="preview" src="assets/legends-reader/preview-deer.png" alt="Превью комикса">
+  <img class="stack-img" src="assets/legends-reader/paper-stack.webp" alt="">
+  <img class="preview" id="preview" src="assets/legends-reader/preview-deer.webp" alt="Превью комикса">
  </section>
  <button class="read-btn" id="read">Читать историю</button>
  <section class="reader" id="reader" aria-label="Читалка комиксов">
-  <img class="table-bg" src="assets/legends-reader/table-bg.png" alt=""><div class="reader-top"><button class="back-btn" id="back">← К стопке историй</button><button class="close-btn" id="close">Закрыть ✕</button></div>
+  <img class="table-bg" src="assets/legends-reader/table-bg.webp" alt=""><div class="reader-top"><button class="back-btn" id="back">← К стопке историй</button><button class="close-btn" id="close">Закрыть ✕</button></div>
   <div class="reader-book"><div class="spread" id="spread">
-   <img class="spread-img base" id="currentSpread" src="assets/legends-reader/comic-deer.png" alt="Комикс">
-   <div class="flip-page" id="flip"><div class="flip-front"><img id="flipFront" src="assets/legends-reader/comic-deer.png" alt=""></div><div class="flip-back"><img id="flipBack" src="assets/legends-reader/comic-heart.png" alt=""></div></div>
+   <img class="spread-img base" id="currentSpread" src="assets/legends-reader/comic-deer.webp" alt="Комикс">
+   <div class="flip-page" id="flip"><div class="flip-front"><img id="flipFront" src="assets/legends-reader/comic-deer.webp" alt=""></div><div class="flip-back"><img id="flipBack" src="assets/legends-reader/comic-heart.webp" alt=""></div></div>
    <div class="corner left" id="prevArea" title="Предыдущая история"></div><div class="corner right" id="nextArea" title="Следующая история"></div>
   </div></div>
   <div class="reader-controls"><button id="prev" aria-label="Предыдущая история">‹</button><button id="next" aria-label="Следующая история">›</button></div>
@@ -76,8 +76,8 @@ body{background:#29190f}
 </main>
 <script>
 const stories=[
- {title:"След лесного хранителя",preview:"assets/legends-reader/preview-deer.png",comic:"assets/legends-reader/comic-deer.png"},
- {title:"Вожатское сердце",preview:"assets/legends-reader/preview-heart.png",comic:"assets/legends-reader/comic-heart.png"}
+ {title:"След лесного хранителя",preview:"assets/legends-reader/preview-deer.webp",comic:"assets/legends-reader/comic-deer.webp"},
+ {title:"Вожатское сердце",preview:"assets/legends-reader/preview-heart.webp",comic:"assets/legends-reader/comic-heart.webp"}
 ];
 let active=0, busy=false;
 const $=id=>document.getElementById(id);
@@ -111,4 +111,25 @@ $('preview').addEventListener('click',openReader);
 $('flip').style.display='none';
 document.addEventListener('keydown',e=>{if(!$('reader').classList.contains('open'))return;if(e.key==='Escape')closeReader();if(e.key==='ArrowRight')turn(1);if(e.key==='ArrowLeft')turn(-1);});
 </script>
+
+<script>
+/* Pause decorative CSS animations in background tabs and distant sections. */
+(() => {
+  const root = document.documentElement;
+  const syncVisibility = () => root.classList.toggle('is-page-hidden', document.hidden);
+  document.addEventListener('visibilitychange', syncVisibility, { passive: true });
+  syncVisibility();
+
+  if (!('IntersectionObserver' in window)) return;
+  const sections = document.querySelectorAll('body > section, main > section');
+  if (!sections.length) return;
+  const observer = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      entry.target.dataset.motionPaused = entry.isIntersecting ? 'false' : 'true';
+    }
+  }, { rootMargin: '120px 0px', threshold: 0 });
+  sections.forEach(section => observer.observe(section));
+})();
+</script>
+
 </body></html>

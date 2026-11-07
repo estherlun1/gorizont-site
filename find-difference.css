@@ -2,7 +2,7 @@
 :root{--forest:#204b3b;--orange:#f15a24;--ink:#49301d}
 html,body{margin:0;min-height:100%;background:#183b2d}
 body{font-family:"Trebuchet MS",Arial,sans-serif;color:var(--ink)}button,a{font:inherit}
-.game-stage{position:relative;width:100%;max-width:1920px;margin:0 auto;aspect-ratio:1672/940;background:#e9d5a5 url("assets/find-difference/game-background.png") center top/100% 100% no-repeat;overflow:hidden;isolation:isolate}
+.game-stage{position:relative;width:100%;max-width:1920px;margin:0 auto;aspect-ratio:1672/940;background:#e9d5a5 url("assets/find-difference/game-background.webp") center top/100% 100% no-repeat;overflow:hidden;isolation:isolate}
 .game-heading{position:absolute;left:29.2%;top:11.5%;width:41.6%;height:11.2%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff1d2;text-shadow:0 2px 3px #6b2e08;pointer-events:none}
 .eyebrow{font-size:clamp(8px,.7vw,13px);font-weight:800;letter-spacing:.16em;margin:0 0 .25em}
 .game-heading h1{font-size:clamp(18px,2.1vw,40px);line-height:1.05;margin:0;font-weight:900}

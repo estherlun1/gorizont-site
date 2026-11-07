@@ -4,8 +4,8 @@ const levels = [
     title: 'Домик у озера',
     instruction: 'Найди 7 отличий между картинками',
     total: 7,
-    imageA: 'assets/find-difference/level-1-a.jpg',
-    imageB: 'assets/find-difference/level-1-b.jpg',
+    imageA: 'assets/find-difference/level-1-a.webp',
+    imageB: 'assets/find-difference/level-1-b.webp',
     alt: 'Домик у озера',
     spots: [
       { id: 1, x: 37, y: 32, label: 'Крыша домика' },
@@ -21,8 +21,8 @@ const levels = [
     title: 'Вечер у костра',
     instruction: 'Найди 7 отличий между картинками',
     total: 7,
-    imageA: 'assets/find-difference/level-2-a.jpg',
-    imageB: 'assets/find-difference/level-2-b.jpg',
+    imageA: 'assets/find-difference/level-2-a.webp',
+    imageB: 'assets/find-difference/level-2-b.webp',
     alt: 'Вечер у костра в палаточном лагере',
     spots: [
       { id: 1, x: 8.2, y: 50.8, label: 'Гитара у палатки' },
@@ -38,8 +38,8 @@ const levels = [
     title: 'Рыбалка у причала',
     instruction: 'Найди 7 отличий между картинками',
     total: 7,
-    imageA: 'assets/find-difference/level-3-a.jpg',
-    imageB: 'assets/find-difference/level-3-b.jpg',
+    imageA: 'assets/find-difference/level-3-a.webp',
+    imageB: 'assets/find-difference/level-3-b.webp',
     alt: 'Дети на рыбацком мостике у озера',
     spots: [
       { id: 1, x: 88, y: 80, label: 'Лодка у причала' },
@@ -56,8 +56,8 @@ const levels = [
     title: 'Верёвочный городок',
     instruction: 'Найди 7 отличий между картинками',
     total: 7,
-    imageA: 'assets/find-difference/level-4-a.jpg',
-    imageB: 'assets/find-difference/level-4-b.jpg',
+    imageA: 'assets/find-difference/level-4-a.webp',
+    imageB: 'assets/find-difference/level-4-b.webp',
     alt: 'Дети проходят верёвочный маршрут среди деревьев',
     spots: [
       { id: 1, x: 61, y: 10, label: 'Птица в небе' },

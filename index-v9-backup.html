@@ -64,17 +64,17 @@
  <section class="album reveal" id="guides">
   <div><h2>Вожатые<br>и их суперсилы</h2><p>Наши вожатые не просто супер — у каждого своя уникальная сила!</p><a class="btn sm" href="guides.html">Познакомиться со всеми</a></div>
   <div class="polas">
-   <figure class="pola"><img src="assets/masha.png" alt="Маша" loading="lazy"><span>Маша ⚡</span></figure>
-   <figure class="pola"><img src="assets/danya.png" alt="Даня" loading="lazy"><span>Даня 🧭</span></figure>
-   <figure class="pola"><img src="assets/katya.png" alt="Катя" loading="lazy"><span>Катя 💡</span></figure>
+   <figure class="pola"><img src="assets/masha.webp" alt="Маша" loading="lazy"><span>Маша ⚡</span></figure>
+   <figure class="pola"><img src="assets/danya.webp" alt="Даня" loading="lazy"><span>Даня 🧭</span></figure>
+   <figure class="pola"><img src="assets/katya.webp" alt="Катя" loading="lazy"><span>Катя 💡</span></figure>
   </div>
  </section>
 
  <section class="legend reveal" id="legends">
   <div><h2>Истории<br>с Горизонта</h2><p>Волк и Медведь знают о лагере всё — вот что они рассказывают о сменах, дружбе и маленьких победах.</p><a class="btn teal sm" href="stories.html">Читать истории →</a></div>
   <div class="notes">
-   <div class="note"><img src="assets/wolf.png" alt="Волк — маскот лагеря" loading="lazy"><h3>Волк</h3><small>Хранитель троп и ночных тайн.</small><a href="stories.html">Истории Волка →</a></div>
-   <div class="note"><img src="assets/bear.png" alt="Медведь — маскот лагеря" loading="lazy"><h3>Медведь</h3><small>Знаток леса и его секретов.</small><a href="stories.html">Истории Медведя →</a></div>
+   <div class="note"><img src="assets/wolf.webp" alt="Волк — маскот лагеря" loading="lazy"><h3>Волк</h3><small>Хранитель троп и ночных тайн.</small><a href="stories.html">Истории Волка →</a></div>
+   <div class="note"><img src="assets/bear.webp" alt="Медведь — маскот лагеря" loading="lazy"><h3>Медведь</h3><small>Знаток леса и его секретов.</small><a href="stories.html">Истории Медведя →</a></div>
   </div>
   <div class="stamp">Следуй день за природой</div>
  </section>
@@ -121,9 +121,9 @@
  <section class="album reveal" id="album">
   <div><h2>Наш<br>фотоальбом</h2><p>Моменты, которые хочется пересматривать снова и снова.</p><a class="btn sm" href="album.html">Смотреть галерею</a></div>
   <div class="polas">
-   <figure class="pola"><img src="assets/album-fire.jpg" alt="Костёр" loading="lazy"><span>Костёр</span></figure>
-   <figure class="pola"><img src="assets/album-fun.jpg" alt="Развлечения" loading="lazy"><span>Развлечения</span></figure>
-   <figure class="pola"><img src="assets/album-team.jpg" alt="Команда" loading="lazy"><span>Команда</span></figure>
+   <figure class="pola"><img src="assets/album-fire.webp" alt="Костёр" loading="lazy"><span>Костёр</span></figure>
+   <figure class="pola"><img src="assets/album-fun.webp" alt="Развлечения" loading="lazy"><span>Развлечения</span></figure>
+   <figure class="pola"><img src="assets/album-team.webp" alt="Команда" loading="lazy"><span>Команда</span></figure>
   </div>
  </section>
 
@@ -143,5 +143,26 @@
 <script src="script.js"></script>
 <script src="nav.js"></script>
 <script src="reveal.js"></script>
-<script src="mascot.js"></script>\n</body>
+<script src="mascot.js"></script>\n
+<script>
+/* Pause decorative CSS animations in background tabs and distant sections. */
+(() => {
+  const root = document.documentElement;
+  const syncVisibility = () => root.classList.toggle('is-page-hidden', document.hidden);
+  document.addEventListener('visibilitychange', syncVisibility, { passive: true });
+  syncVisibility();
+
+  if (!('IntersectionObserver' in window)) return;
+  const sections = document.querySelectorAll('body > section, main > section');
+  if (!sections.length) return;
+  const observer = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      entry.target.dataset.motionPaused = entry.isIntersecting ? 'false' : 'true';
+    }
+  }, { rootMargin: '120px 0px', threshold: 0 });
+  sections.forEach(section => observer.observe(section));
+})();
+</script>
+
+</body>
 </html>

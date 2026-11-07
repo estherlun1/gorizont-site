@@ -20,7 +20,21 @@
    observeDialogue('#schedule','А вот расписание смен! Выбирай дату, тему и формат лагеря — впереди целая смена приключений.');
    observeDialogue('#about','А здесь можно узнать, какой «Горизонт» внутри: лес, игры, костры, сцена и много новых друзей. Загляни — я всё покажу!');
    observeDialogue('#album','И, конечно, фотоальбом! Здесь живут самые яркие моменты лагеря. Можно листать и вспоминать приключения снова и снова.');
-   window.addEventListener('scroll',()=>{const y=window.scrollY;if(Math.abs(y-lastY)>90){host.classList.remove('big');host.classList.add('walking');clearTimeout(scrollTimer);scrollTimer=setTimeout(()=>host.classList.remove('walking'),900)}lastY=y},{passive:true});
+   let scrollRaf=0;
+   window.addEventListener('scroll',()=>{
+     if(scrollRaf)return;
+     scrollRaf=requestAnimationFrame(()=>{
+       scrollRaf=0;
+       const y=window.scrollY;
+       if(Math.abs(y-lastY)>90){
+         host.classList.remove('big');
+         host.classList.add('walking');
+         clearTimeout(scrollTimer);
+         scrollTimer=setTimeout(()=>host.classList.remove('walking'),900);
+       }
+       lastY=y;
+     });
+   },{passive:true});
  } else if(activePage==='backpack.html'){
    setMascot('bear');setTimeout(()=>{host.classList.add('waving');speak('Привет, сборщик приключений! Проверим рюкзак вместе: полезное берём, лишнее оставляем дома — и я объясню почему.')},650);
    const game=document.getElementById('game');if(game){game.addEventListener('click',e=>{const item=e.target.closest('.item');if(!item)return;const label=item.textContent.trim();setTimeout(()=>{const say=document.getElementById('sayTx');if(say&&say.textContent){speak(say.textContent)}} ,80)});}

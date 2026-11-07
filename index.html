@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Горизонт — твоё лето</title>
-<link rel="icon" type="image/png" href="./assets/favicon.png">
+<link rel="icon" type="image/png" href="./assets/favicon.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
@@ -197,7 +197,7 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
   width:20%;
   aspect-ratio:1 / 1;
   height:auto;
-  background-image:url('assets/camp-scene/fire-sprite.png');
+  background-image:url('assets/camp-scene/fire-sprite.webp');
   background-repeat:no-repeat;
   background-size:600% 200%;
   background-position:0% 0%;
@@ -671,7 +671,7 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
 <style>
 /* Legends board */
 #legends { position:relative; display:block; width:100vw; max-width:none; margin:0 0 0 calc(50% - 50vw); padding:0; overflow:hidden; line-height:0; }
-#legends .legends-board { position:relative; display:block; width:100%; margin:0 auto; aspect-ratio:1672/941; background:url('assets/legends/board-bg.png') center/100% 100% no-repeat; transition:transform .22s ease-out; will-change:transform; }
+#legends .legends-board { position:relative; display:block; width:100%; margin:0 auto; aspect-ratio:1672/941; background:url('assets/legends/board-bg.webp') center/100% 100% no-repeat; transition:transform .22s ease-out; will-change:transform; }
 #legends .legend-polaroid { position:absolute; left:50%; top:52%; width:56%; max-width:900px; height:auto; cursor:pointer; border:0; background:transparent; padding:0; transform:translate(-50%,-50%); transition:transform .28s ease,filter .28s ease; filter:drop-shadow(0 8px 9px #301b1055); z-index:3; }
 #legends .legend-polaroid:hover,#legends .legend-polaroid:focus-visible { transform:translate(-50%,-53%) scale(1.035); filter:drop-shadow(0 12px 13px #1c100b75); z-index:5; outline:none; }
 #legends .legend-polaroid img { display:block;width:100%;height:auto; }
@@ -876,7 +876,7 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
 <nav class="menu-bookmark" id="menu">
   <button class="menu-tab" id="menuTab" aria-expanded="false" aria-controls="menu">меню</button>
   <div class="menu-inner">
-    <a class="logo" href="index.html"><img src="assets/logo.svg" alt="Горизонт"></a>
+    <a class="logo" href="index.html"><img src="assets/logo.svg" alt="Горизонт" loading="lazy" decoding="async"></a>
     <div class="menu-links">
       <a href="#map">Карта</a>
       <a href="#games-section">Игры</a>
@@ -893,9 +893,9 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
 <main>
 <section class="hero" id="top">
   <div class="scene" id="scene">
-    <img class="layer bg" id="bg" src="assets/hero-cover.png" alt="Летний лагерь Горизонт">
-    <img class="layer characters" id="characters" src="assets/hero-characters.png" alt="Дети и медведь идут в лагерь">
-    <img class="layer grass" id="grass" src="assets/hero-grass.png" alt="Трава и цветы на переднем плане">
+    <img class="layer bg" id="bg" src="assets/hero-cover.webp" alt="Летний лагерь Горизонт" loading="eager" fetchpriority="high" decoding="async">
+    <img class="layer characters" id="characters" src="assets/hero-characters.webp" alt="Дети и медведь идут в лагерь" loading="eager" decoding="async">
+    <img class="layer grass" id="grass" src="assets/hero-grass.webp" alt="Трава и цветы на переднем плане" loading="eager" decoding="async">
     <div class="depth-glow"></div>
 
     <div class="hero-actions">
@@ -913,12 +913,12 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
 
 <section class="camp-world" id="camp-world" aria-label="Лес, друзья, костры и игры">
   <div class="camp-scene" id="campScene">
-    <img class="camp-layer camp-bg" src="assets/camp-scene/forest-background.png" alt="Лесная поляна у озера">
-    <img class="camp-layer camp-base" src="assets/camp-scene/campfire-base.png" alt="Место для костра">
-    <img class="camp-layer camp-kids" src="assets/camp-scene/kids-camp.png" alt="Дети, медведь и волк у костра">
-    <img class="camp-layer camp-props" src="assets/camp-scene/camp-props.png" alt="Лагерные указатели и предметы">
+    <img class="camp-layer camp-bg" src="assets/camp-scene/forest-background.webp" alt="Лесная поляна у озера" loading="lazy" decoding="async">
+    <img class="camp-layer camp-base" src="assets/camp-scene/campfire-base.webp" alt="Место для костра" loading="lazy" decoding="async">
+    <img class="camp-layer camp-kids" src="assets/camp-scene/kids-camp.webp" alt="Дети, медведь и волк у костра" loading="lazy" decoding="async">
+    <img class="camp-layer camp-props" src="assets/camp-scene/camp-props.webp" alt="Лагерные указатели и предметы" loading="lazy" decoding="async">
     <div class="camp-flame-sprite" id="campFireSprite" aria-hidden="true"></div>
-    <img class="camp-layer camp-foreground" src="assets/camp-scene/forest-foreground.png" alt="Трава переднего плана">
+    <img class="camp-layer camp-foreground" src="assets/camp-scene/forest-foreground.webp" alt="Трава переднего плана" loading="lazy" decoding="async">
 
 
     <a class="camp-hotspot camp-hotspot-forest" href="#map" aria-label="Лес — карта лагеря" title="Лес"><span>лес</span></a>
@@ -934,7 +934,7 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
 
 <section class="horizon-map" id="map" aria-label="Интерактивная карта лагеря">
   <div class="map-stage" id="mapStage">
-    <img class="map-bg" src="assets/map/map.png" alt="Иллюстрированная карта стационарного и палаточного лагерей «Горизонт»">
+    <img class="map-bg" src="assets/map/map.webp" alt="Иллюстрированная карта стационарного и палаточного лагерей «Горизонт»" loading="lazy" decoding="async">
 
     <aside id="huntTab" aria-expanded="false" aria-label="Игра Найди предметы">
       <button class="tab-handle" type="button" aria-label="Открыть список предметов">НАЙДИ ПРЕДМЕТЫ</button>
@@ -942,17 +942,17 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
     </aside>
 
     <!-- Локации и описания перенесены из эталонной версии карты. -->
-    <button class="map-hit" style="left:12%;top:34%" data-location="Зона спорта" data-photo="assets/map/zone-05-stationary-sports.jpg" data-text="Открытая площадка для движения, спортивных игр и активного отдыха. Здесь можно играть в мяч, тренироваться и проводить командные соревнования на свежем воздухе." aria-label="Зона спорта"></button>
+    <button class="map-hit" style="left:12%;top:34%" data-location="Зона спорта" data-photo="assets/map/zone-05-stationary-sports.webp" data-text="Открытая площадка для движения, спортивных игр и активного отдыха. Здесь можно играть в мяч, тренироваться и проводить командные соревнования на свежем воздухе." aria-label="Зона спорта"></button>
     <button class="map-hit" style="left:36%;top:32%" data-location="Спальный корпус" data-text="Здесь живут участники смены: отдыхают после насыщенного дня, общаются с друзьями и набираются сил перед новыми приключениями." aria-label="Спальный корпус"></button>
-    <button class="map-hit" style="left:24%;top:51%" data-location="Столовая и актовый зал" data-photo="assets/map/zone-04-stationary-dining.jpg" data-text="Место, где собирается весь лагерь. Здесь проходят общие сборы и мероприятия, а ещё ребята приходят на завтрак, обед и ужин." aria-label="Столовая и актовый зал"></button>
-    <button class="map-hit" style="left:41%;top:56%" data-location="Зона отдыха" data-photo="assets/map/zone-08-rest-area.jpg" data-text="Уютный уголок на свежем воздухе, где можно посидеть с друзьями, поговорить, передохнуть между занятиями и просто насладиться летним днём." aria-label="Зона отдыха"></button>
+    <button class="map-hit" style="left:24%;top:51%" data-location="Столовая и актовый зал" data-photo="assets/map/zone-04-stationary-dining.webp" data-text="Место, где собирается весь лагерь. Здесь проходят общие сборы и мероприятия, а ещё ребята приходят на завтрак, обед и ужин." aria-label="Столовая и актовый зал"></button>
+    <button class="map-hit" style="left:41%;top:56%" data-location="Зона отдыха" data-photo="assets/map/zone-08-rest-area.webp" data-text="Уютный уголок на свежем воздухе, где можно посидеть с друзьями, поговорить, передохнуть между занятиями и просто насладиться летним днём." aria-label="Зона отдыха"></button>
     <button class="map-hit" style="left:13%;top:68%" data-location="Зона охраны" data-text="Въезд на территорию лагеря и пост охраны. Здесь контролируют въезд и следят за безопасностью ребят и сотрудников." aria-label="Зона охраны"></button>
-    <button class="map-hit" style="left:58%;top:36%" data-location="Тюбинг" data-photo="assets/map/zone-07-tubing.jpg" data-text="Яркие спуски и виражи на тюбинговой трассе! Можно получить заряд эмоций и попробовать прокатиться ещё раз." aria-label="Тюбинг"></button>
-    <button class="map-hit" style="left:68%;top:46%" data-location="Костровая площадка" data-photo="assets/map/zone-02-campfire.jpg" data-text="Место вечерних встреч у огня: здесь поют песни, играют, делятся историями и создают самые тёплые воспоминания о смене." aria-label="Костровая площадка"></button>
-    <button class="map-hit" style="left:84%;top:32%" data-location="Зона спорта" data-photo="assets/map/zone-09-tent-sports.jpg" data-text="Спортивная площадка палаточного лагеря для волейбола, командных игр и весёлых соревнований на свежем воздухе." aria-label="Зона спорта"></button>
-    <button class="map-hit" style="left:96%;top:36%" data-location="Верёвочный городок" data-photo="assets/map/zone-01-rope-park.jpg" data-text="Верёвочные препятствия, мостики и задания на ловкость. Здесь можно проверить равновесие, смелость и поддержать друзей на маршруте." aria-label="Верёвочный городок"></button>
-    <button class="map-hit" style="left:73%;top:61%" data-location="Палаточный городок" data-photo="assets/map/zone-11-tent-town.jpg" data-text="Жизнь в палатках — это друзья по отряду, самостоятельность, свежий воздух и маленькие ежедневные приключения на природе." aria-label="Палаточный городок"></button>
-    <button class="map-hit" style="left:89%;top:61%" data-location="Большой шатёр и столовая" data-photo="assets/map/zone-10-big-tent.jpg" data-text="Просторный шатёр для общих встреч и занятий. Здесь можно собраться всем вместе и укрыться от солнца или непогоды, а рядом организовано питание." aria-label="Большой шатёр и столовая"></button>
+    <button class="map-hit" style="left:58%;top:36%" data-location="Тюбинг" data-photo="assets/map/zone-07-tubing.webp" data-text="Яркие спуски и виражи на тюбинговой трассе! Можно получить заряд эмоций и попробовать прокатиться ещё раз." aria-label="Тюбинг"></button>
+    <button class="map-hit" style="left:68%;top:46%" data-location="Костровая площадка" data-photo="assets/map/zone-02-campfire.webp" data-text="Место вечерних встреч у огня: здесь поют песни, играют, делятся историями и создают самые тёплые воспоминания о смене." aria-label="Костровая площадка"></button>
+    <button class="map-hit" style="left:84%;top:32%" data-location="Зона спорта" data-photo="assets/map/zone-09-tent-sports.webp" data-text="Спортивная площадка палаточного лагеря для волейбола, командных игр и весёлых соревнований на свежем воздухе." aria-label="Зона спорта"></button>
+    <button class="map-hit" style="left:96%;top:36%" data-location="Верёвочный городок" data-photo="assets/map/zone-01-rope-park.webp" data-text="Верёвочные препятствия, мостики и задания на ловкость. Здесь можно проверить равновесие, смелость и поддержать друзей на маршруте." aria-label="Верёвочный городок"></button>
+    <button class="map-hit" style="left:73%;top:61%" data-location="Палаточный городок" data-photo="assets/map/zone-11-tent-town.webp" data-text="Жизнь в палатках — это друзья по отряду, самостоятельность, свежий воздух и маленькие ежедневные приключения на природе." aria-label="Палаточный городок"></button>
+    <button class="map-hit" style="left:89%;top:61%" data-location="Большой шатёр и столовая" data-photo="assets/map/zone-10-big-tent.webp" data-text="Просторный шатёр для общих встреч и занятий. Здесь можно собраться всем вместе и укрыться от солнца или непогоды, а рядом организовано питание." aria-label="Большой шатёр и столовая"></button>
     <button class="map-hit" style="left:82%;top:75%" data-location="Зона чистоты" data-text="Санитарная зона палаточного лагеря с душевыми и местами для поддержания личной гигиены. Здесь можно освежиться после активного дня." aria-label="Зона чистоты"></button>
 
     <div class="description" id="description" aria-live="polite">
@@ -968,12 +968,12 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
 
 <section class="counselors-section" id="guides" aria-label="Вожатые">
   <div class="counselors-stage" id="counselorsStage">
-    <img class="counselors-layer c-bg" src="assets/counselors/bg.png" alt="Закат у озера в лагере Горизонт">
-    <img class="counselors-layer c-anya" src="assets/counselors/anya.png" alt="Вожатая Аня">
-    <img class="counselors-layer c-maxim" src="assets/counselors/matvey.png" alt="Вожатый с гитарой">
-    <img class="counselors-layer c-lera" src="assets/counselors/polina.png" alt="Вожатая Полина">
-    <img class="counselors-layer c-ilya" src="assets/counselors/sonya.png" alt="Вожатая Соня">
-    <img class="counselors-layer c-kids-front" src="assets/counselors/foreground.png" alt="Дети собрались у костра">
+    <img class="counselors-layer c-bg" src="assets/counselors/bg.webp" alt="Закат у озера в лагере Горизонт" loading="lazy" decoding="async">
+    <img class="counselors-layer c-anya" src="assets/counselors/anya.webp" alt="Вожатая Аня" loading="lazy" decoding="async">
+    <img class="counselors-layer c-maxim" src="assets/counselors/matvey.webp" alt="Вожатый с гитарой" loading="lazy" decoding="async">
+    <img class="counselors-layer c-lera" src="assets/counselors/polina.webp" alt="Вожатая Полина" loading="lazy" decoding="async">
+    <img class="counselors-layer c-ilya" src="assets/counselors/sonya.webp" alt="Вожатая Соня" loading="lazy" decoding="async">
+    <img class="counselors-layer c-kids-front" src="assets/counselors/foreground.webp" alt="Дети собрались у костра" loading="lazy" decoding="async">
     <div class="counselors-hint">нажми на вожатого — познакомимся поближе</div>
   </div>
 </section>
@@ -989,8 +989,8 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
 
 <section id="legends" aria-label="Легенды Горизонта">
  <div class="legends-board" id="legendsBoard">
-  <button class="legend-arrow left" id="legendPrev" aria-label="Предыдущие истории"><img src="assets/legends/arrow-left.png" alt=""></button>
-  <button class="legend-arrow right" id="legendNext" aria-label="Следующие истории"><img src="assets/legends/arrow-right.png" alt=""></button>
+  <button class="legend-arrow left" id="legendPrev" aria-label="Предыдущие истории"><img src="assets/legends/arrow-left.webp" alt="" loading="lazy" decoding="async"></button>
+  <button class="legend-arrow right" id="legendNext" aria-label="Следующие истории"><img src="assets/legends/arrow-right.webp" alt="" loading="lazy" decoding="async"></button>
  </div>
  <div class="legend-modal-shade" id="legendShade"></div>
  <div class="legend-modal" id="legendModal" role="dialog" aria-modal="true" aria-labelledby="legendTitle">
@@ -1004,7 +1004,7 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
 
 <section id="day-in-horizon" class="day-horizon" aria-label="Один день в Горизонте">
   <div class="day-horizon-frame" id="dayHorizonFrame">
-    <img class="day-horizon-image" id="dayHorizonImage" src="assets/day-scenes/01-morning.png" alt="Доброе утро в лагере Горизонт">
+    <img class="day-horizon-image" id="dayHorizonImage" src="assets/day-scenes/01-morning.webp" alt="Доброе утро в лагере Горизонт" loading="lazy" decoding="async">
     <div class="day-sign-hotspots" id="daySignHotspots" aria-label="Интерактивные указатели сцены"></div>
     <button class="day-horizon-arrow day-horizon-prev" id="dayHorizonPrev" type="button" aria-label="Предыдущая сцена">‹</button>
     <button class="day-horizon-arrow day-horizon-next" id="dayHorizonNext" type="button" aria-label="Следующая сцена">›</button>
@@ -1035,32 +1035,32 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
 
 <section class="games-section" id="games-section" aria-label="Игры Горизонта">
  <div class="games-scene" id="gamesScene">
-  <img class="games-layer games-background" src="assets/games/games-background.png" alt="Лесная поляна и домики у озера">
-  <img class="games-layer games-board" src="assets/games/games-board.png" alt="Игры Горизонта — игровая карусель">
+  <img class="games-layer games-background" src="assets/games/games-background.webp" alt="Лесная поляна и домики у озера" loading="lazy" decoding="async">
+  <img class="games-layer games-board" src="assets/games/games-board.webp" alt="Игры Горизонта — игровая карусель" loading="lazy" decoding="async">
   <div class="games-viewport" id="gamesViewport" aria-label="Выбор игры">
    <div class="games-track" id="gamesTrack">
     <a class="game-preview" href="backpack.html" aria-label="Играть: Собери рюкзак">
-     <span class="game-preview-visual"><img src="assets/games/backpack-preview.png" alt="Рюкзак путешественника у горного озера" loading="lazy"></span>
+     <span class="game-preview-visual"><img src="assets/games/backpack-preview.webp" alt="Рюкзак путешественника у горного озера" loading="lazy" decoding="async"></span>
      <span class="game-preview-title">Собери рюкзак</span><span class="game-preview-description">Разложи вещи в рюкзак и проверь, всё ли пригодится в путешествии.</span><span class="game-preview-action">Играть <span aria-hidden="true">→</span></span>
     </a>
     <a class="game-preview" href="find-difference.html" aria-label="Играть: Найди отличия">
-     <span class="game-preview-visual"><img src="assets/games/differences-preview.png" alt="Два похожих пейзажа с домиком у озера" loading="lazy"></span>
+     <span class="game-preview-visual"><img src="assets/games/differences-preview.webp" alt="Два похожих пейзажа с домиком у озера" loading="lazy" decoding="async"></span>
      <span class="game-preview-title">Найди отличия</span><span class="game-preview-description">Сравни две картинки и найди все спрятанные различия.</span><span class="game-preview-action">Играть <span aria-hidden="true">→</span></span>
     </a>
     <button class="game-preview soon" type="button" data-game-soon="Запомни картинку">
-     <span class="game-preview-visual"><img src="assets/games/memory-preview.png" alt="Предметы на столе в домике у озера" loading="lazy"></span>
+     <span class="game-preview-visual"><img src="assets/games/memory-preview.webp" alt="Предметы на столе в домике у озера" loading="lazy" decoding="async"></span>
      <span class="game-preview-title">Запомни картинку</span><span class="game-preview-description">Внимательно рассмотри картинку, запомни детали и ответь на вопросы.</span><span class="game-preview-action">Скоро</span>
     </button>
     <button class="game-preview soon" type="button" data-game-soon="Лабиринт">
-     <span class="game-preview-visual"><img src="assets/games/maze-preview.png" alt="Извилистые дорожки в зелёном лесном лабиринте" loading="lazy"></span>
+     <span class="game-preview-visual"><img src="assets/games/maze-preview.webp" alt="Извилистые дорожки в зелёном лесном лабиринте" loading="lazy" decoding="async"></span>
      <span class="game-preview-title">Лабиринт</span><span class="game-preview-description">Помоги герою добраться до цели, собирая предметы по пути.</span><span class="game-preview-action">Скоро</span>
     </button>
     <button class="game-preview soon" type="button" data-game-soon="Собери персонажа">
-     <span class="game-preview-visual"><img src="assets/games/character-preview.png" alt="Персонаж и предметы одежды для сборки образа" loading="lazy"></span>
+     <span class="game-preview-visual"><img src="assets/games/character-preview.webp" alt="Персонаж и предметы одежды для сборки образа" loading="lazy" decoding="async"></span>
      <span class="game-preview-title">Собери персонажа</span><span class="game-preview-description">Придумай герою свой образ, сочетая одежду и аксессуары.</span><span class="game-preview-action">Скоро</span>
     </button>
     <a class="game-preview" href="stereograms.html" aria-label="Открыть стереокартинки">
-     <span class="game-preview-visual"><img src="assets/games/stereo-preview.png" alt="Стереограмма на деревянном стенде у горного озера" loading="lazy"></span>
+     <span class="game-preview-visual"><img src="assets/games/stereo-preview.webp" alt="Стереограмма на деревянном стенде у горного озера" loading="lazy" decoding="async"></span>
      <span class="game-preview-title">Стереокартинки</span><span class="game-preview-description">Попробуй увидеть скрытое изображение — включи внимание и дай глазам отдохнуть.</span><span class="game-preview-action">Играть <span aria-hidden="true">→</span></span>
     </a>
    </div>
@@ -1071,7 +1071,7 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
   <div class="games-pagination" id="gamesPagination" aria-label="Страница карусели"></div>
   <div class="games-toast" id="gamesToast" role="status" aria-live="polite"></div>
   <div class="games-section-note">выбери игру и отправляйся в приключение</div>
-  <img class="games-layer games-foreground" src="assets/games/games-foreground.png" alt="Указатели, цветы и рюкзак на переднем плане">
+  <img class="games-layer games-foreground" src="assets/games/games-foreground.webp" alt="Указатели, цветы и рюкзак на переднем плане" loading="lazy" decoding="async">
  </div>
 </section>
 
@@ -1226,8 +1226,8 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
     document.querySelector('.description .close').addEventListener('click',closeDescription);
 
     const huntFiles=[
-      'backpack.png','compass.png','map.png','guitar.png',
-      'squirrel.png','bird.png','pawprints.png','camera.png'
+      'backpack.webp','compass.webp','map.webp','guitar.webp',
+      'squirrel.webp','bird.webp','pawprints.webp','camera.webp'
     ];
     const itemsEl=document.getElementById('huntItems');
     const counter=document.getElementById('counter');
@@ -1247,7 +1247,7 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
     const shuffled=safeZones.slice().sort(()=>Math.random()-0.5);
     let found=0;
     const chosen=huntFiles.slice(0,8);
-    const huntNames={'backpack.png':'Рюкзак','compass.png':'Компас','map.png':'Карта','guitar.png':'Гитара','squirrel.png':'Белка','bird.png':'Птичка','pawprints.png':'Следы','camera.png':'Фотоаппарат'};
+    const huntNames={'backpack.webp':'Рюкзак','compass.webp':'Компас','map.webp':'Карта','guitar.webp':'Гитара','squirrel.webp':'Белка','bird.webp':'Птичка','pawprints.webp':'Следы','camera.webp':'Фотоаппарат'};
 
     function updateCounter(){
       counter.textContent=`Найдено: ${found} из ${chosen.length}`;
@@ -1353,10 +1353,10 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
   stage.addEventListener('pointerleave',()=>{px=py=0;if(!raf)raf=requestAnimationFrame(render)});
 
   const data={
-    anya:{name:'Аня',img:'assets/counselors/anya.png',text:'Ещё недавно Аня сидела в отрядном кругу как ребёнок, а летом 2026 года впервые надела вожатский галстук — сразу после выпуска из нашей Школы вожатых. Она пришла в команду со свежим взглядом, бешеной отдачей и невероятным художественным вкусом: Аня превращает любой отрядный уголок или сценический грим в произведение искусства. Она не строит из себя строгого наставника, а становится для детей понимающим старшим другом, с которым не страшно пробовать новое, ошибаться и побеждать.'},
-    maxim:{name:'Матвей',img:'assets/counselors/matvey.png',text:'Абсолютный слэй нашего лагеря! Матвей прошёл путь от любимого вожатого до культорга «Горизонта», и теперь уровень движа зашкаливает на максимуме. Он на одной волне с ребятами: шарит за все актуальные тренды, мемы и звуки из ТикТока, а скучные сценарии обходит за километр. Если на сцене Матвей — зал гарантированно стоит на ушах! Он делает так, чтобы каждое лагерное шоу выглядело как топовый концерт, а каждый ребёнок чувствовал себя главной звездой.'},
-    lera:{name:'Полина',img:'assets/counselors/polina.png',text:'Человек-зажигалка, рядом с которой просто невозможно стоять на месте. Полина знает миллион игр, может раскачать даже самый сонный отряд и превратить уборку комнат в захватывающий квест. Она обожает командные победы и умеет создать такую сплочённость, что к концу смены все становятся лучшими друзьями. Её девиз: «Скучать будем дома, а здесь — зажигаем!»'},
-    ilya:{name:'Соня',img:'assets/counselors/sonya.png',text:'Соня в палаточном лагере с самого первого дня его открытия: каждое лето приезжала сюда ребёнком, а повзрослев, вернулась уже вожатой. Она знает, как развеять любую грусть на вечернем огоньке, а своей улыбкой и танцами умеет зажигать огонь даже в самых робких детских сердцах. Соня искренне верит, что в каждом ребёнке прячется звёздочка, которой просто нужно помочь засиять. А если новичок скучает по дому, она тепло обнимет и тихо скажет: «Не бойся, ты дома».',quote:'Когда-то «Горизонт» зажёг моё сердце, а теперь я каждый день зажигаю этот огонёк в глазах детей'}
+    anya:{name:'Аня',img:'assets/counselors/anya.webp',text:'Ещё недавно Аня сидела в отрядном кругу как ребёнок, а летом 2026 года впервые надела вожатский галстук — сразу после выпуска из нашей Школы вожатых. Она пришла в команду со свежим взглядом, бешеной отдачей и невероятным художественным вкусом: Аня превращает любой отрядный уголок или сценический грим в произведение искусства. Она не строит из себя строгого наставника, а становится для детей понимающим старшим другом, с которым не страшно пробовать новое, ошибаться и побеждать.'},
+    maxim:{name:'Матвей',img:'assets/counselors/matvey.webp',text:'Абсолютный слэй нашего лагеря! Матвей прошёл путь от любимого вожатого до культорга «Горизонта», и теперь уровень движа зашкаливает на максимуме. Он на одной волне с ребятами: шарит за все актуальные тренды, мемы и звуки из ТикТока, а скучные сценарии обходит за километр. Если на сцене Матвей — зал гарантированно стоит на ушах! Он делает так, чтобы каждое лагерное шоу выглядело как топовый концерт, а каждый ребёнок чувствовал себя главной звездой.'},
+    lera:{name:'Полина',img:'assets/counselors/polina.webp',text:'Человек-зажигалка, рядом с которой просто невозможно стоять на месте. Полина знает миллион игр, может раскачать даже самый сонный отряд и превратить уборку комнат в захватывающий квест. Она обожает командные победы и умеет создать такую сплочённость, что к концу смены все становятся лучшими друзьями. Её девиз: «Скучать будем дома, а здесь — зажигаем!»'},
+    ilya:{name:'Соня',img:'assets/counselors/sonya.webp',text:'Соня в палаточном лагере с самого первого дня его открытия: каждое лето приезжала сюда ребёнком, а повзрослев, вернулась уже вожатой. Она знает, как развеять любую грусть на вечернем огоньке, а своей улыбкой и танцами умеет зажигать огонь даже в самых робких детских сердцах. Соня искренне верит, что в каждом ребёнке прячется звёздочка, которой просто нужно помочь засиять. А если новичок скучает по дому, она тепло обнимет и тихо скажет: «Не бойся, ты дома».',quote:'Когда-то «Горизонт» зажёг моё сердце, а теперь я каждый день зажигаю этот огонёк в глазах детей'}
   };
   const modal=document.getElementById('counselorsModal');
   const shade=document.getElementById('counselorsShade');
@@ -1428,16 +1428,16 @@ const stories=[
   key:'story-moose',
   title:'След лесного хранителя',
   subtitle:'Тайна, рассказанная у вечернего костра',
-  image:'assets/legends/story-moose.png',
-  modalImage:'assets/legends/story-moose-original.png',
+  image:'assets/legends/story-moose.webp',
+  modalImage:'assets/legends/story-moose-original.webp',
   text:'Летом 2022 года, когда наш палаточный лагерь только начинал свою историю, на одном из вечерних огоньков директор Дмитрий Александрович Горячев поделился с нами тайной.\n\nОн рассказал, что по ночам бродит невидимый хранитель здешних мест — то ли величавый лесной лось, то ли благородный олень. Он оставляет свои следы. И если ранним утром найти на лесной тропинке этот след, прикоснуться к нему и загадать самое заветное желание — оно обязательно сбудется.\n\nЧто началось потом, сложно описать словами! Всю оставшуюся смену мы, дети, превратились в настоящих следопытов: на цыпочках обходили каждую полянку, разглядывали каждую мелочь и искали то самое чудо.\n\nИ знаете, мы ведь действительно нашли. Потому что лагерное чудо — это не просто след на земле, а та искренняя вера в сказку, которую взрослые так бережно подарили нам у ночного костра.'
  },
  {
   key:'story-heart',
   title:'Вожатское сердце',
   subtitle:'Маленький кусочек Горизонта всегда с тобой',
-  image:'assets/legends/story-heart.png',
-  modalImage:'assets/legends/story-heart-original.png',
+  image:'assets/legends/story-heart.webp',
+  modalImage:'assets/legends/story-heart-original.webp',
   text:'Вы замечали, почему вожатые так крепко обнимаются в последний день смены и иногда тайком вытирают слёзы?\n\nЕсть старая сказка о том, что в день разъезда вожатый отламывает от своего сердца по маленькому невидимому кусочку и прячет каждому ребёнку в кармашек куртки или прямо в ладошку.\n\nРебята уезжают домой: в разные города, школы, к своим урокам. Но если осенью или холодной зимой тебе вдруг станет одиноко, грустно или покажется, что опустились руки — просто приложи ладошку к груди и вспомни наш лагерь.\n\nТы сразу почувствуешь лёгкое, тёплое тук-тук. Это бьётся тот самый кусочек вожатского сердца из «Горизонта», который напоминает: «Ты не один. Тебя помнят, любят и очень ждут обратно».'
  }
 ];
@@ -1499,13 +1499,13 @@ render();
   const live = document.getElementById('dayHorizonLive');
   if (!image || !prev || !next || !dots.length) return;
   const scenes = [
-    {src:'assets/day-scenes/01-morning.png', alt:'Доброе утро в лагере Горизонт', label:'08:00 — Доброе утро'},
-    {src:'assets/day-scenes/02-workshops.png', alt:'Дети на мастер-классах и творческих занятиях', label:'10:30 — Время открытий'},
-    {src:'assets/day-scenes/03-sports.png', alt:'Спортивные активности в лагере', label:'15:00 — Время движения'},
-    {src:'assets/day-scenes/04-friends.png', alt:'Дети отдыхают и общаются у озера', label:'17:00 — Время друзей'},
-    {src:'assets/day-scenes/05-preparation.png', alt:'Подготовка к вечернему мероприятию', label:'18:00 — Готовимся к вечеру'},
-    {src:'assets/day-scenes/06-evening.png', alt:'Большой вечер в лагере: концерт и костёр', label:'20:00 — Большой вечер'},
-    {src:'assets/day-scenes/07-night.png', alt:'Тихий вечер и подготовка ко сну в лагере', label:'21:30 — Время отдыха'}
+    {src:'assets/day-scenes/01-morning.webp', alt:'Доброе утро в лагере Горизонт', label:'08:00 — Доброе утро'},
+    {src:'assets/day-scenes/02-workshops.webp', alt:'Дети на мастер-классах и творческих занятиях', label:'10:30 — Время открытий'},
+    {src:'assets/day-scenes/03-sports.webp', alt:'Спортивные активности в лагере', label:'15:00 — Время движения'},
+    {src:'assets/day-scenes/04-friends.webp', alt:'Дети отдыхают и общаются у озера', label:'17:00 — Время друзей'},
+    {src:'assets/day-scenes/05-preparation.webp', alt:'Подготовка к вечернему мероприятию', label:'18:00 — Готовимся к вечеру'},
+    {src:'assets/day-scenes/06-evening.webp', alt:'Большой вечер в лагере: концерт и костёр', label:'20:00 — Большой вечер'},
+    {src:'assets/day-scenes/07-night.webp', alt:'Тихий вечер и подготовка ко сну в лагере', label:'21:30 — Время отдыха'}
   ];
   let current = 0;
   function show(index) {
@@ -1655,6 +1655,27 @@ render();
  scene.addEventListener('pointermove',e=>{if(e.pointerType==='touch')return;const r=scene.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-.5;const y=(e.clientY-r.top)/r.height-.5;scene.querySelector('.games-background').style.transform='scale(1.04) translate('+(-x*7)+'px,'+(-y*5)+'px)';scene.querySelector('.games-foreground').style.transform='translate('+(x*5)+'px,'+(y*3)+'px)'});
  scene.addEventListener('pointerleave',()=>{scene.querySelector('.games-background').style.transform='scale(1.025)';scene.querySelector('.games-foreground').style.transform='translate(0,0)'});
  render();
+})();
+</script>
+
+
+<script>
+/* Pause decorative CSS animations in background tabs and distant sections. */
+(() => {
+  const root = document.documentElement;
+  const syncVisibility = () => root.classList.toggle('is-page-hidden', document.hidden);
+  document.addEventListener('visibilitychange', syncVisibility, { passive: true });
+  syncVisibility();
+
+  if (!('IntersectionObserver' in window)) return;
+  const sections = document.querySelectorAll('body > section, main > section');
+  if (!sections.length) return;
+  const observer = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      entry.target.dataset.motionPaused = entry.isIntersecting ? 'false' : 'true';
+    }
+  }, { rootMargin: '120px 0px', threshold: 0 });
+  sections.forEach(section => observer.observe(section));
 })();
 </script>
 
