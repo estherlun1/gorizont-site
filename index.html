@@ -1365,6 +1365,25 @@ main {
 }
 </style>
 
+
+<style id="camp-auth-profile-styles">
+.auth-profile[hidden] { display: none !important; }
+.auth-profile { text-align: center; }
+.auth-profile-avatar { font-size: 42px; margin: 4px 0 8px; }
+.auth-profile-kicker { margin: 0 0 6px; color: #a56b37; font-size: 10px; font-weight: 800; letter-spacing: .13em; }
+.auth-profile h3 { margin: 0 0 4px; color: #34483e; font-size: 25px; }
+.auth-profile-nick { margin: 0 0 18px; color: #80664a; font-size: 13px; }
+.auth-points-preview { display: flex; align-items: center; gap: 12px; margin: 0 0 18px; padding: 13px 15px; border: 1px solid #e4c99f; border-radius: 15px; background: rgba(255,255,255,.55); text-align: left; }
+.auth-points-preview > span:first-child { font-size: 27px; }
+.auth-points-preview strong, .auth-points-preview small { display: block; }
+.auth-points-preview strong { color: #5e4c39; font-size: 13px; }
+.auth-points-preview small { margin-top: 3px; color: #82715b; font-size: 11px; line-height: 1.4; }
+.auth-logout { width: 100%; background: #82694e; box-shadow: 0 5px 0 #624b34, 0 10px 18px rgba(91,54,29,.12); }
+.auth-logout:hover { background: #71583f; }
+#campAuthOpen.is-authenticated { background: #285b48; }
+#campAuthOpen.is-authenticated:hover { background: #204b3b; }
+</style>
+
 </head>
 <body>
 <div id="celebrationLayer" aria-hidden="true"></div>
@@ -2233,6 +2252,17 @@ render();
     <p class="auth-eyebrow">ТВОЁ ПРИКЛЮЧЕНИЕ НАЧИНАЕТСЯ ЗДЕСЬ</p>
     <h2 id="authTitle">Добро пожаловать в Горизонт!</h2>
     <p class="auth-intro">Создай аккаунт, собирай очки за игры и меняй их на лагерные подарки.</p>
+    <div class="auth-profile" id="authProfile" hidden>
+      <div class="auth-profile-avatar" aria-hidden="true">🌲</div>
+      <p class="auth-profile-kicker">ТЫ УЖЕ В КОМАНДЕ!</p>
+      <h3 id="authProfileName">Привет!</h3>
+      <p class="auth-profile-nick" id="authProfileNick"></p>
+      <div class="auth-points-preview">
+        <span>⭐</span>
+        <span><strong>Баланс очков</strong><small>Подключим отображение баланса следующим шагом</small></span>
+      </div>
+      <button class="auth-submit auth-logout" id="authLogout" type="button">Выйти из аккаунта</button>
+    </div>
     <div class="auth-tabs" role="tablist" aria-label="Регистрация или вход">
       <button class="auth-tab active" id="authRegisterTab" type="button" role="tab" aria-selected="true">Я впервые здесь</button>
       <button class="auth-tab" id="authLoginTab" type="button" role="tab" aria-selected="false">У меня есть аккаунт</button>
