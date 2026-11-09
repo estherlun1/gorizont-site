@@ -933,6 +933,24 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
 </style>
 
 \n<style id="mobile-map-adaptation">\n.map-mobile-switch,.map-mobile-bg{display:none}\n@media(max-width:600px){\n  .horizon-map{padding:12px 0 20px;background:#f3dfb4}\n  .map-mobile-switch{display:flex;position:relative;z-index:45;gap:8px;justify-content:center;padding:8px 12px 12px}\n  .map-mobile-tab{flex:1;max-width:190px;min-height:42px;border:2px solid #9a6337;border-radius:999px;background:#f7e5bd;color:#674323;font:700 13px/1.1 inherit;box-shadow:0 3px 0 #bd8a51;cursor:pointer}\n  .map-mobile-tab.active{background:#8b542d;color:#fff4dc;border-color:#754323;box-shadow:0 3px 0 #60391f}\n  .map-stage{width:100%!important;aspect-ratio:1086 / 1448;overflow:hidden;position:relative}\n  .map-bg{display:none!important}\n  .map-mobile-bg{display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;pointer-events:none;user-select:none;-webkit-user-drag:none}\n  .map-mobile-bg.map-mobile-stationary{display:block}\n  .map-stage:has(.map-mobile-tab[data-map-page="tent"].active) .map-mobile-tent{display:block}\n  .map-stage:has(.map-mobile-tab[data-map-page="tent"].active) .map-mobile-stationary{display:none}\n  .map-hit{width:34px;height:42px;z-index:12;transform:translate(-50%,-100%) scale(.9)}\n  .map-hit::before{width:27px;height:27px;border-width:2px}\n  .map-hit::after{top:8px;width:7px;height:7px}\n  .map-hit[hidden],.hunt-object[hidden]{display:none!important}\n  #huntTab{position:fixed;top:auto;bottom:12px;left:10px;transform:none;min-height:48px;width:48px;border-radius:16px;z-index:1000}\n  #huntTab.open{width:min(330px,calc(100vw - 20px));min-height:0;bottom:12px;top:auto}\n  #huntTab .tab-handle{writing-mode:horizontal-tb;width:48px;height:48px;font-size:0}\n  #huntTab .tab-handle:after{content:"🔎";font-size:21px}\n  #huntTab .tab-panel{width:calc(min(330px,100vw - 20px) - 48px);padding:12px 10px 12px}\n  #huntTab.open .tab-panel{max-height:45vh;overflow:auto}\n  #huntTab .hunt-title{font-size:16px}\n  #huntTab .hunt-copy{font-size:11px;margin-bottom:7px}\n  #huntTab .hunt-items{gap:5px}\n  #huntTab .hunt-slot{width:58px;min-height:57px;flex-basis:58px}\n  #huntTab .hunt-slot img{max-width:31px;max-height:31px}\n  .hunt-object{width:34px;height:34px;z-index:16}\n  .description{position:fixed;left:12px;right:12px;bottom:76px;top:auto;width:auto;max-width:none;transform:translateY(12px);z-index:900}\n  .description.show{transform:translateY(0)}\n  .description .desc-photo{max-height:130px;object-fit:cover}\n}\n</style>\n
+
+<style id="camp-auth-styles">
+.hero-btn.primary{position:relative;border:0;cursor:pointer;font-family:inherit}
+.auth-hint{position:absolute;left:50%;top:calc(100% + 12px);transform:translate(-50%,-5px);padding:9px 13px;border-radius:12px;background:#fffaf1;color:#36513e;font-size:11px;font-weight:800;box-shadow:0 8px 22px #20302d25;opacity:0;visibility:hidden;transition:.2s;pointer-events:none;z-index:30}
+.auth-hint:before{content:"";position:absolute;left:50%;top:-6px;width:12px;height:12px;background:#fffaf1;transform:translateX(-50%) rotate(45deg)}
+.hero-btn.primary:hover .auth-hint,.hero-btn.primary:focus-visible .auth-hint{opacity:1;visibility:visible;transform:translate(-50%,0)}
+.points-invite{position:absolute;z-index:20;left:50%;bottom:4.2%;transform:translateX(-50%);max-width:min(650px,90%);border:1px solid #fff8d5;border-radius:999px;padding:11px 20px;background:#fff8dfed;color:#38533d;font:600 13px/1.4 Inter,sans-serif;box-shadow:0 7px 22px #243d2d25;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.points-invite:hover{transform:translate(-50%,-3px);box-shadow:0 11px 26px #243d2d30}.points-invite b{color:#d85d32}
+.auth-shade{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;padding:18px;background:#172b24a8;backdrop-filter:blur(7px);opacity:0;visibility:hidden;transition:opacity .22s,visibility .22s}
+.auth-shade.open{opacity:1;visibility:visible}
+.auth-dialog{position:relative;width:min(470px,100%);max-height:min(92vh,850px);overflow:auto;padding:30px 34px 26px;border:1px solid #f5e5c5;border-radius:28px;background:linear-gradient(160deg,#fffdf5,#f4f0dc);box-shadow:0 24px 80px #10251c55;text-align:center;color:#294334;transform:translateY(14px) scale(.98);transition:transform .22s}
+.auth-shade.open .auth-dialog{transform:translateY(0) scale(1)}.auth-close{position:absolute;right:15px;top:12px;width:36px;height:36px;border:0;border-radius:50%;background:#e9eddf;color:#38513e;font-size:25px;cursor:pointer}
+.auth-mark{display:grid;place-items:center;width:52px;height:52px;margin:0 auto 10px;border-radius:17px;background:#e3edda;font-size:27px}.auth-eyebrow{margin:0 0 7px;color:#d76b3b;font-size:9px;font-weight:800;letter-spacing:1.5px}.auth-dialog h2{margin:0;font:700 clamp(24px,5vw,30px)/1.15 Oswald,Inter,sans-serif;color:#284b37}.auth-intro{max-width:340px;margin:10px auto 19px;color:#68776b;font-size:12px;line-height:1.55}
+.auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:5px;margin-bottom:17px;border-radius:14px;background:#e9eddf}.auth-tab{min-height:40px;padding:8px;border:0;border-radius:10px;background:transparent;color:#657365;font:700 11px Inter,sans-serif;cursor:pointer}.auth-tab.active{background:#fffdf5;color:#31563d;box-shadow:0 2px 8px #20302d15}
+.auth-form{display:grid;gap:11px;text-align:left}.auth-form[hidden]{display:none}.auth-form label{display:grid;gap:5px;color:#405c48;font-size:11px;font-weight:800}.auth-form input{width:100%;min-height:43px;padding:11px 13px;border:1px solid #d8dfcf;border-radius:12px;outline:none;background:#fffefa;color:#263d30;font:500 13px Inter,sans-serif}.auth-form input:focus{border-color:#7d9b69;box-shadow:0 0 0 3px #91b17b2b}.auth-submit{display:flex;align-items:center;justify-content:center;gap:10px;min-height:47px;margin-top:4px;border:0;border-radius:13px;background:#e96d3c;color:white;font:800 14px Inter,sans-serif;cursor:pointer;box-shadow:0 5px 0 #c6532d}.auth-submit:hover{background:#dc5e30}.auth-submit span{font-size:19px}.auth-legal{margin:1px 3px 0;color:#7b8678;font-size:10px;line-height:1.5;text-align:center}.auth-status{min-height:16px;margin:10px 0 0;color:#a34c2d;font-size:11px;line-height:1.4}
+@media(max-width:600px){.auth-dialog{padding:27px 20px 22px;border-radius:23px}.points-invite{bottom:2%;font-size:10px;padding:8px 12px;max-width:94%;border-radius:16px}.auth-hint{display:none}}
+</style>
+
 </head>
 <body>
 <div id="celebrationLayer" aria-hidden="true"></div>
@@ -965,7 +983,7 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
 
     <div class="hero-actions">
       <a class="hero-btn light" href="#camp-world">лето начинается здесь!</a>
-      <a class="hero-btn primary" href="#map">войти в лагерь <span class="arrow">→</span></a>
+      <button class="hero-btn primary" id="campAuthOpen" type="button" aria-haspopup="dialog" aria-controls="campAuthModal">войти в лагерь <span class="arrow">→</span><span class="auth-hint">регистрация и вход · копи очки за игры</span></button>
     </div>
 
     <a class="sign-hotspot sign1" href="#map" aria-label="Горизонт"><span>Горизонт</span></a>
@@ -1143,6 +1161,7 @@ footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-conte
   <div class="games-pagination" id="gamesPagination" aria-label="Страница карусели"></div>
   <div class="games-toast" id="gamesToast" role="status" aria-live="polite"></div>
   <div class="games-section-note">выбери игру и отправляйся в приключение</div>
+  <button class="points-invite" type="button" data-open-auth>🎒 Хочешь копить очки за игры и обменивать их на подарки? <b>Зарегистрируйся в Горизонте</b> →</button>
   <img class="games-layer games-foreground" src="assets/games/games-foreground.webp" alt="Указатели, цветы и рюкзак на переднем плане" loading="lazy" decoding="async">
  </div>
 </section>
@@ -1790,6 +1809,38 @@ render();
   sections.forEach(section => observer.observe(section));
 })();
 </script>
+
+
+<!-- Личный кабинет: окно регистрации и входа -->
+<div class="auth-shade" id="campAuthModal" aria-hidden="true">
+  <section class="auth-dialog" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <button class="auth-close" id="campAuthClose" type="button" aria-label="Закрыть окно">×</button>
+    <div class="auth-mark" aria-hidden="true">🌲</div>
+    <p class="auth-eyebrow">ТВОЁ ПРИКЛЮЧЕНИЕ НАЧИНАЕТСЯ ЗДЕСЬ</p>
+    <h2 id="authTitle">Добро пожаловать в Горизонт!</h2>
+    <p class="auth-intro">Создай аккаунт, собирай очки за игры и меняй их на лагерные подарки.</p>
+    <div class="auth-tabs" role="tablist" aria-label="Регистрация или вход">
+      <button class="auth-tab active" id="authRegisterTab" type="button" role="tab" aria-selected="true">Я впервые здесь</button>
+      <button class="auth-tab" id="authLoginTab" type="button" role="tab" aria-selected="false">У меня есть аккаунт</button>
+    </div>
+    <form class="auth-form" id="authRegisterForm">
+      <label>Имя и фамилия<input name="full_name" autocomplete="name" placeholder="Например, Маша Иванова" required maxlength="100"></label>
+      <label>Твой игровой ник<input name="nickname" autocomplete="nickname" placeholder="Как тебя будут видеть друзья?" required maxlength="40"></label>
+      <label>Логин<input name="username" autocomplete="username" placeholder="Латинские буквы и цифры" required minlength="3" maxlength="24" pattern="[a-zA-Z0-9_]+"></label>
+      <label>Пароль<input name="password" type="password" autocomplete="new-password" placeholder="Не менее 8 символов" required minlength="8"></label>
+      <button class="auth-submit" type="submit">Создать аккаунт <span>→</span></button>
+      <p class="auth-legal">Придумай пароль, который ты сможешь вспомнить. Если забудешь его, обратись к администратору лагеря.</p>
+    </form>
+    <form class="auth-form" id="authLoginForm" hidden>
+      <label>Логин<input name="username" autocomplete="username" placeholder="Твой логин" required maxlength="24"></label>
+      <label>Пароль<input name="password" type="password" autocomplete="current-password" placeholder="Твой пароль" required></label>
+      <button class="auth-submit" type="submit">Войти в аккаунт <span>→</span></button>
+      <p class="auth-legal">Забыл пароль? Обратись к администратору лагеря.</p>
+    </form>
+    <p class="auth-status" id="authStatus" role="status" aria-live="polite"></p>
+  </section>
+</div>
+<script src="auth-ui.js" defer></script>
 
 </body>
 </html>

@@ -75,13 +75,16 @@ var ITEMS = GOOD.map(function (g, i) {
     n: g[1],
     ok: true
   };
-})
-.concat(BAD.map(function (b) {
-  return { e: b[0], n: b[1], ok: false, why: b[2] };
+}).concat(BAD.map(function (b) {
+  return {
+    e: b[0],
+    n: b[1],
+    ok: false,
+    why: b[2]
+  };
 }));
-})
-    .concat(BAD.map(function (b) { return { e: b[0], n: b[1], ok: false, why: b[2] }; }));
-  var TOTAL = GOOD.length;
+
+var TOTAL = GOOD.length;
 
   function $(id) { return document.getElementById(id); }
   var left = $('left'), right = $('right'), stuff = $('stuff'), bag = $('bag'), say = $('say'),
@@ -177,7 +180,9 @@ update();
 
   // ---- правильно / неправильно ----
   function attempt(t, g) {
-    if (it.ok) {
+  var it = t._it;
+
+  if (it.ok) {
   if (g) g.remove();
   t.hidden = true;
   packed++;
