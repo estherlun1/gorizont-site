@@ -49,7 +49,37 @@
     'Медведь бы такое тоже не взял. ',
     'Рюкзак качает головой: '
   ];
-  var ITEMS = GOOD.map(function (g) { return { e: g[0], n: g[1], ok: true }; })
+  var GOOD_IDS = [
+  'good_01',
+  'good_02',
+  'good_03',
+  'good_04',
+  'good_05',
+  'good_06',
+  'good_07',
+  'good_08',
+  'good_09',
+  'good_10',
+  'good_11',
+  'good_12',
+  'good_13',
+  'good_14',
+  'good_15',
+  'good_16'
+];
+
+var ITEMS = GOOD.map(function (g, i) {
+  return {
+    id: GOOD_IDS[i],
+    e: g[0],
+    n: g[1],
+    ok: true
+  };
+})
+.concat(BAD.map(function (b) {
+  return { e: b[0], n: b[1], ok: false, why: b[2] };
+}));
+})
     .concat(BAD.map(function (b) { return { e: b[0], n: b[1], ok: false, why: b[2] }; }));
   var TOTAL = GOOD.length;
 
@@ -57,6 +87,7 @@
   var left = $('left'), right = $('right'), stuff = $('stuff'), bag = $('bag'), say = $('say'),
       sayTx = $('sayTx'), bar = $('bar'), cnt = $('cnt'), win = $('win'), conf = $('confetti');
   var packed = 0, drag = null;
+var packedItems = [];
 
   function shuffle(a) {
     for (var i = a.length - 1; i > 0; i--) {
@@ -74,7 +105,9 @@
 
   function build() {
     left.innerHTML = right.innerHTML = stuff.innerHTML = '';
-    packed = 0; update();
+    packed = 0;
+packedItems = [];
+update();
     talk(pick([
       'Поехали! Выбирай вещи для лагеря и перетаскивай их в рюкзак.',
       'Проверим твою лагерную интуицию: что действительно нужно взять?',
@@ -144,10 +177,11 @@
 
   // ---- правильно / неправильно ----
   function attempt(t, g) {
-    var it = t._it;
     if (it.ok) {
-      if (g) g.remove();
-      t.hidden = true; packed++;
+  if (g) g.remove();
+  t.hidden = true;
+  packed++;
+  packedItems.push(it.id);
       var i = document.createElement('i');
       i.innerHTML = it.e; i.title = it.n; stuff.appendChild(i);
       kick(bag, 'pop'); update();
