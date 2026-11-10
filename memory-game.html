@@ -10,16 +10,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--green:#15574d;--green2:#0d4039;--orange:#ed672f;--cream:#fff5df;--paper:#f8e8c9;--ink:#4b321e;--muted:#826b52;--gold:#d6a45c}
-*{box-sizing:border-box}body{margin:0;min-height:100vh;background:#e5e8d9;color:var(--ink);font-family:Inter,Arial,sans-serif}
-.page{width:min(1100px,calc(100% - 28px));margin:24px auto 48px}
-.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
-.nav{display:inline-flex;align-items:center;gap:7px;color:var(--green);font-weight:800;text-decoration:none;background:#fff6e4;border:1px solid #d9bd8b;padding:11px 16px;border-radius:999px}
-.brand{font:700 clamp(20px,3vw,28px) Oswald,sans-serif;color:var(--green);letter-spacing:.02em}
-.panel{background:var(--cream);border:1px solid #e0c797;border-radius:26px;padding:clamp(18px,3vw,34px);box-shadow:0 12px 34px #40351d18}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:#173e32 url("assets/games/games-background.webp") center center/cover fixed no-repeat;color:var(--ink);font-family:Inter,Arial,sans-serif;position:relative}
+body:before{content:"";position:fixed;inset:0;background:linear-gradient(180deg,rgba(13,48,39,.18),rgba(13,48,39,.38));pointer-events:none;z-index:-1}
+.page{position:relative;width:min(1100px,calc(100% - 28px));min-height:calc(100vh - 72px);margin:24px auto 48px;display:flex;flex-direction:column}.panel{margin:auto;width:100%}
+.top{display:flex;align-items:center;justify-content:flex-start;gap:12px;margin-bottom:16px;flex:0 0 auto}
+.nav{display:inline-flex;align-items:center;gap:7px;color:#fff5dc;font-weight:800;text-decoration:none;background:#204b3bdf;border:1px solid #f1d49a;padding:11px 16px;border-radius:999px;text-shadow:0 1px 2px #15372b;box-shadow:0 3px 10px #102b2340}
+.brand{font:700 clamp(20px,3vw,28px) Oswald,sans-serif;color:#fff1d2;letter-spacing:.08em;text-shadow:0 2px 5px #173c30,0 0 10px #173c30}
+.panel{background:linear-gradient(145deg,rgba(255,246,224,.97),rgba(250,226,185,.97));border:3px solid #d5a45f;border-radius:24px;padding:clamp(18px,3vw,34px);box-shadow:0 8px 0 #8b5428,0 18px 42px #102b2370;position:relative}
 h1,h2,h3,p{margin-top:0}h1{font:700 clamp(34px,6vw,58px)/1 Oswald,sans-serif;color:var(--green);text-align:center;margin-bottom:12px}
 .lead{text-align:center;color:var(--muted);line-height:1.6;max-width:650px;margin:0 auto 22px}
 .levels{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:24px 0}
-.level{border:2px solid #dfc28e;border-radius:18px;padding:20px 12px;background:#fffaf0;color:var(--ink);cursor:pointer;text-align:center;transition:.18s;min-height:150px}
+.level{border:2px solid #c99550;border-radius:16px;padding:20px 12px;background:linear-gradient(160deg,#fff5d9,#f3d69e);color:var(--ink);cursor:pointer;text-align:center;transition:.18s;min-height:150px;box-shadow:0 4px 0 #b47a3d,0 7px 14px #69431b20}
 .level:hover,.level:focus-visible{transform:translateY(-3px);border-color:var(--orange);outline:none;box-shadow:0 7px 0 #e7c99a}
 .level strong{display:block;font:700 24px Oswald,sans-serif;color:var(--green);margin-bottom:7px}
 .level .time{font-size:25px;font-weight:800;color:var(--orange);display:block;margin:5px 0}
@@ -28,8 +29,18 @@ h1,h2,h3,p{margin-top:0}h1{font:700 clamp(34px,6vw,58px)/1 Oswald,sans-serif;col
 .primary{background:var(--green);color:white;box-shadow:0 4px 0 var(--green2)}
 .primary:hover{filter:brightness(1.08)}.secondary{background:#f2dfbd;color:var(--ink);border:1px solid #d7b77f}
 .center{text-align:center}.hidden{display:none!important}
-.art-wrap{position:relative;margin:16px auto 18px;max-width:980px;border:7px solid #fff9eb;border-radius:18px;overflow:hidden;box-shadow:0 8px 25px #43331e22;background:#e8d5ad}
+.art-wrap{position:relative;margin:16px auto 18px;max-width:980px;border:7px solid #fff0ca;border-radius:18px;overflow:hidden;box-shadow:0 0 0 2px #b77b39,0 8px 25px #43331e45;background:#e8d5ad}
 .art{display:block;width:100%;height:auto}
+#memoryScreen{position:fixed;inset:0;z-index:50;width:100%;height:100dvh;max-width:none;margin:0;padding:clamp(14px,2.5vw,30px);border:0;border-radius:0;background:rgba(11,39,32,.94);box-shadow:none;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+#memoryScreen.hidden{display:none!important}
+#memoryScreen h1{color:#fff1d2;text-shadow:0 3px 10px #071e18;margin:0 0 8px}
+#memoryScreen .timer-row{color:#fff1d2;margin:0 0 12px;position:relative;z-index:2}
+#memoryScreen .timer{background:#fff4dc;border-color:#d8ad64}
+#memoryScreen .art-wrap{width:min(96vw,1500px);max-height:calc(100dvh - 170px);margin:0 auto;border-width:8px;border-radius:22px;animation:pictureReveal .9s cubic-bezier(.2,.8,.2,1) both}
+#memoryScreen .art{width:100%;height:100%;max-height:calc(100dvh - 190px);object-fit:contain}
+#memoryScreen .lead{color:#fff1d2;margin:12px auto 0;max-width:850px}
+@keyframes pictureReveal{0%{transform:scale(.38);opacity:.2;border-radius:40px;filter:blur(5px)}65%{transform:scale(1.025);opacity:1;filter:blur(0)}100%{transform:scale(1);opacity:1;border-radius:22px;filter:blur(0)}}
+@media(prefers-reduced-motion:reduce){#memoryScreen .art-wrap{animation:none}}
 .timer-row{display:flex;align-items:center;justify-content:center;gap:12px;margin:12px 0 18px;color:var(--green);font-weight:800}
 .timer{font:700 34px Oswald,sans-serif;min-width:76px;text-align:center;background:#fff8e9;border:2px solid #d8bd8b;border-radius:14px;padding:5px 10px}
 .timer.warning{color:#c84325;border-color:#e46b47;animation:pulse .8s infinite alternate}
@@ -38,23 +49,23 @@ h1,h2,h3,p{margin-top:0}h1{font:700 clamp(34px,6vw,58px)/1 Oswald,sans-serif;col
 .question-head{display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--muted);font-size:13px;font-weight:800}
 .question{font:700 clamp(25px,4vw,38px)/1.2 Oswald,sans-serif;color:var(--green);text-align:center;margin:24px auto;max-width:780px}
 .answers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:760px;margin:0 auto 20px}
-.answer{padding:17px 14px;border:2px solid #dfc28e;border-radius:14px;background:#fffaf0;color:var(--ink);font:700 16px Inter,sans-serif;cursor:pointer;min-height:58px}
+.answer{padding:17px 14px;border:2px solid #c99550;border-radius:14px;background:linear-gradient(160deg,#fff8e6,#f7e5c2);color:var(--ink);font:700 16px Inter,sans-serif;cursor:pointer;min-height:58px;box-shadow:0 3px 0 #d6b17a}
 .answer:hover:not(:disabled){border-color:var(--orange);background:#fff1dc}
 .answer:disabled{cursor:default;opacity:1}
 .answer.correct{background:#e5f2df;border-color:#78a56c;color:#285b35}
 .answer.wrong{background:#fbe5db;border-color:#d77a5c;color:#943f2a}
 .feedback{min-height:28px;text-align:center;font-weight:800;color:var(--green);margin:10px 0 16px}
-.result-score{font:700 clamp(48px,10vw,78px)/1 Oswald,sans-serif;color:var(--orange);text-align:center;margin:10px 0}
+.result-score{font:700 clamp(48px,10vw,78px)/1 Oswald,sans-serif;color:var(--orange);text-align:center;margin:10px 0;text-shadow:0 2px 0 #ffdbad}
 .review{max-width:760px;margin:20px auto;text-align:left}.review-item{padding:12px 14px;border-bottom:1px solid #e5d2ac;line-height:1.45}.review-item b{color:var(--green)}
 .actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:20px}
 .note{font-size:12px;color:var(--muted);text-align:center;margin-top:15px;line-height:1.5}
-@media(max-width:650px){.page{width:min(100% - 16px,1100px);margin:10px auto 28px}.top{margin:6px 2px 12px}.panel{border-radius:19px;padding:17px 13px}.levels{gap:7px}.level{padding:13px 6px;min-height:130px}.level strong{font-size:19px}.level .time{font-size:21px}.level small{font-size:10px}.art-wrap{border-width:4px;border-radius:12px}.answers{gap:8px}.answer{font-size:14px;padding:13px 8px;min-height:58px}.question{margin:18px auto}.nav{font-size:12px;padding:9px 11px}.brand{font-size:20px}}
+@media(max-width:650px){body{background-attachment:scroll;background-position:center top}.page{width:min(100% - 16px,1100px);min-height:calc(100dvh - 20px);margin:10px auto 20px}.top{margin:6px 2px 12px}.panel{border-radius:19px;padding:17px 13px}.levels{gap:7px}.level{padding:13px 6px;min-height:130px}.level strong{font-size:19px}.level .time{font-size:21px}.level small{font-size:10px}.art-wrap{border-width:4px;border-radius:12px}.answers{gap:8px}.answer{font-size:14px;padding:13px 8px;min-height:58px}.question{margin:18px auto}.nav{font-size:12px;padding:9px 11px}#memoryScreen{padding:10px}#memoryScreen .art-wrap{width:100%;max-height:calc(100dvh - 155px);border-width:4px}#memoryScreen .art{max-height:calc(100dvh - 175px)}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 <main class="page">
- <header class="top"><a class="nav" href="index.html">← На главную</a><div class="brand">ГОРИЗОНТ</div></header>
+ <header class="top"><a class="nav" href="index.html">← На главную</a></header>
  <section class="panel" id="startScreen">
   <h1>Запомни картинку!</h1>
   <p class="lead">Выбери сложность, внимательно рассмотри лесной пикник, а затем ответь на вопросы. Проверим твою память!</p>
