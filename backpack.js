@@ -1,3 +1,16 @@
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const SUPABASE_URL = "https://jrvukdqqrmfjbtskrayy.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_AAHg7Xgeq_KRm6PdropyMg_V6op0enJ";
+const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: false,
+    storageKey: "gorizont-auth-session"
+  }
+});
+
 (function () {
   var TOWEL = '<svg viewBox="0 0 40 40"><rect x="8" y="3" width="24" height="34" rx="3" fill="#8fbcec"/><rect x="8" y="12" width="24" height="5" fill="#fff"/><rect x="8" y="23" width="24" height="5" fill="#fff"/></svg>';
   var COMB = '<svg viewBox="0 0 40 40"><rect x="3" y="9" width="34" height="9" rx="3" fill="#e08a3c"/><path d="M7 18v14M14 18v14M20 18v14M26 18v14M33 18v14" stroke="#e08a3c" stroke-width="3" stroke-linecap="round"/></svg>';
@@ -91,6 +104,68 @@ var TOTAL = GOOD.length;
       sayTx = $('sayTx'), bar = $('bar'), cnt = $('cnt'), win = $('win'), conf = $('confetti');
   var packed = 0, drag = null;
 var packedItems = [];
+  var completionKey = null;
+  var rewardRequestStarted = false;
+
+  async function submitBackpackResult() {
+    var message = $('winMessage');
+    if (rewardRequestStarted) return;
+    rewardRequestStarted = true;
+
+    if (!completionKey) {
+      completionKey = (window.crypto && crypto.randomUUID)
+        ? crypto.randomUUID()
+        : "backpack-" + Date.now() + "-" + Math.random().toString(36).slice(2);
+    }
+
+    if (message) message.textContent = "Проверяем результат и начисляем очки...";
+
+    try {
+      var sessionResult = await supabase.auth.getSession();
+      var session = sessionResult.data && sessionResult.data.session;
+
+      if (!session || !session.access_token) {
+        if (message) {
+          message.textContent = "Рюкзак собран! Чтобы получить лагерные очки, войди в аккаунт и сыграй ещё раз.";
+        }
+        return;
+      }
+
+      var response = await fetch(SUPABASE_URL + "/functions/v1/complete-game", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_PUBLISHABLE_KEY,
+          "Authorization": "Bearer " + session.access_token
+        },
+        body: JSON.stringify({
+          item_ids: packedItems.slice(),
+          idempotency_key: completionKey
+        })
+      });
+
+      var result = await response.json().catch(function () { return {}; });
+
+      if (!response.ok) {
+        throw new Error(result.error || "Не удалось проверить результат.");
+      }
+
+      if (result.status === "awarded") {
+        if (message) message.textContent = "Отлично! Тебе начислено " + result.points_awarded + " очков Горизонта! ⭐";
+      } else if (result.status === "weekly_limit") {
+        if (message) message.textContent = "Рюкзак собран! Награду за эту игру на этой неделе ты уже получил. Попробуй снова на следующей неделе.";
+      } else if (result.status === "duplicate_request") {
+        if (message) message.textContent = "Результат уже принят сервером. Начислено очков: " + result.points_awarded + ".";
+      } else {
+        if (message) message.textContent = "Рюкзак собран! Сервер обработал результат.";
+      }
+    } catch (error) {
+      console.error("Backpack reward error:", error);
+      if (message) message.textContent = "Рюкзак собран, но не удалось отправить результат. Не закрывай страницу и попробуй обновить игру позже.";
+    } finally {
+      rewardRequestStarted = false;
+    }
+  }
 
   function shuffle(a) {
     for (var i = a.length - 1; i > 0; i--) {
@@ -110,7 +185,9 @@ var packedItems = [];
     left.innerHTML = right.innerHTML = stuff.innerHTML = '';
     packed = 0;
 packedItems = [];
-update();
+    completionKey = null;
+    rewardRequestStarted = false;
+    update();
     talk(pick([
       'Поехали! Выбирай вещи для лагеря и перетаскивай их в рюкзак.',
       'Проверим твою лагерную интуицию: что действительно нужно взять?',
@@ -211,6 +288,7 @@ update();
       conf.appendChild(s);
     }
     win.hidden = false;
+    submitBackpackResult();
     $('again').focus();
   }
   $('again').addEventListener('click', function () { win.hidden = true; conf.innerHTML = ''; build(); });
