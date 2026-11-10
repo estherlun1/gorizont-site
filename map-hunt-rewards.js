@@ -26,7 +26,7 @@ window.addEventListener("gorizont:map-hunt-completed", async (event) => {
     const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
     if (sessionError || !session) {
-      showMapHuntMessage("Все предметы найдены! Чтобы получить очки, войди в аккаунт и пройди игру ещё раз.");
+      showMapHuntMessage("Вы всё нашли! Войдите в аккаунт, чтобы получить 20 очков. После входа пройдите игру ещё раз.");
       return;
     }
 
@@ -56,9 +56,9 @@ window.addEventListener("gorizont:map-hunt-completed", async (event) => {
     }
 
     if (result.awarded) {
-      showMapHuntMessage("Победа! За игру начислено 20 очков. Загляни в профиль!");
+      showMapHuntMessage("Вы всё нашли! Держите 20 очков! ⭐");
     } else if (result.weekly_limit) {
-      showMapHuntMessage("Все предметы найдены! Награда за эту игру на этой неделе уже получена.");
+      showMapHuntMessage("Вы всё нашли! Награду за эту игру на этой неделе вы уже получили. Возвращайтесь на следующей! ⭐");
     } else if (result.duplicate_request) {
       showMapHuntMessage("Результат этой игры уже был отправлен.");
     } else {

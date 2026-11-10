@@ -65,6 +65,11 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
     pointsValue.textContent = `${balance} очков на твоём счету`;
   }
 
+  // Обновляем баланс после начисления награды в любой игре.
+  window.addEventListener("gorizont:points-updated", () => {
+    refreshPoints();
+  });
+
   function showProfile(data) {
     participant = data || null;
     const signedIn = !!participant;
