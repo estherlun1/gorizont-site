@@ -27,6 +27,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
   const menuAccount = document.getElementById("menuAccount");
   const menuAccountGreeting = document.getElementById("menuAccountGreeting");
   const pointsValue = profile?.querySelector(".auth-points-preview small");
+  const pointsHistory = document.getElementById("authPointsHistory");
   const status = document.getElementById("authStatus");
   let previousFocus = null;
   let busy = false;
@@ -45,24 +46,83 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
       button.style.cursor = value ? "wait" : "";
     });
   }
+  function renderPointsHistory(rows) {
+    if (!pointsHistory) return;
+    pointsHistory.replaceChildren();
+    if (!rows.length) {
+      const empty = document.createElement("p");
+      empty.className = "auth-history-empty";
+      empty.textContent = "Пока операций нет. Играй и собирай свои первые очки!";
+      pointsHistory.appendChild(empty);
+      return;
+    }
+    const titles = {
+      game_reward: "Награда за игру",
+      achievement: "Достижение",
+      manual_reward: "Награда от вожатого",
+      purchase: "Покупка в магазине",
+      adjustment: "Корректировка баланса"
+    };
+    const list = document.createElement("div");
+    list.className = "auth-history-list";
+    rows.forEach(row => {
+      const item = document.createElement("div");
+      item.className = "auth-history-row";
+      const info = document.createElement("div");
+      info.className = "auth-history-info";
+      const title = document.createElement("div");
+      title.className = "auth-history-title";
+      title.textContent = row.description || titles[row.transaction_type] || "Операция с очками";
+      const dateLabel = document.createElement("div");
+      dateLabel.className = "auth-history-date";
+      const date = new Date(row.created_at);
+      dateLabel.textContent = Number.isNaN(date.getTime()) ? "" :
+        date.toLocaleString("ru-RU", {day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});
+      const amount = document.createElement("div");
+      const value = Number(row.amount || 0);
+      amount.className = "auth-history-amount" + (value < 0 ? " negative" : "");
+      amount.textContent = `${value > 0 ? "+" : ""}${value} ⭐`;
+      info.append(title, dateLabel);
+      item.append(info, amount);
+      list.appendChild(item);
+    });
+    pointsHistory.appendChild(list);
+  }
+
   async function refreshPoints() {
     if (!participant || !pointsValue) return;
     pointsValue.textContent = "Загружаем баланс...";
+    if (pointsHistory) pointsHistory.textContent = "Загружаем историю...";
     const { data: sessionData } = await supabase.auth.getSession();
     if (!sessionData.session) {
       pointsValue.textContent = "Войди в аккаунт, чтобы увидеть очки";
+      if (pointsHistory) pointsHistory.textContent = "История доступна после входа в аккаунт.";
       return;
     }
-    const { data, error } = await supabase
+    const { data: rows, error } = await supabase
+      .from("point_transactions")
+      .select("amount, transaction_type, description, created_at")
+      .eq("participant_id", participant.id)
+      .order("created_at", { ascending: false })
+      .limit(10);
+    if (error) {
+      console.error("Не удалось загрузить историю очков:", error);
+      pointsValue.textContent = "Не удалось загрузить баланс";
+      if (pointsHistory) pointsHistory.textContent = "Не удалось загрузить историю операций.";
+      return;
+    }
+    const { data: allRows, error: balanceError } = await supabase
       .from("point_transactions")
       .select("amount")
       .eq("participant_id", participant.id);
-    if (error) {
+    if (balanceError) {
+      console.error("Не удалось рассчитать баланс:", balanceError);
       pointsValue.textContent = "Не удалось загрузить баланс";
-      return;
+    } else {
+      const total = (allRows || []).reduce((sum, row) => sum + Number(row.amount || 0), 0);
+      pointsValue.textContent = `${total} очков на твоём счету`;
     }
-    const balance = (data || []).reduce((sum, row) => sum + Number(row.amount || 0), 0);
-    pointsValue.textContent = `${balance} очков на твоём счету`;
+    renderPointsHistory(rows || []);
   }
 
   // Обновляем баланс после начисления награды в любой игре.

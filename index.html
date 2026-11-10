@@ -1378,6 +1378,17 @@ main {
 .auth-points-preview strong, .auth-points-preview small { display: block; }
 .auth-points-preview strong { color: #5e4c39; font-size: 13px; }
 .auth-points-preview small { margin-top: 3px; color: #82715b; font-size: 11px; line-height: 1.4; }
+.auth-points-history { margin: 0 0 18px; padding: 13px 14px; border: 1px solid #e4c99f; border-radius: 15px; background: rgba(255,255,255,.42); text-align: left; }
+.auth-points-history h4 { margin: 0 0 9px; color: #5e4c39; font-size: 13px; }
+.auth-history-list { display: grid; gap: 8px; }
+.auth-history-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; padding-top: 8px; border-top: 1px solid rgba(130,105,78,.16); }
+.auth-history-row:first-child { padding-top: 0; border-top: 0; }
+.auth-history-info { min-width: 0; }
+.auth-history-title { color: #5e4c39; font-size: 12px; font-weight: 700; overflow-wrap: anywhere; }
+.auth-history-date { margin-top: 2px; color: #927e66; font-size: 10px; }
+.auth-history-amount { flex: 0 0 auto; color: #38734e; font-size: 12px; font-weight: 800; white-space: nowrap; }
+.auth-history-amount.negative { color: #a34c3c; }
+.auth-history-empty { margin: 0; color: #82715b; font-size: 11px; line-height: 1.4; }
 .auth-logout { width: 100%; background: #82694e; box-shadow: 0 5px 0 #624b34, 0 10px 18px rgba(91,54,29,.12); }
 .auth-logout:hover { background: #71583f; }
 #campAuthOpen.is-authenticated { background: #285b48; }
@@ -2314,8 +2325,12 @@ render();
       <p class="auth-profile-nick" id="authProfileNick"></p>
       <div class="auth-points-preview">
         <span>⭐</span>
-        <span><strong>Баланс очков</strong><small>Подключим отображение баланса следующим шагом</small></span>
+        <span><strong>Баланс очков</strong><small>Загружаем баланс...</small></span>
       </div>
+      <section class="auth-points-history" aria-live="polite">
+        <h4>История операций</h4>
+        <div id="authPointsHistory"><p class="auth-history-empty">Загружаем историю...</p></div>
+      </section>
       <button class="auth-submit auth-logout" id="authLogout" type="button">Выйти из аккаунта</button>
     </div>
     <div class="auth-tabs" role="tablist" aria-label="Регистрация или вход">
