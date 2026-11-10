@@ -1384,12 +1384,56 @@ main {
 #campAuthOpen.is-authenticated:hover { background: #204b3b; }
 </style>
 
+
+<style id="camp-menu-account-styles">
+.menu-account-tab {
+  position: absolute;
+  left: 122px;
+  bottom: -50px;
+  min-width: 148px;
+  height: 48px;
+  padding: 0 15px;
+  border: 0;
+  border-radius: 0 0 16px 16px;
+  background: #285b48;
+  color: #fff;
+  font: 800 12px Inter, system-ui, sans-serif;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(35,56,47,.18);
+  z-index: 101;
+}
+.menu-account-tab[hidden], .menu-account[hidden] { display: none !important; }
+.menu-account {
+  display: grid;
+  gap: 4px;
+  min-width: 150px;
+  max-width: 190px;
+  padding: 10px 13px;
+  border: 1px solid #d8c19b;
+  border-radius: 14px;
+  background: #fff5df;
+  color: #31433d;
+  text-align: left;
+  cursor: pointer;
+}
+.menu-account-greeting { font-size: 13px; font-weight: 900; }
+.menu-account-sub { color: #8a633b; font-size: 10px; font-weight: 700; }
+.auth-points-preview strong { font-size: 14px; }
+.auth-points-preview small { display: block; }
+@media (max-width: 700px) {
+  .menu-account-tab { left: 108px; min-width: 128px; padding: 0 10px; font-size: 11px; }
+  .menu-inner { flex-wrap: wrap; }
+  .menu-account { order: 5; max-width: 100%; }
+}
+</style>
+
 </head>
 <body>
 <div id="celebrationLayer" aria-hidden="true"></div>
 
 <nav class="menu-bookmark" id="menu">
   <button class="menu-tab" id="menuTab" aria-expanded="false" aria-controls="menu">меню</button>
+  <button class="menu-account-tab" id="menuAccountTab" type="button" data-open-auth hidden>Войти в аккаунт</button>
   <div class="menu-inner">
     <a class="logo" href="index.html"><img src="assets/logo.svg" alt="Горизонт" loading="lazy" decoding="async"></a>
     <div class="menu-links">
@@ -1401,6 +1445,10 @@ main {
       <a href="album.html">Фото</a>
       <a href="#camp-world">О лагере</a>
     </div>
+    <button class="menu-account" id="menuAccount" type="button" data-open-auth hidden>
+      <span class="menu-account-greeting" id="menuAccountGreeting">Привет!</span>
+      <span class="menu-account-sub">Мой профиль и очки →</span>
+    </button>
     <div class="menu-age"><span>возраст</span><b>0+</b></div>
   </div>
 </nav>

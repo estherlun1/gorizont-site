@@ -23,6 +23,10 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
   const profileName = document.getElementById("authProfileName");
   const profileNick = document.getElementById("authProfileNick");
   const logoutButton = document.getElementById("authLogout");
+  const menuAccountTab = document.getElementById("menuAccountTab");
+  const menuAccount = document.getElementById("menuAccount");
+  const menuAccountGreeting = document.getElementById("menuAccountGreeting");
+  const pointsValue = profile?.querySelector(".auth-points-preview small");
   const status = document.getElementById("authStatus");
   let previousFocus = null;
   let busy = false;
@@ -41,28 +45,65 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
       button.style.cursor = value ? "wait" : "";
     });
   }
+  async function refreshPoints() {
+    if (!participant || !pointsValue) return;
+    pointsValue.textContent = "Загружаем баланс...";
+    const { data: sessionData } = await supabase.auth.getSession();
+    if (!sessionData.session) {
+      pointsValue.textContent = "Войди в аккаунт, чтобы увидеть очки";
+      return;
+    }
+    const { data, error } = await supabase
+      .from("point_transactions")
+      .select("amount")
+      .eq("participant_id", participant.id);
+    if (error) {
+      pointsValue.textContent = "Не удалось загрузить баланс";
+      return;
+    }
+    const balance = (data || []).reduce((sum, row) => sum + Number(row.amount || 0), 0);
+    pointsValue.textContent = `${balance} очков на твоём счету`;
+  }
+
   function showProfile(data) {
     participant = data || null;
     const signedIn = !!participant;
     if (mainOpener) {
       const arrow = mainOpener.querySelector(".arrow");
       mainOpener.classList.toggle("is-authenticated", signedIn);
-      mainOpener.firstChild.textContent = signedIn ? `Мой профиль · ${participant.nickname || participant.username}` : "войти в лагерь ";
+      mainOpener.firstChild.textContent = signedIn
+        ? `Мой профиль · ${participant.nickname || participant.username}`
+        : "войти в лагерь ";
       if (arrow) arrow.textContent = signedIn ? " ↗" : "→";
+    }
+    if (menuAccountTab) {
+      menuAccountTab.hidden = false;
+      menuAccountTab.textContent = signedIn
+        ? `Привет, ${participant.nickname || participant.full_name || "друг"}!`
+        : "Войти в аккаунт";
+    }
+    if (menuAccount) {
+      menuAccount.hidden = !signedIn;
+      if (menuAccountGreeting) {
+        const firstName = (participant.full_name || participant.nickname || "друг").trim().split(/\\s+/)[0];
+        menuAccountGreeting.textContent = `Привет, ${firstName}!`;
+      }
     }
     if (profile) profile.hidden = !signedIn;
     if (tabs) tabs.hidden = signedIn;
     registerForm.hidden = signedIn || !registerForm.dataset.active;
     loginForm.hidden = signedIn || registerForm.dataset.active;
     if (intro) intro.textContent = signedIn
-      ? "Твой аккаунт Горизонта. Здесь будет твой лагерный профиль и баланс очков."
+      ? "Твой аккаунт Горизонта. Здесь твой лагерный профиль и баланс очков."
       : "Создай аккаунт, собирай очки за игры и меняй их на лагерные подарки.";
     if (title) title.textContent = signedIn ? "Твой профиль" : "Добро пожаловать в Горизонт!";
     if (signedIn) {
       profileName.textContent = participant.full_name || participant.nickname || "Участник Горизонта";
       profileNick.textContent = `Игровой ник: ${participant.nickname || "—"} · Логин: ${participant.username || "—"}`;
+      refreshPoints();
     }
   }
+
   function open() {
     previousFocus = document.activeElement;
     modal.classList.add("open");
