@@ -52,7 +52,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
     if (!rows.length) {
       const empty = document.createElement("p");
       empty.className = "auth-history-empty";
-      empty.textContent = "Пока операций нет. Играй и собирай свои первые очки!";
+      empty.textContent = "Пока операций нет. Играй и собирай свои первые горизонтики!";
       pointsHistory.appendChild(empty);
       return;
     }
@@ -72,7 +72,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
       info.className = "auth-history-info";
       const title = document.createElement("div");
       title.className = "auth-history-title";
-      title.textContent = row.description || titles[row.transaction_type] || "Операция с очками";
+      title.textContent = row.description || titles[row.transaction_type] || "Операция с горизонтИками";
       const dateLabel = document.createElement("div");
       dateLabel.className = "auth-history-date";
       const date = new Date(row.created_at);
@@ -81,12 +81,21 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
       const amount = document.createElement("div");
       const value = Number(row.amount || 0);
       amount.className = "auth-history-amount" + (value < 0 ? " negative" : "");
-      amount.textContent = `${value > 0 ? "+" : ""}${value} ⭐`;
+      amount.textContent = `${value > 0 ? "+" : ""}${value} ${currencyWord(value)} ⭐`;
       info.append(title, dateLabel);
       item.append(info, amount);
       list.appendChild(item);
     });
     pointsHistory.appendChild(list);
+  }
+
+  function currencyWord(value) {
+    const n = Math.abs(Number(value)) % 100;
+    const last = n % 10;
+    if (n > 10 && n < 20) return "горизонтиков";
+    if (last > 1 && last < 5) return "горизонтика";
+    if (last === 1) return "горизонтик";
+    return "горизонтиков";
   }
 
   async function refreshPoints() {
@@ -95,7 +104,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
     if (pointsHistory) pointsHistory.textContent = "Загружаем историю...";
     const { data: sessionData } = await supabase.auth.getSession();
     if (!sessionData.session) {
-      pointsValue.textContent = "Войди в аккаунт, чтобы увидеть очки";
+      pointsValue.textContent = "Войди в аккаунт, чтобы увидеть горизонтики";
       if (pointsHistory) pointsHistory.textContent = "История доступна после входа в аккаунт.";
       return;
     }
@@ -106,8 +115,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
       .order("created_at", { ascending: false })
       .limit(10);
     if (error) {
-      console.error("Не удалось загрузить историю очков:", error);
-      pointsValue.textContent = "Не удалось загрузить баланс";
+      console.error("Не удалось загрузить историю горизонтИков:", error);
+      pointsValue.textContent = "Не удалось загрузить баланс горизонтИков";
       if (pointsHistory) pointsHistory.textContent = "Не удалось загрузить историю операций.";
       return;
     }
@@ -116,11 +125,11 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
       .select("amount")
       .eq("participant_id", participant.id);
     if (balanceError) {
-      console.error("Не удалось рассчитать баланс:", balanceError);
-      pointsValue.textContent = "Не удалось загрузить баланс";
+      console.error("Не удалось рассчитать баланс горизонтИков:", balanceError);
+      pointsValue.textContent = "Не удалось загрузить баланс горизонтИков";
     } else {
       const total = (allRows || []).reduce((sum, row) => sum + Number(row.amount || 0), 0);
-      pointsValue.textContent = `${total} очков на твоём счету`;
+      pointsValue.textContent = `${total} ${currencyWord(total)} на твоём счету`;
     }
     renderPointsHistory(rows || []);
   }
@@ -159,8 +168,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
     registerForm.hidden = signedIn || !registerForm.dataset.active;
     loginForm.hidden = signedIn || registerForm.dataset.active;
     if (intro) intro.textContent = signedIn
-      ? "Твой аккаунт Горизонта. Здесь твой лагерный профиль и баланс очков."
-      : "Создай аккаунт, собирай очки за игры и меняй их на лагерные подарки.";
+      ? "Твой аккаунт Горизонта. Здесь твой лагерный профиль и баланс горизонтИков."
+      : "Создай аккаунт, собирай горизонтИки за игры и меняй их на лагерные подарки.";
     if (title) title.textContent = signedIn ? "Твой профиль" : "Добро пожаловать в Горизонт!";
     if (signedIn) {
       profileName.textContent = participant.full_name || participant.nickname || "Участник Горизонта";

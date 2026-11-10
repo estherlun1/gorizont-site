@@ -118,7 +118,7 @@ var packedItems = [];
         : "backpack-" + Date.now() + "-" + Math.random().toString(36).slice(2);
     }
 
-    if (message) message.textContent = "Проверяем результат и начисляем очки...";
+    if (message) message.textContent = "Проверяем результат и начисляем горизонтики...";
 
     try {
       var sessionResult = await supabase.auth.getSession();
@@ -126,7 +126,7 @@ var packedItems = [];
 
       if (!session || !session.access_token) {
         if (message) {
-          message.textContent = "Рюкзак собран! Чтобы получить лагерные очки, войди в аккаунт и сыграй ещё раз.";
+          message.textContent = "Рюкзак собран! Чтобы получить горизонтики, войди в аккаунт и сыграй ещё раз.";
         }
         return;
       }
@@ -151,11 +151,11 @@ var packedItems = [];
       }
 
       if (result.status === "awarded") {
-        if (message) message.textContent = "Отлично! Тебе начислено " + result.points_awarded + " очков Горизонта! ⭐";
+        if (message) message.textContent = "Отлично! Тебе начислено " + result.points_awarded + " горизонтИков Горизонта! ⭐";
       } else if (result.status === "weekly_limit") {
         if (message) message.textContent = "Рюкзак собран! Награду за эту игру на этой неделе ты уже получил. Попробуй снова на следующей неделе.";
       } else if (result.status === "duplicate_request") {
-        if (message) message.textContent = "Результат уже принят сервером. Начислено очков: " + result.points_awarded + ".";
+        if (message) message.textContent = "Результат уже принят сервером. Начислено горизонтИков: " + result.points_awarded + ".";
       } else {
         if (message) message.textContent = "Рюкзак собран! Сервер обработал результат.";
       }
