@@ -1801,6 +1801,10 @@ main {
       'backpack.webp','compass.webp','map.webp','guitar.webp',
       'squirrel.webp','bird.webp','pawprints.webp','camera.webp'
     ];
+    const huntItemIds=[
+      'map_01','map_02','map_03','map_04',
+      'map_05','map_06','map_07','map_08'
+    ];
     const itemsEl=document.getElementById('huntItems');
     const counter=document.getElementById('counter');
     const huntTab=document.getElementById('huntTab');
@@ -1889,6 +1893,9 @@ main {
         if(found===chosen.length){
           document.querySelector('.hunt-title').textContent='Все предметы найдены!';
           celebrate();
+          window.dispatchEvent(new CustomEvent('gorizont:map-hunt-completed',{
+            detail:{item_ids:huntItemIds.slice()}
+          }));
         }
       });
 
@@ -2334,5 +2341,6 @@ render();
 </div>
 <script type="module" src="auth-ui.js"></script>
 
+<script type="module" src="map-hunt-rewards.js"></script>
 </body>
 </html>
