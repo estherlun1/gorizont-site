@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Горизонт — собери своего героя</title>
+<style>
+:root{--ink:#633b22;--brown:#8a4d25;--gold:#d69a4c;--paper:#fff0d2;--paper2:#f8dfb1;--green:#526b35}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;padding:18px;background:radial-gradient(ellipse at 50% 0%,#56774d 0,#294d38 42%,#102d25 100%);font-family:Georgia,serif;color:var(--ink)}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background:radial-gradient(ellipse at 8% 20%,#c9b36c 0 2px,transparent 3px),radial-gradient(ellipse at 85% 12%,#c9b36c 0 2px,transparent 3px);background-size:70px 90px}
+.shell{max-width:1450px;margin:auto;background:linear-gradient(135deg,#fff3d8,#f3d9a9);border:5px double #d79e50;border-radius:24px;padding:18px;box-shadow:0 18px 55px #061c17aa;position:relative}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.brand{font-weight:bold;letter-spacing:.08em;color:#8b5429;border:2px solid #c58a42;border-radius:12px;padding:8px 12px;background:#f9e4bb}
+h1{font-size:clamp(23px,3vw,36px);margin:0;text-align:center;color:#6b3d21}.sub{text-align:center;font:14px Arial;margin-top:3px;color:#805a38}
+.pill{border:1px solid #c88d45;border-radius:30px;background:#f8e1b6;padding:8px 13px;font:13px Arial}
+.progress{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px auto 18px;max-width:800px}
+.step{border:2px solid #d1a064;background:#f7e4c2;border-radius:14px;padding:10px;text-align:center;color:#967b5d;font-weight:bold}
+.step.active{background:#5c7139;color:#fff5d9;border-color:#d6a04d;box-shadow:0 3px 0 #344b28}.step.done{background:#e5edcf;color:#526b35;border-color:#91a76b}
+.layout{display:grid;grid-template-columns:minmax(250px,340px) minmax(0,1fr);gap:16px}
+.panel{background:#ffedcc;border:2px solid #d5a05b;border-radius:18px;padding:14px;min-width:0}
+.preview-panel{display:flex;flex-direction:column;align-items:center;background:linear-gradient(#f7e8c8,#ebd19d)}
+.preview-panel h2,.wardrobe h2{margin:0 0 10px;font-size:22px}
+.character-stage{width:100%;min-height:470px;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 85%,#d6b77d,#f5e5c4 68%);border-radius:14px;overflow:hidden;position:relative}
+canvas{height:min(65vh,570px);max-width:100%;width:auto;object-fit:contain;filter:drop-shadow(0 8px 5px #4a321f33)}
+.caption{font:13px/1.45 Arial;background:#efd29b;border-radius:12px;padding:10px;margin-top:12px;width:100%;text-align:center}
+.wardrobe{display:flex;flex-direction:column}.top-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.tab{border:1px solid #c88c45;border-radius:11px;padding:9px 13px;background:#fff3db;color:#744624;cursor:pointer;font-weight:bold}
+.tab.active{background:#b86b2d;color:#fff}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(105px,1fr));gap:10px;align-content:start}
+.item{border:2px solid #e1b879;border-radius:14px;background:#fff7e8;min-height:160px;padding:8px 6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;color:#714522;transition:.15s}
+.item:hover{transform:translateY(-2px);border-color:#b97936}.item.selected{border:3px solid #718b43;background:#f0f4dc;box-shadow:0 0 0 2px #d2dfa9}
+.item img{width:100%;height:118px;object-fit:contain}.item span{font:12px Arial;text-align:center}
+.footer{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px}
+.hint{font:13px/1.4 Arial;color:#795330;max-width:60%}
+.btn{border:2px solid #8d4b1e;border-radius:13px;padding:12px 22px;font-weight:bold;background:linear-gradient(#f6a33d,#d66c1f);color:white;box-shadow:0 3px 0 #854318;cursor:pointer;font-size:15px}
+.btn.green{background:linear-gradient(#849c4c,#536d34);border-color:#42552a;box-shadow:0 3px 0 #334524}.btn:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.5)}
+.back{background:#f9e6c3;border:1px solid #c98e48;color:#704421;border-radius:11px;padding:10px 14px;cursor:pointer}
+.hidden{display:none!important}.result{text-align:center;padding:24px}.result h2{font-size:30px}.small{font:12px Arial;color:#86633f}
+@media(max-width:850px){body{padding:7px}.shell{padding:10px}.layout{grid-template-columns:1fr}.preview-panel{order:0}.wardrobe{order:1}.character-stage{min-height:360px}canvas{height:380px}.grid{grid-template-columns:repeat(3,minmax(90px,1fr))}.footer{flex-wrap:wrap}.hint{max-width:100%;width:100%}}
+@media(max-width:480px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.step{font-size:12px;padding:8px 4px}.character-stage{min-height:330px}}
+</style></head><body><main class="shell">
+<header><div class="brand">▲ ГОРИЗОНТ</div><div><h1>Пробный уровень</h1><div class="sub">Собери свой первый образ для лагеря!</div></div><div class="pill">⭐ <b id="progressText">0/3</b></div></header>
+<nav class="progress"><div class="step active" id="step0">① Верх</div><div class="step" id="step1">② Джинсы 🔒</div><div class="step" id="step2">③ Обувь 🔒</div></nav>
+<div class="layout" id="game">
+<section class="panel preview-panel"><h2>Твой персонаж</h2><div class="character-stage"><canvas id="doll" width="292" height="724"></canvas></div><div class="caption" id="lookText">Сначала выбери футболку или толстовку.</div></section>
+<section class="panel wardrobe"><h2 id="sectionTitle">Шаг 1. Выбери верх</h2>
+<div class="top-tabs" id="topTabs"><button class="tab active" data-kind="shirts">Футболки</button><button class="tab" data-kind="hoodies">Толстовки</button></div>
+<div class="grid" id="items"></div>
+<div class="footer"><div class="hint" id="hint">Выбери футболку или толстовку. После этого откроется следующий шаг.</div><div><button class="back hidden" id="back">← Назад</button> <button class="btn" id="next" disabled>Далее →</button></div></div></section></div>
+<section class="panel result hidden" id="result"><h2>🌿 Образ готов!</h2><p>Ты собрала полный комплект для лагеря.</p><div class="character-stage" style="max-width:340px;margin:auto"><canvas id="finalDoll" width="292" height="724"></canvas></div><p id="finalSummary"></p><button class="btn green" id="again">Собрать ещё один образ</button></section>
+</main>
+<script>
+const DATA={
+ base:'base.png',
+ pants:Array.from({length:6},(_,i)=>`pants_${i+1}.png`),
+ shoes:Array.from({length:10},(_,i)=>`shoe_${i+1}.png`),
+ shirts:Array.from({length:12},(_,i)=>`shirt_${i+1}.png`),
+ hoodies:Array.from({length:11},(_,i)=>`hoodie_${i+1}.png`),
+ shirtHead:'shirt_head.png',
+ hoodieHeads:Array.from({length:13},(_,i)=>`hoodie_head_${i+1}.png`)
+};
+const A='assets/';
+const labels={
+ shirts:['Горы','Лес','Цветы','Закат','Полоска','Ночная палатка','Звезда','Колледж','Котик','Граффити','Волны','Мотылёк'],
+ hoodies:['Горизонт','Звёздная','Котик','Нашивки','Лесная','Полосатая','Цветочная','Бордовая','Ночная','Оливковая','Кремовая'],
+ pants:['Классические бежевые','Голубые джинсы','Оливковые карго','Тёмные широкие','Джинсы patchwork','Лиловые карго'],
+ shoes:['Походные ботинки','Высокие кеды','Тёмные кроссовки','Треккинговые кроссовки','Кожаные ботинки','Оливковые кроссовки','Ретро-кеды','Спортивные кроссовки','Кеды с сердечками','Высокие ботинки']
+};
+let step=0,kind='shirts',chosen={top:null,topKind:null,pants:null,shoes:null};
+const canvas=document.getElementById('doll'),finalCanvas=document.getElementById('finalDoll'),cache={};
+function image(file){if(!cache[file]){const im=new Image();im.src=A+file;cache[file]=im;im.onload=draw}return cache[file]}
+function drawTo(c){
+ const x=c.getContext('2d');x.clearRect(0,0,292,724);
+ const put=file=>{const im=image(file);if(im.complete&&im.naturalWidth)x.drawImage(im,0,0,292,724)};
+ // ВАЖЕН ПОРЯДОК: тело → обувь → джинсы → верх → голова/волосы.
+ put(DATA.base);
+ if(chosen.shoes!==null)put(DATA.shoes[chosen.shoes]);
+ if(chosen.pants!==null)put(DATA.pants[chosen.pants]);
+ if(chosen.top!==null){
+   put((chosen.topKind==='hoodies'?DATA.hoodies:DATA.shirts)[chosen.top]);
+   put(chosen.topKind==='hoodies'?DATA.hoodieHeads[chosen.top]:DATA.shirtHead);
+ }
+}
+function draw(){drawTo(canvas);if(!document.getElementById('result').classList.contains('hidden'))drawTo(finalCanvas)}
+function setStepUI(){
+ document.querySelectorAll('.step').forEach((el,i)=>{el.classList.toggle('active',i===step);el.classList.toggle('done',i<step);el.textContent=(i===0?'① Верх':i===1?'② Джинсы':'③ Обувь')+(i>step?' 🔒':i<step?' ✓':'')});
+ document.getElementById('progressText').textContent=(chosen.top!==null?1:0)+(chosen.pants!==null?1:0)+(chosen.shoes!==null?1:0)+'/3';
+ document.getElementById('topTabs').classList.toggle('hidden',step!==0);
+ document.getElementById('back').classList.toggle('hidden',step===0);
+ document.getElementById('sectionTitle').textContent=['Шаг 1. Выбери футболку или толстовку','Шаг 2. Подбери джинсы или брюки','Шаг 3. Заверши образ обувью'][step];
+ document.getElementById('next').textContent=step===2?'Завершить образ ✓':'Далее →';
+ document.getElementById('next').disabled=step===0?chosen.top===null:step===1?chosen.pants===null:chosen.shoes===null;
+ document.getElementById('hint').textContent=['Выбери футболку или толстовку. Только после этого откроется выбор джинсов.','Отлично! Теперь выбери джинсы или брюки. Затем откроется обувь.','Последний шаг — выбери обувь, и образ будет готов!'][step];
+ const parts=[];
+ if(chosen.top!==null)parts.push((chosen.topKind==='shirts'?'Футболка: ':'Толстовка: ')+labels[chosen.topKind][chosen.top]);
+ if(chosen.pants!==null)parts.push(labels.pants[chosen.pants]);
+ if(chosen.shoes!==null)parts.push(labels.shoes[chosen.shoes]);
+ document.getElementById('lookText').textContent=parts.length?parts.join(' · '):'Сначала выбери футболку или толстовку.';
+ document.querySelectorAll('[data-kind]').forEach(b=>b.classList.toggle('active',b.dataset.kind===kind));
+}
+function renderItems(){
+ const box=document.getElementById('items');box.innerHTML='';
+ let list=[];
+ if(step===0){list=(kind==='shirts'?DATA.shirts:DATA.hoodies).map((f,i)=>({file:f,label:labels[kind][i],thumb:f.replace('.png','_thumb.png'),idx:i}))}
+ if(step===1)list=DATA.pants.map((f,i)=>({file:f,label:labels.pants[i],thumb:f.replace('.png','_thumb.png'),idx:i}));
+ if(step===2)list=DATA.shoes.map((f,i)=>({file:f,label:labels.shoes[i],thumb:f.replace('.png','_thumb.png'),idx:i}));
+ list.forEach(item=>{
+  const b=document.createElement('button');b.className='item';
+  const selected=step===0?chosen.top===item.idx&&chosen.topKind===kind:step===1?chosen.pants===item.idx:chosen.shoes===item.idx;
+  if(selected)b.classList.add('selected');
+  const im=document.createElement('img');im.src=A+item.thumb;im.alt=item.label;b.append(im);
+  const t=document.createElement('span');t.textContent=item.label;b.append(t);
+  b.onclick=()=>{if(step===0){chosen.top=item.idx;chosen.topKind=kind}else if(step===1)chosen.pants=item.idx;else chosen.shoes=item.idx;renderItems();setStepUI();draw()};
+  box.append(b)
+ });
+}
+document.querySelectorAll('[data-kind]').forEach(b=>b.onclick=()=>{kind=b.dataset.kind;renderItems();setStepUI()});
+document.getElementById('next').onclick=()=>{
+ if(step===0&&chosen.top!==null){step=1;renderItems();setStepUI()}
+ else if(step===1&&chosen.pants!==null){step=2;renderItems();setStepUI()}
+ else if(step===2&&chosen.shoes!==null){
+  document.getElementById('game').classList.add('hidden');document.getElementById('result').classList.remove('hidden');
+  document.getElementById('finalSummary').textContent=(chosen.topKind==='shirts'?'Футболка: ':'Толстовка: ')+labels[chosen.topKind][chosen.top]+' · '+labels.pants[chosen.pants]+' · '+labels.shoes[chosen.shoes];draw()
+ }
+};
+document.getElementById('back').onclick=()=>{if(step>0){step--;renderItems();setStepUI()}};
+document.getElementById('again').onclick=()=>{step=0;kind='shirts';chosen={top:null,topKind:null,pants:null,shoes:null};document.getElementById('result').classList.add('hidden');document.getElementById('game').classList.remove('hidden');renderItems();setStepUI();draw()};
+[Object.values(DATA).flat().filter(x=>typeof x==='string'),DATA.shirtHead].flat().forEach(image);draw();renderItems();setStepUI();
+</script></body></html>
