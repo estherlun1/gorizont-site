@@ -1,4 +1,4 @@
-<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>Лабиринт — Горизонт</title>
+<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>Лабиринт Горизонта — новая графика</title>
 <style>
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#102f29;color:#fff1d5;font-family:Georgia,serif}
 body:before{content:"";position:fixed;inset:0;pointer-events:none;background:
@@ -54,6 +54,40 @@ repeating-linear-gradient(45deg,#ffffff08 0 2px,transparent 2px 12px);z-index:20
 .tutorial-item{min-height:170px;padding:10px}
 .tutorial-item img,.tutorial-item .trap-icon{height:72px;width:72px}
 }
+
+/* Final layout overrides: readable tutorial cards on desktop and mobile */
+@media (min-width:701px){
+  #card{width:min(94vw,1120px)!important;max-width:1120px!important;padding:30px 42px!important}
+  .tutorial-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:14px!important}
+  .tutorial-item{
+    display:grid!important;grid-template-columns:1fr!important;grid-template-rows:88px auto 1fr!important;
+    justify-items:center!important;align-items:start!important;text-align:center!important;
+    min-height:235px!important;padding:14px 12px!important;gap:7px!important;overflow:hidden!important;
+    box-sizing:border-box!important
+  }
+  .tutorial-item>img,.tutorial-item .trap-icon{width:82px!important;height:82px!important;object-fit:contain}
+  .tutorial-item .trap-icon{display:grid!important;place-items:center!important}
+  .tutorial-item strong{display:block!important;margin:2px 0!important;font:bold 16px Arial!important}
+  .tutorial-item small{display:block!important;font:14px/1.45 Arial!important;max-width:100%!important;overflow-wrap:normal!important}
+  .tutorial-item>div:not(.trap-icon){display:grid!important;grid-template-columns:repeat(2,38px)!important;grid-template-rows:repeat(2,38px)!important;gap:3px!important;align-content:center!important;justify-content:center!important;width:82px!important;height:82px!important}
+  .tutorial-item>div:not(.trap-icon) img{width:38px!important;height:38px!important;object-fit:contain!important}
+}
+@media (max-width:700px){
+  #card{width:min(96vw,520px)!important;max-height:96vh!important;margin:8px auto!important;padding:18px 14px!important}
+  .tutorial-grid{grid-template-columns:1fr!important;gap:9px!important}
+  .tutorial-item{
+    display:grid!important;grid-template-columns:76px minmax(0,1fr)!important;grid-template-rows:auto 1fr!important;
+    justify-items:start!important;align-items:center!important;text-align:left!important;min-height:90px!important;
+    padding:9px 12px!important;gap:2px 12px!important;overflow:hidden!important;box-sizing:border-box!important
+  }
+  .tutorial-item>img,.tutorial-item .trap-icon{grid-column:1!important;grid-row:1 / span 2!important;width:68px!important;height:68px!important;object-fit:contain!important}
+  .tutorial-item .trap-icon{display:grid!important;place-items:center!important}
+  .tutorial-item strong{grid-column:2!important;grid-row:1!important;font:bold 15px Arial!important;margin:0!important}
+  .tutorial-item small{grid-column:2!important;grid-row:2!important;font:12px/1.4 Arial!important;max-width:none!important}
+  .tutorial-item>div:not(.trap-icon){grid-column:1!important;grid-row:1 / span 2!important;display:grid!important;grid-template-columns:repeat(2,30px)!important;grid-template-rows:repeat(2,30px)!important;gap:2px!important;width:68px!important;height:68px!important;align-content:center!important;justify-content:center!important}
+  .tutorial-item>div:not(.trap-icon) img{width:30px!important;height:30px!important;object-fit:contain!important}
+}
+
 </style><canvas id="c"></canvas><div class="hud">
   <div class="plaque hearts"><span id="heartIcons">❤️❤️🖤</span></div>
   <div class="plaque"><span class="icon">⭐</span><span><b id="score">0/10</b></span></div>
@@ -165,12 +199,40 @@ function moveAxis(axis,amount){
     if(canOccupy(nx,ny)){p.x=nx;p.y=ny;}else break;
   }
 }
+function rescueFromWall(){
+  // Find the nearest free cell with a small BFS around the player's current tile.
+  const sx=Math.max(1,Math.min(N-2,Math.floor(p.x)));
+  const sy=Math.max(1,Math.min(N-2,Math.floor(p.y)));
+  const q=[[sx,sy]],seen=new Set([sx+','+sy]);
+  for(let i=0;i<q.length;i++){
+    const [x,y]=q[i];
+    if(M[y]&&M[y][x]===0){
+      const old=phaseUntil; phaseUntil=0;
+      const ok=canOccupy(x+.5,y+.5);
+      phaseUntil=old;
+      if(ok){p.x=x+.5;p.y=y+.5;return true;}
+    }
+    for(const [dx,dy] of dirs){
+      const nx=x+dx,ny=y+dy,key=nx+','+ny;
+      if(nx>0&&ny>0&&nx<N-1&&ny<N-1&&!seen.has(key)){
+        seen.add(key);q.push([nx,ny]);
+      }
+    }
+  }
+  return false;
+}
+let phaseWasActive=false;
+
 function hint(t){let el=$('#hint');el.textContent=t;el.style.opacity=1;clearTimeout(hintTimer);hintTimer=setTimeout(()=>el.style.opacity=0,1900)}
-function update(dt){secs+=dt;cool=Math.max(0,cool-dt);let x=(keys.ArrowRight||keys.KeyD||touch.right?1:0)-(keys.ArrowLeft||keys.KeyA||touch.left?1:0),y=(keys.ArrowDown||keys.KeyS||touch.down?1:0)-(keys.ArrowUp||keys.KeyW||touch.up?1:0);if(x&&y){x*=.707;y*=.707}moving=!!(x||y);if(Math.abs(x)>Math.abs(y)){facing=x<0?'left':'right'}else if(y!==0){facing=y<0?'back':'front'}if(moving)walkClock+=dt*9;let speed=performance.now()/1000<speedUntil?5.2:3;let dx=x*speed*dt,dy=y*speed*dt;moveAxis('x',dx);moveAxis('y',dy);let gx=p.x|0,gy=p.y|0;for(let a of items)if(!a.got&&a.x===gx&&a.y===gy){a.got=true;score++;sfx('star');}for(let t of traps)if(!t.used&&t.x===gx&&t.y===gy&&cool===0){t.used=true;lives--;cool=2.5;sfx('trap');hint('Ловушка! Осталось жизней: '+lives);if(lives<=0){finish(false);return}}
+function update(dt){
+ const phaseNow=phaseUntilActive();
+ if(phaseWasActive&&!phaseNow&&!canOccupy(p.x,p.y)){rescueFromWall();hint('Зелье закончилось — ты выбрался из изгороди!')}
+ phaseWasActive=phaseNow;
+ secs+=dt;cool=Math.max(0,cool-dt);let x=(keys.ArrowRight||keys.KeyD||touch.right?1:0)-(keys.ArrowLeft||keys.KeyA||touch.left?1:0),y=(keys.ArrowDown||keys.KeyS||touch.down?1:0)-(keys.ArrowUp||keys.KeyW||touch.up?1:0);if(x&&y){x*=.707;y*=.707}moving=!!(x||y);if(Math.abs(x)>Math.abs(y)){facing=x<0?'left':'right'}else if(y!==0){facing=y<0?'back':'front'}if(moving)walkClock+=dt*9;let speed=performance.now()/1000<speedUntil?5.2:3;let dx=x*speed*dt,dy=y*speed*dt;moveAxis('x',dx);moveAxis('y',dy);let gx=p.x|0,gy=p.y|0;for(let a of items)if(!a.got&&a.x===gx&&a.y===gy){a.got=true;score++;sfx('star');}for(let t of traps)if(!t.used&&t.x===gx&&t.y===gy&&cool===0){t.used=true;lives--;cool=2.5;sfx('trap');hint('Ловушка! Осталось жизней: '+lives);if(lives<=0){finish(false);return}}
 for(let z of potions)if(!z.used&&z.x===gx&&z.y===gy){z.used=true;sfx('potion');
  if(z.type==='speed'){speedUntil=performance.now()/1000+8;hint('Зелье скорости: 8 секунд!')}
  if(z.type==='reveal'){revealUntil=performance.now()/1000+12;hint('Зелье поиска! Стрелка указывает на портал — 12 секунд!')}
- if(z.type==='phase'){phaseUntil=performance.now()/1000+5;hint('Эфирное зелье: стены проходимы 5 секунд!')}
+ if(z.type==='phase'){phaseUntil=performance.now()/1000+5;phaseWasActive=true;hint('Эфирное зелье: стены проходимы 5 секунд!')}
  if(z.type==='teleport'){let safe=[];for(let yy=1;yy<N-1;yy++)for(let xx=1;xx<N-1;xx++)if(!M[yy][xx]&&!(xx===exit.x&&yy===exit.y)&&!traps.some(t=>t.x===xx&&t.y===yy&&!t.used))safe.push([xx,yy]);let dest=safe[Math.random()*safe.length|0];if(dest){p={x:dest[0]+.5,y:dest[1]+.5};}hint('Случайный телепорт!')}
 }
 if(gx===exit.x&&gy===exit.y)finish(true);hud()}
