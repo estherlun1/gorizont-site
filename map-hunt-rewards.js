@@ -66,6 +66,7 @@ window.addEventListener("gorizont:map-hunt-completed", async (event) => {
     }
 
     window.dispatchEvent(new CustomEvent("gorizont:points-updated"));
+    requestStarted = false;
   } catch (error) {
     console.error("Map hunt reward error:", error);
     showMapHuntMessage("Предметы найдены, но не удалось отправить результат. Войди в аккаунт и попробуй позже.");
