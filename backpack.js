@@ -151,11 +151,11 @@ var packedItems = [];
       }
 
       if (result.status === "awarded") {
-        if (message) message.textContent = "Отлично! Тебе начислено " + result.points_awarded + " горизонтИков Горизонта! ⭐";
+        if (message) message.textContent = "Отлично! Тебе начислено " + result.points_awarded + " горизонтиков Горизонта! ⭐";
       } else if (result.status === "weekly_limit") {
         if (message) message.textContent = "Рюкзак собран! Награду за эту игру на этой неделе ты уже получил. Попробуй снова на следующей неделе.";
       } else if (result.status === "duplicate_request") {
-        if (message) message.textContent = "Результат уже принят сервером. Начислено горизонтИков: " + result.points_awarded + ".";
+        if (message) message.textContent = "Результат уже принят сервером. Начислено горизонтиков: " + result.points_awarded + ".";
       } else {
         if (message) message.textContent = "Рюкзак собран! Сервер обработал результат.";
       }

@@ -72,7 +72,26 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
       info.className = "auth-history-info";
       const title = document.createElement("div");
       title.className = "auth-history-title";
-      title.textContent = row.description || titles[row.transaction_type] || "Операция с горизонтИками";
+      const rawDescription = String(row.description || "");
+      const gameNames = {
+        memory_easy: "Запомни картинку",
+        memory_medium: "Запомни картинку",
+        memory_hard: "Запомни картинку",
+        map_hunt: "Найди на карте",
+        backpack: "Собери рюкзак",
+        character_builder: "Собери персонажа",
+        maze: "Лабиринт",
+        find_difference_1: "Найди отличия",
+        find_difference_2: "Найди отличия",
+        find_difference_3: "Найди отличия",
+        find_difference_4: "Найди отличия"
+      };
+      const match = rawDescription.match(/(?:Ежедневная награда:\s*|Награда за игру\s*:?)?([a-z_]+)$/i);
+      const friendlyGame = match ? gameNames[match[1]] : null;
+      const isTechnicalDailyReward = /^Ежедневная награда:/i.test(rawDescription);
+      title.textContent = friendlyGame
+        ? `Награда за игру «${friendlyGame}»`
+        : (isTechnicalDailyReward ? "Награда за игру" : (rawDescription || titles[row.transaction_type] || "Операция с горизонтиками"));
       const dateLabel = document.createElement("div");
       dateLabel.className = "auth-history-date";
       const date = new Date(row.created_at);
@@ -115,8 +134,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
       .order("created_at", { ascending: false })
       .limit(10);
     if (error) {
-      console.error("Не удалось загрузить историю горизонтИков:", error);
-      pointsValue.textContent = "Не удалось загрузить баланс горизонтИков";
+      console.error("Не удалось загрузить историю горизонтиков:", error);
+      pointsValue.textContent = "Не удалось загрузить баланс горизонтиков";
       if (pointsHistory) pointsHistory.textContent = "Не удалось загрузить историю операций.";
       return;
     }
@@ -125,8 +144,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
       .select("amount")
       .eq("participant_id", participant.id);
     if (balanceError) {
-      console.error("Не удалось рассчитать баланс горизонтИков:", balanceError);
-      pointsValue.textContent = "Не удалось загрузить баланс горизонтИков";
+      console.error("Не удалось рассчитать баланс горизонтиков:", balanceError);
+      pointsValue.textContent = "Не удалось загрузить баланс горизонтиков";
     } else {
       const total = (allRows || []).reduce((sum, row) => sum + Number(row.amount || 0), 0);
       pointsValue.textContent = `${total} ${currencyWord(total)} на твоём счету`;
@@ -168,8 +187,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
     registerForm.hidden = signedIn || !registerForm.dataset.active;
     loginForm.hidden = signedIn || registerForm.dataset.active;
     if (intro) intro.textContent = signedIn
-      ? "Твой аккаунт Горизонта. Здесь твой лагерный профиль и баланс горизонтИков."
-      : "Создай аккаунт, собирай горизонтИки за игры и меняй их на лагерные подарки.";
+      ? "Твой аккаунт Горизонта. Здесь твой лагерный профиль и баланс горизонтиков."
+      : "Создай аккаунт, собирай горизонтики за игры и меняй их на лагерные подарки.";
     if (title) title.textContent = signedIn ? "Твой профиль" : "Добро пожаловать в Горизонт!";
     if (signedIn) {
       profileName.textContent = participant.full_name || participant.nickname || "Участник Горизонта";
