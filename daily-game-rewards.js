@@ -31,7 +31,7 @@ export async function submitDailyGameReward(gameSlug, score) {
     });
     const result = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(result.error || "Не удалось отправить результат");
-    if (result.status === "awarded") showMessage("Отлично! Тебе начислено " + result.points_awarded + " горизонтИков! ⭐");
+    if (result.status === "awarded") showMessage("Отлично! Тебе начислено " + result.points_awarded + " горизонтиков! ⭐");
     else if (result.status === "daily_limit") showMessage("Ты уже получил награду за эту игру сегодня. Приходи завтра!");
     else if (result.status === "duplicate_request") showMessage("Этот результат уже был принят сервером.");
     else showMessage("Результат игры обработан.");
