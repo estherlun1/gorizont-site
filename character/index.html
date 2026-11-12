@@ -117,7 +117,7 @@ document.getElementById('next').onclick=()=>{
  else if(step===1&&chosen.pants!==null){step=2;renderItems();setStepUI()}
  else if(step===2&&chosen.shoes!==null){
   document.getElementById('game').classList.add('hidden');document.getElementById('result').classList.remove('hidden');
-  document.getElementById('finalSummary').textContent=(chosen.topKind==='shirts'?'Футболка: ':'Толстовка: ')+labels[chosen.topKind][chosen.top]+' · '+labels.pants[chosen.pants]+' · '+labels.shoes[chosen.shoes];draw()
+  document.getElementById('finalSummary').textContent=(chosen.topKind==='shirts'?'Футболка: ':'Толстовка: ')+labels[chosen.topKind][chosen.top]+' · '+labels.pants[chosen.pants]+' · '+labels.shoes[chosen.shoes];draw();import('../daily-game-rewards.js').then(m=>m.submitDailyGameReward('character_builder',1))
  }
 };
 document.getElementById('back').onclick=()=>{if(step>0){step--;renderItems();setStepUI()}};
