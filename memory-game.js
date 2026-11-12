@@ -137,7 +137,7 @@ function choose(btn,opt,q){
  else{btn.classList.add("wrong");$("feedback").textContent=`Почти! Правильный ответ: ${q.a[q.correct]}.`;}
  $("scoreCount").textContent=`Верно: ${score}`;$("nextButton").textContent=index===questions.length-1?"Результат →":"Дальше →";$("nextButton").classList.remove("hidden");
 }
-function finish(){
+async function finish(){
  show("resultScreen");const total=questions.length,percent=score/total;
  $("resultTitle").textContent=percent===1?"Безупречная память!":percent>=.7?"Отличная память!":percent>=.4?"Хорошая попытка!":"Попробуй ещё раз!";
  $("resultSubtitle").textContent=`Сюжет: ${scene.title}. Уровень: ${LEVELS[levelKey].label}. Ты ответил правильно на ${score} из ${total} вопросов.`;
