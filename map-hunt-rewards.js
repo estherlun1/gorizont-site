@@ -56,7 +56,7 @@ window.addEventListener("gorizont:map-hunt-completed", async (event) => {
     }
 
     if (result.status === "awarded") {
-      showMapHuntMessage("Вы всё нашли! Держите 20 горизонтИков! ⭐");
+      showMapHuntMessage("Вы всё нашли! Держите 25 горизонтИков! ⭐");
     } else if (result.status === "daily_limit") {
       showMapHuntMessage("Ты уже получил награду за эту игру сегодня. Приходи завтра!");
     } else if (result.status === "duplicate_request") {
