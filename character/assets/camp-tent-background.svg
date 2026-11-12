@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900">
+<defs>
+ <linearGradient id="canvas" x2="0" y2="1"><stop stop-color="#d97831"/><stop offset=".42" stop-color="#f4b45f"/><stop offset="1" stop-color="#704329"/></linearGradient>
+ <linearGradient id="tent" x2="0" y2="1"><stop stop-color="#e9a04d"/><stop offset=".65" stop-color="#9a562c"/><stop offset="1" stop-color="#653a25"/></linearGradient>
+ <linearGradient id="opening" x2="0" y2="1"><stop stop-color="#e8a1a0"/><stop offset=".45" stop-color="#f8c77e"/><stop offset="1" stop-color="#3b5941"/></linearGradient>
+ <linearGradient id="rug" x2="0" y2="1"><stop stop-color="#a75c39"/><stop offset="1" stop-color="#5e3829"/></linearGradient>
+ <radialGradient id="lamp"><stop stop-color="#fff4a5"/><stop offset=".45" stop-color="#ffbd4f" stop-opacity=".9"/><stop offset="1" stop-color="#f08b26" stop-opacity="0"/></radialGradient>
+ <filter id="soft"><feGaussianBlur stdDeviation="15"/></filter>
+ <pattern id="checks" width="56" height="56" patternUnits="userSpaceOnUse"><path d="M0 0H56V56H0Z" fill="#b86d49"/><path d="M0 0H28V28H0ZM28 28H56V56H28Z" fill="#e3b17a" opacity=".7"/></pattern>
+</defs>
+<rect width="1600" height="900" fill="url(#canvas)"/>
+<path d="M0 0H1600V900H0Z" fill="#2c1a13" opacity=".18"/>
+<!-- tent canvas -->
+<path d="M0 0H1600V730Q1200 670 800 730Q400 670 0 740Z" fill="url(#tent)"/>
+<path d="M0 0L440 0 800 680 0 760Z" fill="#b96d35" opacity=".7"/>
+<path d="M1600 0H1160L800 680 1600 760Z" fill="#a45d30" opacity=".65"/>
+<path d="M0 0L800 680 1600 0" fill="none" stroke="#f3c17a" stroke-width="22" opacity=".45"/>
+<path d="M0 40Q260 150 440 0M1600 40Q1340 150 1160 0" fill="none" stroke="#6d3e26" stroke-width="20" opacity=".5"/>
+<!-- tent opening and forest -->
+<path d="M465 0H1135L1020 600H580Z" fill="#4b3425"/>
+<path d="M500 0H1100L1010 580H590Z" fill="url(#opening)"/>
+<circle cx="805" cy="165" r="115" fill="#ffcf83" opacity=".45" filter="url(#soft)"/>
+<path d="M500 400L560 255 620 395 685 210 750 410 820 230 890 410 960 220 1030 400 1100 265V590H500Z" fill="#314e3d"/>
+<path d="M510 430L580 300 640 430 710 270 770 440 850 280 910 430 980 290 1040 440 1100 330V600H510Z" fill="#203e32"/>
+<path d="M520 510Q780 455 1080 510V600H520Z" fill="#4b704a"/>
+<path d="M580 550Q800 500 1020 550" fill="none" stroke="#e6c17e" stroke-width="7" opacity=".6"/>
+<!-- canvas seams -->
+<path d="M0 0L365 0 720 710M1600 0L1235 0 880 710" fill="none" stroke="#f5c17a" stroke-width="9" opacity=".55"/>
+<path d="M0 0L350 0 680 680M1600 0L1250 0 920 680" fill="none" stroke="#693d28" stroke-width="7" opacity=".45"/>
+<!-- bunting -->
+<path d="M250 55Q800 190 1350 55" fill="none" stroke="#53301e" stroke-width="7"/>
+<g stroke="#50301e" stroke-width="3">
+ <path d="M350 79l-8 62 46-40z" fill="#e8a74e"/><path d="M440 102l-1 67 47-43z" fill="#6f8060"/>
+ <path d="M535 126l5 66 43-47z" fill="#cf7146"/><path d="M635 145l12 65 39-52z" fill="#e5c17a"/>
+ <path d="M965 145l-12 65-39-52z" fill="#cf7146"/><path d="M1065 126l-5 66-43-47z" fill="#6f8060"/>
+ <path d="M1160 102l1 67-47-43z" fill="#e8a74e"/><path d="M1250 79l8 62-46-40z" fill="#cf7146"/>
+</g>
+<!-- string lights -->
+<path d="M60 72Q420 10 800 65T1540 70" fill="none" stroke="#49301f" stroke-width="5"/>
+<g fill="#ffdf83" stroke="#fff0b7" stroke-width="3">
+ <path d="M135 48l10 18 20 3-15 14 4 20-19-10-18 10 3-20-15-14 21-3z"/>
+ <path d="M300 35l10 18 20 3-15 14 4 20-19-10-18 10 3-20-15-14 21-3z"/>
+ <path d="M470 28l10 18 20 3-15 14 4 20-19-10-18 10 3-20-15-14 21-3z"/>
+ <path d="M635 34l10 18 20 3-15 14 4 20-19-10-18 10 3-20-15-14 21-3z"/>
+ <path d="M980 35l10 18 20 3-15 14 4 20-19-10-18 10 3-20-15-14 21-3z"/>
+ <path d="M1150 26l10 18 20 3-15 14 4 20-19-10-18 10 3-20-15-14 21-3z"/>
+ <path d="M1320 34l10 18 20 3-15 14 4 20-19-10-18 10 3-20-15-14 21-3z"/>
+ <path d="M1480 48l10 18 20 3-15 14 4 20-19-10-18 10 3-20-15-14 21-3z"/>
+</g>
+<!-- floor and rug -->
+<path d="M0 650Q800 575 1600 650V900H0Z" fill="#70442b"/>
+<path d="M80 720Q800 610 1520 720L1600 900H0Z" fill="url(#rug)" stroke="#e5b06c" stroke-width="16"/>
+<path d="M115 740Q800 645 1485 740L1540 870H60Z" fill="url(#checks)" opacity=".72" stroke="#e4b77c" stroke-width="8"/>
+<path d="M180 780Q800 700 1420 780" fill="none" stroke="#f3d09b" stroke-width="5" opacity=".7"/>
+<!-- left wooden trunk -->
+<g transform="translate(80 565)">
+ <ellipse cx="190" cy="155" rx="205" ry="35" fill="#29190f" opacity=".3"/>
+ <rect x="15" y="45" width="350" height="145" rx="15" fill="#754321" stroke="#d39a58" stroke-width="12"/>
+ <path d="M25 60H355M30 105H350M30 150H350" stroke="#b8783e" stroke-width="8" opacity=".7"/>
+ <rect x="0" y="20" width="380" height="50" rx="12" fill="#a96636" stroke="#e0ad6c" stroke-width="10"/>
+ <path d="M175 70V185M90 70V185M275 70V185" stroke="#4b2d1d" stroke-width="7"/>
+ <path d="M55 40l35-25 30 25M240 40l35-25 30 25" fill="none" stroke="#f1cb8a" stroke-width="7"/>
+</g>
+<!-- lantern glow and lantern -->
+<circle cx="300" cy="455" r="125" fill="url(#lamp)" opacity=".65"/>
+<g transform="translate(260 350)" stroke="#39271b" stroke-width="10" fill="none">
+ <path d="M25 35Q25 -25 70 -25Q115 -25 115 35"/>
+ <rect x="25" y="25" width="90" height="145" rx="30" fill="#d48a38" stroke="#4a3020"/>
+ <path d="M45 45L95 150M95 45L45 150" stroke="#f4d08b" stroke-width="5"/>
+ <path d="M70 50Q45 90 70 130Q95 90 70 50" fill="#ffdb72" stroke="#fff0b1" stroke-width="3"/>
+ <path d="M20 20H120M20 170H120" stroke="#3b2719" stroke-width="9"/>
+</g>
+<!-- backpack right -->
+<g transform="translate(1240 490)">
+ <ellipse cx="115" cy="235" rx="130" ry="25" fill="#26180f" opacity=".3"/>
+ <rect x="15" y="35" width="200" height="220" rx="65" fill="#c47b24" stroke="#5b3a1f" stroke-width="12"/>
+ <path d="M45 70Q115 20 185 70V175H45Z" fill="#e5a33b" stroke="#74451f" stroke-width="8"/>
+ <rect x="55" y="150" width="120" height="70" rx="18" fill="#a85c25" stroke="#6a3b1d" stroke-width="8"/>
+ <path d="M75 175l40-30 40 30-40 25z" fill="#6e8552" stroke="#e6c27c" stroke-width="6"/>
+</g>
+<!-- cushions -->
+<g transform="translate(10 520) rotate(-12)"><rect width="220" height="110" rx="28" fill="#a85c42" stroke="#e2b07b" stroke-width="10"/><path d="M15 25H205M15 55H205M15 85H205" stroke="#e5c38e" stroke-width="8" opacity=".8"/></g>
+<g transform="translate(1370 600) rotate(12)"><rect width="200" height="110" rx="28" fill="#61734a" stroke="#d7aa6c" stroke-width="10"/><path d="M20 25H180M20 55H180M20 85H180" stroke="#e5c38e" stroke-width="8" opacity=".7"/></g>
+<!-- small potted leaves -->
+<g fill="#425d3a"><path d="M90 350q-55-45-10-95 30 40 10 95M110 340q10-75 65-70-10 55-65 70M80 370q-70-5-70-60 55 5 70 60"/></g>
+<g fill="#bd7740"><path d="M50 380h75l-10 55H60z"/></g>
+<!-- decorative warm grain -->
+<rect width="1600" height="900" fill="none" stroke="#4b2b1b" stroke-width="20" opacity=".16"/>
+</svg>
