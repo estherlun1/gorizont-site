@@ -26,7 +26,7 @@ window.addEventListener("gorizont:map-hunt-completed", async (event) => {
     const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
     if (sessionError || !session) {
-      showMapHuntMessage("Вы всё нашли! Войдите в аккаунт, чтобы получить 20 горизонтИков. После входа пройдите игру ещё раз.");
+      showMapHuntMessage("Вы всё нашли! Войдите в аккаунт, чтобы получить 20 горизонтиков. После входа пройдите игру ещё раз.");
       return;
     }
 
@@ -56,7 +56,7 @@ window.addEventListener("gorizont:map-hunt-completed", async (event) => {
     }
 
     if (result.status === "awarded") {
-      showMapHuntMessage("Вы всё нашли! Держите 25 горизонтИков! ⭐");
+      showMapHuntMessage("Вы всё нашли! Держите 25 горизонтиков! ⭐");
     } else if (result.status === "daily_limit") {
       showMapHuntMessage("Ты уже получил награду за эту игру сегодня. Приходи завтра!");
     } else if (result.status === "duplicate_request") {
