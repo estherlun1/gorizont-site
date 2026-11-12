@@ -55,11 +55,11 @@ window.addEventListener("gorizont:map-hunt-completed", async (event) => {
       throw new Error(result.error || "Не удалось отправить результат");
     }
 
-    if (result.awarded) {
+    if (result.status === "awarded") {
       showMapHuntMessage("Вы всё нашли! Держите 20 горизонтИков! ⭐");
-    } else if (result.weekly_limit) {
-      showMapHuntMessage("Вы всё нашли! Награду за эту игру на этой неделе вы уже получили. Возвращайтесь на следующей! ⭐");
-    } else if (result.duplicate_request) {
+    } else if (result.status === "daily_limit") {
+      showMapHuntMessage("Ты уже получил награду за эту игру сегодня. Приходи завтра!");
+    } else if (result.status === "duplicate_request") {
       showMapHuntMessage("Результат этой игры уже был отправлен.");
     } else {
       showMapHuntMessage("Все предметы найдены! Результат отправлен на проверку.");
