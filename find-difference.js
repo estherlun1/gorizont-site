@@ -73,6 +73,7 @@ const levels = [
 
 let levelIndex = 0;
 let found = new Set();
+let rewardSubmitted = false;
 let hintTimer = null;
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -122,6 +123,10 @@ function checkSpot(spot) {
   status.textContent = `Отличие найдено! ${spot.label}.`;
   if (found.size === levels[levelIndex].total) {
     status.textContent = 'Все отличия найдены!';
+    if (!rewardSubmitted) {
+      rewardSubmitted = true;
+      import('./daily-game-rewards.js').then(m => m.submitDailyGameReward('find_difference_' + (levelIndex + 1), 7));
+    }
     $('#win-title').textContent = `Ура, уровень «${levels[levelIndex].title}» пройден!`;
     $('#win-message').textContent = levelIndex < levels.length - 1
       ? 'Отличная работа! Готов попробовать следующий сюжет?'
@@ -141,17 +146,20 @@ function syncFound() {
 
 $('#reset-btn').addEventListener('click', () => {
   found.clear();
+  rewardSubmitted = false;
   render();
   status.textContent = `Начали заново. Найди все ${levels[levelIndex].total} отличий.`;
 });
 $('#again-btn').addEventListener('click', () => {
   found.clear();
+  rewardSubmitted = false;
   render();
 });
 nextButton.addEventListener('click', () => {
   if (levelIndex >= levels.length - 1) return;
   levelIndex += 1;
   found.clear();
+  rewardSubmitted = false;
   render();
 });
 $('#hint-btn').addEventListener('click', () => {
