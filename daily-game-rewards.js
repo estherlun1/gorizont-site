@@ -12,7 +12,7 @@ function showMessage(text) {
     el = document.createElement("p");
     el.id = "dailyRewardMessage";
     el.style.cssText = "margin:14px auto;padding:12px 16px;max-width:680px;border-radius:12px;background:#fff4d8;color:#594321;text-align:center;font-weight:700;line-height:1.45";
-    (document.querySelector("main") || document.body).appendChild(el);
+    (document.getElementById("card") || document.querySelector("main") || document.body).appendChild(el);
   }
   el.textContent = text;
 }
