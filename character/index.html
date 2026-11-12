@@ -14,11 +14,11 @@
 .character-select h2{font-size:clamp(25px,4vw,34px);margin:0 0 5px}.character-select p{font:15px Arial;color:#805a38;margin:0 0 16px}
 .character-options{display:grid;grid-template-columns:1fr 1fr;gap:16px}.character-option{background:linear-gradient(#fff7e7,#efd3a1);border:2px solid #d69b53;border-radius:20px;padding:10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;color:#704322}
 .character-option:hover{transform:translateY(-3px);border-color:#6d8847;box-shadow:0 8px 18px #4b361f33}.character-option canvas{height:230px;max-width:100%;filter:drop-shadow(0 7px 5px #38231255)}.character-option strong{font-size:22px}.character-option small{font:13px Arial;color:#8a6743}
-.layout{width:min(1500px,100%);margin:auto;display:grid;grid-template-columns:minmax(320px,42%) minmax(500px,58%);gap:clamp(12px,2vw,28px);align-items:center;flex:1}
+.layout{width:min(1580px,100%);margin:auto;display:grid;grid-template-columns:minmax(400px,46%) minmax(560px,54%);gap:clamp(10px,1.5vw,24px);align-items:center;flex:1}
 .hero-column{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;position:relative}
-.hero-label{background:#fff0d5e8;border:2px solid #d49b57;border-radius:18px;padding:7px 20px;margin-bottom:7px;font-size:20px;font-weight:bold;box-shadow:0 3px 8px #37200f33}
-.character-switch{display:flex;gap:10px;margin-bottom:6px}.character-chip{width:68px;height:68px;border:3px solid #d7a05b;border-radius:17px;background:#fff0d5;padding:3px;cursor:pointer;box-shadow:0 4px 9px #28180c55;overflow:hidden}.character-chip.active{border-color:#728b49;box-shadow:0 0 0 3px #f8e5b7,0 4px 10px #28180c66}.character-chip canvas{height:100%;width:100%}
-.character-stage{width:100%;height:min(67vh,680px);min-height:430px;display:flex;align-items:flex-end;justify-content:center;position:relative}
+.hero-label{display:none}
+.character-switch{display:flex;flex-direction:column;gap:12px;position:absolute;left:2%;top:25%;z-index:4}.character-chip{width:82px;height:92px;border:3px solid #d7a05b;border-radius:17px;background:#fff0d5;padding:3px;cursor:pointer;box-shadow:0 4px 9px #28180c55;overflow:hidden}.character-chip.active{border-color:#728b49;box-shadow:0 0 0 3px #f8e5b7,0 4px 10px #28180c66}.character-chip canvas{height:72px;width:100%;display:block}.character-chip span{display:block;font:12px Georgia,serif;color:#704322;font-weight:bold}
+.character-stage{width:100%;height:min(76vh,740px);min-height:430px;display:flex;align-items:flex-end;justify-content:center;position:relative}
 .character-stage:after{content:"";position:absolute;bottom:2%;left:50%;transform:translateX(-50%);width:42%;height:22px;border-radius:50%;background:radial-gradient(ellipse,#21150e99 0%,#38241955 48%,transparent 75%);filter:blur(7px)}
 #doll{height:100%;width:auto;max-width:100%;object-fit:contain;position:relative;z-index:1;filter:drop-shadow(0 7px 5px #26170f66)}
 .wardrobe{position:relative;background:linear-gradient(145deg,#fff0d2f5,#f4d9aef5);border:5px solid #86502a;border-radius:24px;padding:17px;box-shadow:0 12px 0 #4c2d19,0 18px 32px #1d140d77,inset 0 0 0 3px #e9bd7b,inset 0 0 24px #b67b3c44;min-width:0}
@@ -34,16 +34,24 @@
 .result{width:min(600px,96vw);margin:auto;padding:22px;background:#fff0d8ee;border:3px solid #c88d4a;border-radius:24px;text-align:center;box-shadow:0 12px 35px #1e130b66}.result h2{font-size:30px;margin:0 0 6px}.result p{font:15px Arial}.result-stage{height:380px;display:flex;align-items:flex-end;justify-content:center}#finalDoll{height:100%;filter:drop-shadow(0 7px 5px #26170f66)}
 .hidden{display:none!important}
 @media(max-width:950px){.layout{grid-template-columns:minmax(250px,38%) minmax(0,62%);gap:10px}.character-stage{height:53vh;min-height:360px}.items-grid{grid-template-columns:repeat(3,minmax(0,1fr));max-height:43vh}.item{min-height:105px}.item img{height:90px}.wardrobe{padding:12px}}
-@media(max-width:700px){body{background-attachment:scroll}.game-shell{padding:9px}.brand{font-size:10px;padding:7px}.game-title h1{font-size:22px}.game-title p{font-size:11px}.layout{grid-template-columns:1fr;gap:10px}.character-stage{height:390px;min-height:0}.character-chip{width:58px;height:58px}.hero-label{font-size:17px}.wardrobe{width:100%}.items-grid{max-height:340px}.wardrobe-footer{align-items:flex-start;flex-direction:column}.footer-buttons{width:100%}.footer-buttons button{flex:1}}
+@media(max-width:700px){body{background-attachment:scroll}.game-shell{padding:9px}.brand{font-size:10px;padding:7px}.game-title h1{font-size:22px}.game-title p{font-size:11px}.layout{grid-template-columns:1fr;gap:10px}.hero-column{padding-left:74px}.character-switch{left:0;top:20%;gap:7px}.character-chip{width:66px;height:78px}.character-chip canvas{height:56px}.character-stage{height:390px;min-height:0}.hero-label{font-size:17px}.wardrobe{width:100%}.items-grid{max-height:340px}.wardrobe-footer{align-items:flex-start;flex-direction:column}.footer-buttons{width:100%}.footer-buttons button{flex:1}}
 @media(max-width:420px){.character-option canvas{height:190px}.category-tab{min-height:58px}.category-tab .symbol{font-size:20px}.category-tab small{font-size:10px}.items-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}}
 </style></head><body><main class="game-shell">
 <header class="topbar"><button class="wood-button" id="backToSite">← На сайт</button><div class="game-title"><h1>Собери своего героя</h1><p>Подбери образ для лагерных приключений</p></div><div class="brand">ГОРИЗОНТ</div></header>
-<section class="character-select" id="characterSelect"><h2>Кого будем наряжать?</h2><p>Выбери героя и отправляйся к гардеробу</p><div class="character-options">
-<button class="character-option" data-character="mila"><canvas id="milaPreview" width="292" height="724"></canvas><strong>Мила</strong><small>Выбрать Милу</small></button>
-<button class="character-option" data-character="misha"><canvas id="mishaPreview" width="292" height="724"></canvas><strong>Миша</strong><small>Выбрать Мишу</small></button></div></section>
-<div class="layout hidden" id="game"><section class="hero-column"><div class="hero-label" id="chosenCharacterTitle">Мила</div>
-<div class="character-switch"><button class="character-chip active" data-switch="mila" title="Мила"><canvas id="milaChip" width="292" height="724"></canvas></button><button class="character-chip" data-switch="misha" title="Миша"><canvas id="mishaChip" width="292" height="724"></canvas></button></div>
-<div class="character-stage"><canvas id="doll" width="292" height="724"></canvas></div><button class="wood-button" id="changeCharacter">Сменить героя</button></section>
+<div class="layout" id="game"><section class="hero-column">
+<div class="character-switch">
+<button class="character-chip active" data-switch="mila" title="Мила"><canvas id="milaChip" width="292" height="724"></canvas><span>Мила</span></button>
+<button class="character-chip" data-switch="misha" title="Миша"><canvas id="mishaChip" width="292" height="724"></canvas><span>Миша</span></button>
+</div>
+<div class="character-stage"><canvas id="doll" width="292" height="724"></canvas></div>
+</section>
+<div class="layout" id="game"><section class="hero-column">
+<div class="character-switch">
+<button class="character-chip active" data-switch="mila" title="Мила"><canvas id="milaChip" width="292" height="724"></canvas><span>Мила</span></button>
+<button class="character-chip" data-switch="misha" title="Миша"><canvas id="mishaChip" width="292" height="724"></canvas><span>Миша</span></button>
+</div>
+<div class="character-stage"><canvas id="doll" width="292" height="724"></canvas></div>
+</section>
 <section class="wardrobe"><div class="wardrobe-heading"><h2>Гардероб</h2><span>Выбери детали образа</span></div>
 <div class="category-tabs"><button class="category-tab active" data-kind="shirts"><span class="symbol">👕</span><small>Футболки</small></button><button class="category-tab" data-kind="hoodies"><span class="symbol">🧥</span><small>Толстовки</small></button><button class="category-tab" data-kind="pants"><span class="symbol">👖</span><small>Брюки</small></button><button class="category-tab" data-kind="shoes"><span class="symbol">👟</span><small>Обувь</small></button></div>
 <div class="items-wrap"><div class="items-grid" id="items"></div></div><div class="wardrobe-footer"><div class="wardrobe-hint" id="hint">Нажимай на вещи, чтобы примерить их на героя.</div><div class="footer-buttons"><button class="wood-button" id="randomLook">Случайный образ</button><button class="wood-button green" id="finish">Готово ✓</button></div></div></section></div>
@@ -55,15 +63,15 @@ function image(file){if(!cache[file]){const im=new Image();im.src=A+file;cache[f
 function drawTo(c){const x=c.getContext('2d');x.clearRect(0,0,292,724);const put=f=>{const im=image(f);if(im.complete&&im.naturalWidth)x.drawImage(im,0,0,292,724)};put(DATA.bases[selectedCharacter]);if(chosen.shoes!==null)put(DATA.shoes[chosen.shoes]);if(chosen.pants!==null)put(DATA.pants[chosen.pants]);if(chosen.top!==null){put((chosen.topKind==='hoodies'?DATA.hoodies:DATA.shirts)[chosen.top]);put(chosen.topKind==='hoodies'?DATA.hoodieHeads[selectedCharacter][chosen.top]:DATA.shirtHeads[selectedCharacter])}}
 function draw(){drawTo(document.getElementById('doll'));if(!document.getElementById('result').classList.contains('hidden'))drawTo(document.getElementById('finalDoll'))}
 function portrait(id,ch){const c=document.getElementById(id),ctx=c.getContext('2d'),im=new Image();im.onload=()=>{ctx.clearRect(0,0,292,724);ctx.drawImage(im,0,0,292,724)};im.src=A+DATA.bases[ch]}
-function setCharacter(ch){selectedCharacter=ch;document.getElementById('chosenCharacterTitle').textContent=ch==='mila'?'Мила':'Миша';document.querySelectorAll('[data-switch]').forEach(b=>b.classList.toggle('active',b.dataset.switch===ch));draw();renderItems()}
-function showGame(ch){setCharacter(ch);document.getElementById('characterSelect').classList.add('hidden');document.getElementById('game').classList.remove('hidden');document.getElementById('result').classList.add('hidden')}
+function setCharacter(ch){selectedCharacter=ch;document.querySelectorAll('[data-switch]').forEach(b=>b.classList.toggle('active',b.dataset.switch===ch));draw();renderItems()}
+function showGame(ch){setCharacter(ch);document.getElementById('result').classList.add('hidden');document.getElementById('game').classList.remove('hidden')}
 function renderItems(){const box=document.getElementById('items');box.innerHTML='';DATA[kind].forEach((file,i)=>{const b=document.createElement('button');b.className='item';const selected=kind==='shirts'?chosen.top===i&&chosen.topKind==='shirts':kind==='hoodies'?chosen.top===i&&chosen.topKind==='hoodies':kind==='pants'?chosen.pants===i:chosen.shoes===i;if(selected)b.classList.add('selected');const im=document.createElement('img');im.src=A+file.replace('.png','_thumb.png');im.alt='Вариант одежды';b.append(im);b.onclick=()=>{if(kind==='shirts'||kind==='hoodies'){chosen.top=i;chosen.topKind=kind}else if(kind==='pants')chosen.pants=i;else chosen.shoes=i;renderItems();draw()};box.append(b)});document.querySelectorAll('[data-kind]').forEach(b=>b.classList.toggle('active',b.dataset.kind===kind));document.getElementById('hint').textContent={shirts:'Выбери футболку для своего героя.',hoodies:'Подбери уютную толстовку.',pants:'Выбери брюки или джинсы.',shoes:'Заверши образ подходящей обувью.'}[kind]}
 document.querySelectorAll('[data-character]').forEach(b=>b.onclick=()=>showGame(b.dataset.character));document.querySelectorAll('[data-switch]').forEach(b=>b.onclick=()=>setCharacter(b.dataset.switch));document.querySelectorAll('[data-kind]').forEach(b=>b.onclick=()=>{kind=b.dataset.kind;renderItems()});
-document.getElementById('changeCharacter').onclick=()=>{document.getElementById('game').classList.add('hidden');document.getElementById('characterSelect').classList.remove('hidden')};
+
 document.getElementById('randomLook').onclick=()=>{const r=n=>Math.floor(Math.random()*n);chosen.topKind=Math.random()<.5?'shirts':'hoodies';chosen.top=r(12);chosen.pants=r(6);chosen.shoes=r(10);kind=chosen.topKind;renderItems();draw()};
 document.getElementById('finish').onclick=()=>{document.getElementById('game').classList.add('hidden');document.getElementById('result').classList.remove('hidden');draw()};
-document.getElementById('again').onclick=()=>{chosen={top:null,topKind:null,pants:null,shoes:null};kind='shirts';document.getElementById('result').classList.add('hidden');document.getElementById('characterSelect').classList.remove('hidden');renderItems();draw()};
+document.getElementById('again').onclick=()=>{chosen={top:null,topKind:null,pants:null,shoes:null};kind='shirts';document.getElementById('result').classList.add('hidden');document.getElementById('game').classList.remove('hidden');renderItems();draw()};
 document.getElementById('backToSite').onclick=()=>{if(history.length>1)history.back();else location.href='../index.html'};
-portrait('milaPreview','mila');portrait('mishaPreview','misha');portrait('milaChip','mila');portrait('mishaChip','misha');
+portrait('milaChip','mila');portrait('mishaChip','misha');
 [...DATA.pants,...DATA.shoes,...DATA.shirts,...DATA.hoodies,Object.values(DATA.bases),Object.values(DATA.shirtHeads),...Object.values(DATA.hoodieHeads)].flat().forEach(image);renderItems();draw();
 </script></body></html>
