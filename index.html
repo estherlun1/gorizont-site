@@ -719,8 +719,8 @@ main {
 @media(max-width:700px){
  #legends{padding:0;margin-top:0;background:#3b2417}
  #legends .legends-board{width:100%;aspect-ratio:375/812;background:url('assets/legends-mobile-bg.png') center/100% 100% no-repeat}
- #legends .legend-polaroid{width:48%;max-width:none;max-height:76%;top:50%;filter:drop-shadow(0 7px 10px #1b100b77)}
- #legends .legend-polaroid img{width:100%;height:auto;max-height:76svh;object-fit:contain}
+ #legends .legend-polaroid{width:68%;max-width:none;max-height:82%;top:50%;filter:drop-shadow(0 7px 10px #1b100b77)}
+ #legends .legend-polaroid img{width:100%;height:auto;max-height:82svh;object-fit:contain}
  #legends .legend-arrow{width:11%;top:52%}
  #legends .legend-arrow.left{left:2%}
  #legends .legend-arrow.right{right:2%}
@@ -898,7 +898,7 @@ main {
 /* Мобильная обложка: отдельная вертикальная иллюстрация; компьютерная композиция не меняется. */
 .mobile-hero-art,.mobile-camp-art{display:none}
 @media (max-width:600px){
-  .hero{height:auto;min-height:0;aspect-ratio:3 / 4;max-height:none}
+  .hero{height:auto;min-height:0;aspect-ratio:375 / 812;max-height:none}
   .scene{position:absolute;inset:0}
   .scene>.bg,.scene>.characters,.scene>.grass{display:none!important}
   .mobile-hero-art{
@@ -909,7 +909,7 @@ main {
   .depth-glow{z-index:2}
   /* Две реальные HTML-кнопки поверх свободного участка неба. */
   .hero-actions{
-    display:flex;position:absolute;z-index:20;top:45.3%;left:50%;
+    display:flex;position:absolute;z-index:20;top:40%;left:50%;
     width:88%;max-width:360px;transform:translateX(-50%);
     flex-wrap:nowrap;justify-content:center;align-items:stretch;gap:7px;
     white-space:normal;
@@ -926,7 +926,7 @@ main {
   .scroll-cue{display:none}
   .hero .menu-bookmark{z-index:100}
   /* Второй блок: вертикальная иллюстрация целиком, с рабочими зонами на указателе. */
-  .camp-world{height:auto;min-height:0;aspect-ratio:3 / 4;overflow:hidden}
+  .camp-world{height:auto;min-height:0;aspect-ratio:375 / 812;overflow:hidden}
   .camp-scene{position:absolute;inset:0;perspective:none}
   .camp-scene>.camp-layer{display:none!important}
   .mobile-camp-art{
@@ -947,7 +947,7 @@ main {
   .camp-hotspot:hover{transform:none;filter:none}
 }
 @media (max-width:380px){
-  .hero-actions{top:45.1%;width:90%;gap:5px}
+  .hero-actions{top:40%;width:90%;gap:5px}
   .hero-btn{min-height:36px;padding:7px 5px;font-size:9px}
   .camp-flame-sprite{left:40%;top:71.5%;width:19%}
 }
@@ -1059,10 +1059,10 @@ main {
   }
 
   #huntTab {
-    position: fixed;
+    position: absolute;
     top: auto;
-    bottom: 12px;
-    left: 10px;
+    bottom: 14px;
+    left: 12px;
     transform: none;
     min-height: 48px;
     width: 48px;
@@ -1071,7 +1071,7 @@ main {
   }
 
   #huntTab.open {
-    width: min(330px, calc(100vw - 20px));
+    width: min(330px, calc(100% - 24px));
     min-height: 0;
     bottom: 12px;
     top: auto;
@@ -1090,7 +1090,7 @@ main {
   }
 
   #huntTab .tab-panel {
-    width: calc(min(330px, 100vw - 20px) - 48px);
+    width: calc(min(330px, 100% - 24px) - 48px);
     padding: 12px 10px 12px;
   }
 
