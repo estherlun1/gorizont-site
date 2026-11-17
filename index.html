@@ -721,9 +721,11 @@ main {
  #legends .legends-board{width:100%;aspect-ratio:375/812;background:url('assets/legends-mobile-bg.png') center/100% 100% no-repeat}
  #legends .legend-polaroid{width:68%;max-width:none;max-height:82%;top:50%;filter:drop-shadow(0 7px 10px #1b100b77)}
  #legends .legend-polaroid img{width:100%;height:auto;max-height:82svh;object-fit:contain}
- #legends .legend-arrow{width:11%;top:52%}
- #legends .legend-arrow.left{left:2%}
- #legends .legend-arrow.right{right:2%}
+ /* Стрелки нарисованы внизу мобильной доски; прозрачные кнопки поверх рисунка. */
+ #legends .legend-arrow{top:auto;bottom:5.5%;width:19%;height:11%;z-index:25}
+ #legends .legend-arrow img{opacity:0}
+ #legends .legend-arrow.left{left:20%;right:auto}
+ #legends .legend-arrow.right{right:20%;left:auto}
  #legends .legend-card{display:flex;flex-direction:column;max-height:94svh;width:min(520px,94vw);border-width:3px;border-radius:20px}
  #legends .legend-photo{flex:0 0 auto;width:100%;max-width:none;height:auto;max-height:54svh;min-height:0;object-fit:contain;padding:0;background:#fff3d9}
  #legends .legend-copy{padding:18px 17px}
@@ -970,7 +972,7 @@ main {
   }
 
   .map-mobile-switch {
-    display: flex;
+    display: none !important;
     position: relative;
     z-index: 45;
     gap: 8px;
@@ -1002,6 +1004,7 @@ main {
     width: 100% !important;
     aspect-ratio: 1086 / 1448;
     overflow: hidden;
+    touch-action: pan-y;
     position: relative;
   }
 
@@ -1059,28 +1062,36 @@ main {
   }
 
   #huntTab {
-    position: absolute;
-    top: auto;
-    bottom: 14px;
-    left: 12px;
-    transform: none;
-    min-height: 48px;
-    width: 48px;
+    position: absolute !important;
+    top: auto !important;
+    bottom: 14px !important;
+    left: 12px !important;
+    right: auto !important;
+    transform: none !important;
+    width: 48px !important;
+    height: 48px !important;
+    min-height: 48px !important;
+    max-height: 48px !important;
     border-radius: 16px;
-    z-index: 1000;
+    z-index: 40;
   }
 
   #huntTab.open {
-    width: min(330px, calc(100% - 24px));
-    min-height: 0;
-    bottom: 12px;
-    top: auto;
+    width: min(330px, calc(100vw - 24px)) !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: 48vh !important;
+    bottom: 14px !important;
+    top: auto !important;
   }
 
   #huntTab .tab-handle {
+    position: absolute;
+    left: 0;
+    top: 0;
     writing-mode: horizontal-tb;
-    width: 48px;
-    height: 48px;
+    width: 48px !important;
+    height: 48px !important;
     font-size: 0;
   }
 
@@ -1090,13 +1101,13 @@ main {
   }
 
   #huntTab .tab-panel {
-    width: calc(min(330px, 100% - 24px) - 48px);
+    width: calc(min(330px, 100vw - 24px) - 48px);
     padding: 12px 10px 12px;
   }
 
   #huntTab.open .tab-panel {
-    max-height: 45vh;
-    overflow: auto;
+    max-height: 42vh;
+    overflow-y: auto;
   }
 
   #huntTab .hunt-title {
@@ -1892,6 +1903,22 @@ main {
       closeDescription();
     }
     document.querySelectorAll('.map-mobile-tab').forEach(tab=>tab.addEventListener('click',()=>applyMapPage(tab.dataset.mapPage)));
+    // На телефоне переключаем карту свайпом влево/вправо.
+    let mapSwipeStart=null;
+    mapStage.addEventListener('pointerdown',e=>{
+      if(e.pointerType==='mouse') return;
+      mapSwipeStart={x:e.clientX,y:e.clientY};
+    },{passive:true});
+    mapStage.addEventListener('pointerup',e=>{
+      if(!mapSwipeStart || !isMobileMap()) return;
+      const dx=e.clientX-mapSwipeStart.x, dy=e.clientY-mapSwipeStart.y;
+      mapSwipeStart=null;
+      if(Math.abs(dx)>55 && Math.abs(dx)>Math.abs(dy)*1.25){
+        applyMapPage(activeMapPage==='stationary'?'tent':'stationary');
+      }
+    },{passive:true});
+    mapStage.addEventListener('pointercancel',()=>{mapSwipeStart=null;},{passive:true});
+
 
     chosen.forEach((file,i)=>{
       const page=mobilePages[i];
