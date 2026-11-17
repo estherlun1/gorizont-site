@@ -641,6 +641,7 @@ main {
 .counselors-stage{position:absolute;inset:0;overflow:hidden;isolation:isolate}
 .counselors-layer{position:absolute;display:block;height:auto;max-width:none;pointer-events:none;user-select:none;-webkit-user-drag:none;will-change:transform}
 .counselors-layer.c-anya,.counselors-layer.c-maxim,.counselors-layer.c-lera,.counselors-layer.c-ilya{pointer-events:auto;cursor:pointer}
+.counselors-mobile-scene,.counselors-mobile-hotspots{display:none}
 .c-bg{z-index:1;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
 .c-kids-back{z-index:3;display:block;left:-1%;top:30%;width:20%;height:auto}
 .c-anya{z-index:6;left:33%;top:25%;width:22.5%;transform:none}
@@ -1566,8 +1567,8 @@ main {
 
 <section class="counselors-section" id="guides" aria-label="Вожатые">
   <div class="counselors-stage" id="counselorsStage">
-    <img class="counselors-mobile-scene" src="assets/camp-fire-mobile.png" alt="Вожатые и дети у костра в лагере Горизонт" loading="lazy" decoding="async" style="display:none">
-    <div class="counselors-mobile-hotspots" aria-label="Выбрать вожатого" style="display:none">
+    <img class="counselors-mobile-scene" src="assets/camp-fire-mobile.png" alt="Вожатые и дети у костра в лагере Горизонт" loading="lazy" decoding="async">
+    <div class="counselors-mobile-hotspots" aria-label="Выбрать вожатого">
       <button class="counselor-hotspot" data-person="maxim" aria-label="Открыть описание Матвея"></button>
       <button class="counselor-hotspot" data-person="anya" aria-label="Открыть описание Ани"></button>
       <button class="counselor-hotspot" data-person="lera" aria-label="Открыть описание Полины"></button>
