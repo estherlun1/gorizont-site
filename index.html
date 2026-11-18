@@ -837,6 +837,53 @@ main {
   .day-horizon-dots button { min-width: 7px; min-height: 7px; }
 }
 
+
+@media (max-width: 700px) {
+  .day-horizon { width: 100vw; margin-left: calc(50% - 50vw); overflow: hidden; }
+  .day-horizon-frame {
+    width: 100%;
+    aspect-ratio: 375 / 812 !important;
+    height: auto;
+    overflow: hidden;
+  }
+  .day-horizon-image {
+    object-fit: fill !important;
+    object-position: center;
+    transform: none !important;
+  }
+  .day-horizon-frame:hover .day-horizon-image { transform: none !important; }
+  .day-sign-hotspots,
+  .day-sign-modal-shade,
+  .day-sign-modal { display: none !important; }
+  .day-horizon-arrow {
+    top: 73.5% !important;
+    width: 14% !important;
+    height: 10% !important;
+    font-size: 0 !important;
+    background: transparent;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .day-horizon-prev { left: 1.5% !important; }
+  .day-horizon-next { right: 1.5% !important; }
+  .day-horizon-dots {
+    top: 88.5% !important;
+    width: 56% !important;
+    height: 5% !important;
+    gap: 8px !important;
+  }
+  .day-horizon-dots button {
+    width: 13px !important;
+    height: 13px !important;
+    min-width: 13px !important;
+    min-height: 13px !important;
+    background: rgba(111, 62, 27, .28);
+    box-shadow: inset 0 1px 2px rgba(70, 38, 16, .4);
+  }
+  .day-horizon-dots button[aria-current="step"] {
+    background: #fff4d9;
+    box-shadow: 0 0 0 2px #8c542c, 0 1px 4px rgba(0,0,0,.25);
+  }
+}
 </style>
 
 <style>
@@ -1160,6 +1207,117 @@ main {
     max-height: 130px;
     object-fit: cover;
   }
+}
+
+/* Mobile map: use the complete portrait artwork, with in-map navigation controls. */
+@media (max-width: 600px) {
+  .horizon-map { padding: 0 0 12px !important; overflow: visible; }
+  .map-mobile-switch { display: none !important; }
+  .map-stage {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    aspect-ratio: 375 / 812 !important;
+    height: auto !important;
+    overflow: hidden !important;
+    touch-action: pan-y;
+    background: #315b35;
+  }
+  .map-bg { display: none !important; }
+  .map-mobile-bg {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: fill !important;
+    object-position: center !important;
+  }
+  .map-stage.map-page-stationary .map-mobile-stationary,
+  .map-stage.map-page-tent .map-mobile-tent { display: block !important; }
+  .map-stage.map-page-stationary .map-mobile-tent,
+  .map-stage.map-page-tent .map-mobile-stationary { display: none !important; }
+
+  .map-mobile-arrow {
+    display: grid;
+    place-items: center;
+    position: absolute;
+    z-index: 34;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 38px;
+    height: 52px;
+    padding: 0 0 5px;
+    border: 2px solid rgba(111, 67, 35, .85);
+    border-radius: 14px;
+    background: rgba(255, 235, 196, .88);
+    color: #704321;
+    font: 700 36px/1 Georgia, serif;
+    box-shadow: 0 3px 0 rgba(95, 54, 28, .45), 0 4px 12px rgba(20, 35, 20, .25);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .map-mobile-arrow-prev { left: 7px; }
+  .map-mobile-arrow-next { right: 7px; }
+
+  #huntTab {
+    display: flex !important;
+    position: absolute !important;
+    z-index: 38 !important;
+    left: auto !important;
+    right: 12px !important;
+    top: auto !important;
+    bottom: 12px !important;
+    transform: none !important;
+    width: 46px !important;
+    height: 46px !important;
+    min-height: 46px !important;
+    max-height: 46px !important;
+    border-radius: 50% !important;
+    overflow: hidden !important;
+    box-shadow: 0 3px 0 rgba(95, 54, 28, .45), 0 4px 12px rgba(20, 35, 20, .28);
+  }
+  #huntTab .tab-handle {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 46px !important;
+    height: 46px !important;
+    writing-mode: horizontal-tb !important;
+    font-size: 0 !important;
+    border: 0;
+  }
+  #huntTab .tab-handle::after { content: "⌕"; font: 700 34px/1 Arial, sans-serif; }
+  #huntTab .tab-panel { display: none !important; }
+  #huntTab.open {
+    left: 12px !important;
+    right: 12px !important;
+    bottom: 12px !important;
+    top: auto !important;
+    transform: none !important;
+    width: min(330px, calc(100vw - 24px)) !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: 48vh !important;
+    border-radius: 18px !important;
+  }
+  #huntTab.open .tab-handle {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 46px !important;
+    height: 46px !important;
+  }
+  #huntTab.open .tab-panel {
+    display: block !important;
+    width: calc(min(330px, 100vw - 24px) - 46px) !important;
+    max-height: 44vh;
+    overflow-y: auto;
+    padding: 10px 9px !important;
+  }
+  #huntTab .hunt-title { font-size: 14px !important; }
+  #huntTab .hunt-copy { font-size: 10px !important; margin-bottom: 5px !important; }
+  #huntTab .hunt-items { gap: 4px !important; }
+  #huntTab .hunt-slot { width: 49px !important; min-height: 48px !important; flex-basis: 49px !important; }
+  #huntTab .hunt-slot img { max-width: 25px !important; max-height: 25px !important; }
+  .hunt-object { width: 27px !important; height: 27px !important; }
+  .map-stage.map-page-tent #huntTab,
+  .map-stage.map-page-tent .hunt-object { display: none !important; }
 }
 </style>
 
@@ -1545,6 +1703,8 @@ main {
     <img class="map-bg" src="assets/map/map.webp" alt="Иллюстрированная карта стационарного и палаточного лагерей «Горизонт»" loading="lazy" decoding="async">
     <img class="map-mobile-bg map-mobile-stationary" src="assets/map/mobile-stationary.webp" alt="Стационарный лагерь — мобильная карта" loading="lazy" decoding="async">
     <img class="map-mobile-bg map-mobile-tent" src="assets/map/mobile-tent.webp" alt="Палаточный лагерь — мобильная карта" loading="lazy" decoding="async">
+    <button class="map-mobile-arrow map-mobile-arrow-prev" id="mapMobilePrev" type="button" aria-label="Показать стационарный лагерь">‹</button>
+    <button class="map-mobile-arrow map-mobile-arrow-next" id="mapMobileNext" type="button" aria-label="Показать палаточный лагерь">›</button>
 
     <aside id="huntTab" aria-expanded="false" aria-label="Игра Найди предметы">
       <button class="tab-handle" type="button" aria-label="Открыть список предметов">НАЙДИ ПРЕДМЕТЫ</button>
@@ -1865,13 +2025,13 @@ main {
     ];
     const safeZonesMobile={
       stationary:[[9,34],[18,47],[30,72],[48,29],[61,63],[78,47],[84,77],[28,87]],
-      tent:[[12,34],[29,54],[48,43],[69,31],[82,51],[53,72],[73,84],[90,70]]
+      tent:[]
     };
     const isMobileMap=()=>window.matchMedia('(max-width: 600px)').matches;
     const shuffled=safeZonesDesktop.slice().sort(()=>Math.random()-0.5);
     let found=0;
     const chosen=huntFiles.slice(0,8);
-    const mobilePages=['stationary','stationary','stationary','stationary','tent','tent','tent','tent'];
+    const mobilePages=['stationary','stationary','stationary','stationary','stationary','stationary','stationary','stationary'];
     const huntNames={'backpack.webp':'Рюкзак','compass.webp':'Компас','map.webp':'Карта','guitar.webp':'Гитара','squirrel.webp':'Белка','bird.webp':'Птичка','pawprints.webp':'Следы','camera.webp':'Фотоаппарат'};
 
     function updateCounter(){
@@ -1881,6 +2041,8 @@ main {
     let activeMapPage='stationary';
     function applyMapPage(page){
       activeMapPage=page;
+      mapStage.classList.toggle('map-page-stationary',page==='stationary');
+      mapStage.classList.toggle('map-page-tent',page==='tent');
       document.querySelectorAll('.map-mobile-tab').forEach(tab=>{
         const active=tab.dataset.mapPage===page;
         tab.classList.toggle('active',active); tab.setAttribute('aria-pressed',active?'true':'false');
@@ -1903,6 +2065,10 @@ main {
       closeDescription();
     }
     document.querySelectorAll('.map-mobile-tab').forEach(tab=>tab.addEventListener('click',()=>applyMapPage(tab.dataset.mapPage)));
+    const mapPrev=document.getElementById('mapMobilePrev');
+    const mapNext=document.getElementById('mapMobileNext');
+    if(mapPrev) mapPrev.addEventListener('click',()=>applyMapPage('stationary'));
+    if(mapNext) mapNext.addEventListener('click',()=>applyMapPage('tent'));
     // На телефоне переключаем карту свайпом влево/вправо.
     let mapSwipeStart=null;
     mapStage.addEventListener('pointerdown',e=>{
@@ -1975,7 +2141,7 @@ main {
       itemsEl.appendChild(slot);
     });
     updateCounter();
-    if(isMobileMap()) applyMapPage('stationary');
+    applyMapPage('stationary');
     window.addEventListener('resize',()=>{
       if(!isMobileMap()){
         document.querySelectorAll('.map-hit[data-map-page]').forEach(pin=>{pin.hidden=false;if(pin.dataset.desktopStyle!==undefined)pin.setAttribute('style',pin.dataset.desktopStyle);});
@@ -2189,27 +2355,29 @@ render();
   const live = document.getElementById('dayHorizonLive');
   if (!image || !prev || !next || !dots.length) return;
   const scenes = [
-    {src:'assets/day-scenes/01-morning.webp', alt:'Доброе утро в лагере Горизонт', label:'08:00 — Доброе утро'},
-    {src:'assets/day-scenes/02-workshops.webp', alt:'Дети на мастер-классах и творческих занятиях', label:'10:30 — Время открытий'},
-    {src:'assets/day-scenes/03-sports.webp', alt:'Спортивные активности в лагере', label:'15:00 — Время движения'},
-    {src:'assets/day-scenes/04-friends.webp', alt:'Дети отдыхают и общаются у озера', label:'17:00 — Время друзей'},
-    {src:'assets/day-scenes/05-preparation.webp', alt:'Подготовка к вечернему мероприятию', label:'18:00 — Готовимся к вечеру'},
-    {src:'assets/day-scenes/06-evening.webp', alt:'Большой вечер в лагере: концерт и костёр', label:'20:00 — Большой вечер'},
-    {src:'assets/day-scenes/07-night.webp', alt:'Тихий вечер и подготовка ко сну в лагере', label:'21:30 — Время отдыха'}
+    {src:'assets/day-scenes/01-morning.webp', mobileSrc:'assets/schedule-08-morning-mobile-375x812.png', alt:'Доброе утро в лагере Горизонт', label:'08:00 — Доброе утро'},
+    {src:'assets/day-scenes/02-workshops.webp', mobileSrc:'assets/schedule-1030-workshops-mobile-375x812.png', alt:'Дети на мастер-классах и творческих занятиях', label:'10:30 — Время открытий'},
+    {src:'assets/day-scenes/03-sports.webp', mobileSrc:'assets/schedule-15-sports-mobile-375x812.png', alt:'Спортивные активности в лагере', label:'15:00 — Время движения'},
+    {src:'assets/day-scenes/04-friends.webp', mobileSrc:'assets/schedule-17-friends-mobile-375x812.png', alt:'Дети отдыхают и общаются у озера', label:'17:00 — Время друзей'},
+    {src:'assets/day-scenes/05-preparation.webp', mobileSrc:'assets/schedule-18-preparation-mobile-375x812.png', alt:'Подготовка к вечернему мероприятию', label:'18:00 — Готовимся к вечеру'},
+    {src:'assets/day-scenes/06-evening.webp', mobileSrc:'assets/schedule-20-evening-mobile-375x812.png', alt:'Большой вечер в лагере: концерт и костёр', label:'20:00 — Большой вечер'},
+    {src:'assets/day-scenes/07-night.webp', mobileSrc:'assets/schedule-2130-rest-mobile-375x812.png', alt:'Тихий вечер и подготовка ко сну в лагере', label:'21:30 — Время отдыха'}
   ];
   let current = 0;
   function show(index) {
     current = (index + scenes.length) % scenes.length;
     const scene = scenes[current];
+    const mobileView = window.matchMedia('(max-width: 700px)').matches;
+    const imageSrc = mobileView ? scene.mobileSrc : scene.src;
     image.classList.add('is-changing');
     const preload = new Image();
     preload.onload = function() {
-      image.src = scene.src;
+      image.src = imageSrc;
       image.alt = scene.alt;
       requestAnimationFrame(() => image.classList.remove('is-changing'));
     };
     preload.onerror = function() {
-      image.src = scene.src;
+      image.src = imageSrc;
       image.alt = scene.alt;
       image.classList.remove('is-changing');
     };
@@ -2228,6 +2396,19 @@ render();
     if (e.key === 'ArrowLeft') show(current - 1);
     if (e.key === 'ArrowRight') show(current + 1);
   });
+  let scheduleTouchStart = null;
+  frame.addEventListener('pointerdown', e => {
+    if (e.pointerType === 'mouse' || e.target.closest('button')) return;
+    scheduleTouchStart = {x:e.clientX, y:e.clientY};
+  }, {passive:true});
+  frame.addEventListener('pointerup', e => {
+    if (!scheduleTouchStart) return;
+    const dx = e.clientX - scheduleTouchStart.x;
+    const dy = e.clientY - scheduleTouchStart.y;
+    scheduleTouchStart = null;
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.25) show(current + (dx < 0 ? 1 : -1));
+  }, {passive:true});
+  frame.addEventListener('pointercancel', () => { scheduleTouchStart = null; }, {passive:true});
   show(0);
 })();
 </script>
