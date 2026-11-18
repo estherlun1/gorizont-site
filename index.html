@@ -2105,7 +2105,7 @@ main {
       img.alt='';
       el.appendChild(img);
       mapStage.appendChild(el);
-      const mobilePos=safeZonesMobile[page][i%4];
+      const mobilePos=safeZonesMobile[page][i];
       el.dataset.mobileLeft=mobilePos[0]; el.dataset.mobileTop=mobilePos[1];
 
       el.addEventListener('click',e=>{
