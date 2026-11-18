@@ -46,6 +46,57 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
       button.style.cursor = value ? "wait" : "";
     });
   }
+  let passwordChangePanel = null;
+  function showPasswordChange(username, temporaryPassword) {
+    if (passwordChangePanel) passwordChangePanel.remove();
+    passwordChangePanel = document.createElement("form");
+    passwordChangePanel.className = "auth-form";
+    passwordChangePanel.innerHTML = `
+      <p style="line-height:1.5;margin:0 0 14px">Это временный пароль. Придумай новый пароль, чтобы продолжить.</p>
+      <label style="display:block;margin:12px 0 6px">Новый пароль</label>
+      <input name="new_password" type="password" minlength="10" maxlength="72" autocomplete="new-password" required style="width:100%;padding:13px;border:1px solid #d9ded7;border-radius:12px">
+      <label style="display:block;margin:12px 0 6px">Повтори новый пароль</label>
+      <input name="confirm_password" type="password" minlength="10" maxlength="72" autocomplete="new-password" required style="width:100%;padding:13px;border:1px solid #d9ded7;border-radius:12px">
+      <button type="submit" style="width:100%;margin-top:16px;padding:14px;border:0;border-radius:999px;background:#f36f3d;color:white;font-weight:700;cursor:pointer">Сохранить новый пароль</button>
+    `;
+    loginForm.parentElement.insertBefore(passwordChangePanel, loginForm);
+    registerForm.hidden = true;
+    loginForm.hidden = true;
+    if (tabs) tabs.hidden = true;
+    if (title) title.textContent = "Придумай новый пароль";
+    if (intro) intro.textContent = "Это нужно сделать один раз для защиты аккаунта.";
+    setStatus("Временный пароль принят. Остался последний шаг.");
+    passwordChangePanel.querySelector('input[name="new_password"]').focus();
+    passwordChangePanel.addEventListener("submit", async event => {
+      event.preventDefault();
+      if (busy || !passwordChangePanel.reportValidity()) return;
+      const form = new FormData(passwordChangePanel);
+      const next = String(form.get("new_password") || "");
+      const confirm = String(form.get("confirm_password") || "");
+      if (next.length < 10 || next.length > 72) return setStatus("Новый пароль должен содержать от 10 до 72 символов.", true);
+      if (next !== confirm) return setStatus("Пароли не совпадают.", true);
+      const button = passwordChangePanel.querySelector('button[type="submit"]');
+      busy = true; button.disabled = true; button.textContent = "Сохраняем...";
+      setStatus("Меняем пароль...");
+      try {
+        const result = await callFunction("change-participant-password", {
+          username, temporary_password: temporaryPassword, new_password: next
+        });
+        passwordChangePanel.remove(); passwordChangePanel = null;
+        if (result.session) {
+          await acceptSession(result);
+        } else {
+          if (tabs) tabs.hidden = false;
+          tab("login");
+          setStatus(result.message || "Пароль изменён. Теперь войди с новым паролем.");
+        }
+      } catch (error) {
+        button.disabled = false; button.textContent = "Сохранить новый пароль";
+        setStatus(error.message || "Не удалось изменить пароль.", true);
+      } finally { busy = false; }
+    });
+  }
+
   function renderPointsHistory(rows) {
     if (!pointsHistory) return;
     pointsHistory.replaceChildren();
@@ -215,6 +266,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
     previousFocus?.focus();
   }
   function tab(which) {
+    if (passwordChangePanel) { passwordChangePanel.remove(); passwordChangePanel = null; }
     const isRegister = which === "register";
     registerTab.classList.toggle("active", isRegister);
     loginTab.classList.toggle("active", !isRegister);
@@ -287,8 +339,12 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
     setBusy(true); setStatus("Проверяем логин и пароль...");
     try {
       const data = await callFunction("login-user", payload);
-      await acceptSession(data);
-      loginForm.reset();
+      if (data.must_change_password) {
+        showPasswordChange(data.username, payload.password);
+      } else {
+        await acceptSession(data);
+        loginForm.reset();
+      }
     } catch (error) { setStatus(error.message || "Не удалось войти.", true); }
     finally { setBusy(false); }
   });
