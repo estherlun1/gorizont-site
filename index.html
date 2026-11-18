@@ -1255,6 +1255,7 @@ main {
   }
   .map-mobile-arrow-prev { left: 7px; }
   .map-mobile-arrow-next { right: 7px; }
+  .map-stage .map-mobile-arrow { display: grid; }
 
   #huntTab {
     display: flex !important;
@@ -2069,8 +2070,9 @@ main {
     document.querySelectorAll('.map-mobile-tab').forEach(tab=>tab.addEventListener('click',()=>applyMapPage(tab.dataset.mapPage)));
     const mapPrev=document.getElementById('mapMobilePrev');
     const mapNext=document.getElementById('mapMobileNext');
-    if(mapPrev) mapPrev.addEventListener('click',()=>applyMapPage('stationary'));
-    if(mapNext) mapNext.addEventListener('click',()=>applyMapPage('tent'));
+    const toggleMapPage=()=>applyMapPage(activeMapPage==='stationary'?'tent':'stationary');
+    if(mapPrev) mapPrev.addEventListener('click',toggleMapPage);
+    if(mapNext) mapNext.addEventListener('click',toggleMapPage);
     // На телефоне переключаем карту свайпом влево/вправо.
     let mapSwipeStart=null;
     mapStage.addEventListener('pointerdown',e=>{
@@ -2384,7 +2386,7 @@ render();
       image.alt = scene.alt;
       image.classList.remove('is-changing');
     };
-    preload.src = scene.src;
+    preload.src = imageSrc;
     dots.forEach((dot, i) => {
       if (i === current) dot.setAttribute('aria-current', 'step');
       else dot.removeAttribute('aria-current');
