@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Администрирование — Горизонт</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#20302d;--green:#244c3b;--orange:#f36f3d;--cream:#fffaf1}
+*{box-sizing:border-box}body{margin:0;background:#e7f1e9;color:var(--ink);font-family:Inter,system-ui,sans-serif}
+header{background:var(--green);color:white;padding:20px clamp(18px,5vw,60px);display:flex;align-items:center;justify-content:space-between;gap:16px}
+header strong{font:700 25px Oswald,sans-serif;letter-spacing:.04em}header a{color:white;text-decoration:none;font-size:13px}
+main{width:min(1100px,calc(100% - 28px));margin:36px auto 70px}
+.panel{background:var(--cream);border-radius:24px;padding:clamp(20px,4vw,36px);box-shadow:0 14px 38px #244c3b12;margin-bottom:20px}
+h1,h2{font-family:Oswald,sans-serif;margin:0 0 14px}h1{font-size:34px}h2{font-size:26px}
+p{line-height:1.55}.muted{color:#64736b;font-size:13px}
+input{font:inherit;padding:13px 14px;border:1px solid #d8e0d7;border-radius:12px;width:100%;background:white}
+button{font:700 14px Inter;cursor:pointer;border:0;border-radius:999px;padding:13px 18px;background:var(--orange);color:white}
+button:disabled{opacity:.55;cursor:wait}.secondary{background:#e7eee7;color:var(--green)}
+form{display:grid;gap:12px;max-width:420px}.field{display:grid;gap:6px}.hidden{display:none!important}
+#status{min-height:22px;color:#47734f;font-size:14px;margin-top:12px}#status.error{color:#a33d2b}
+.toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:18px 0}.toolbar input{max-width:360px}
+.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:640px}th,td{text-align:left;padding:13px 10px;border-bottom:1px solid #e6e8df;font-size:14px}th{font-size:12px;text-transform:uppercase;color:#68766e;letter-spacing:.04em}
+.row-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.row-actions button{padding:9px 13px;font-size:12px}
+.status-pill{display:inline-block;padding:5px 9px;border-radius:99px;background:#e7eee7;color:#315b43;font-size:11px}
+.status-pill.warn{background:#fff0dc;color:#955b1a}
+#passwordResult{border:1px dashed #e5a36f;background:#fff5e9;border-radius:16px;padding:18px;margin-top:18px}
+.password{font:700 20px ui-monospace,monospace;word-break:break-all;margin:8px 0 14px}
+@media(max-width:600px){header{align-items:flex-start;flex-direction:column}.toolbar input{max-width:none}}
+</style>
+</head>
+<body>
+<header><strong>ГОРИЗОНТ · АДМИНИСТРИРОВАНИЕ</strong><a href="./index.html">← На сайт лагеря</a></header>
+<main>
+<section id="loginPanel" class="panel">
+<h1>Вход администратора</h1>
+<p class="muted">Этот раздел предназначен только для сотрудников с административными правами.</p>
+<form id="loginForm">
+<div class="field"><label for="adminPassword">Пароль администратора</label><input id="adminPassword" type="password" autocomplete="current-password" required></div>
+<button id="loginButton" type="submit">Войти</button>
+</form><div id="status" role="status"></div>
+</section>
+<section id="dashboard" class="panel hidden">
+<h1>Участники лагеря</h1>
+<p class="muted">Найди участника по имени или логину и при необходимости выдай временный пароль. Он действует 24 часа и требует обязательной смены при входе.</p>
+<div class="toolbar"><input id="search" type="search" placeholder="Поиск по имени или логину"><button id="refresh" class="secondary" type="button">Обновить список</button><button id="logout" class="secondary" type="button">Выйти</button></div>
+<div class="table-wrap"><table><thead><tr><th>Участник</th><th>Логин</th><th>Статус пароля</th><th>Действие</th></tr></thead><tbody id="participants"></tbody></table></div>
+<div id="passwordResult" class="hidden"><strong>Временный пароль создан</strong><p class="muted">Передай его участнику лично. Он будет показан только сейчас.</p><div id="temporaryPassword" class="password"></div><p id="expiry" class="muted"></p><button id="copyPassword" type="button">Скопировать пароль</button></div>
+<div id="dashboardStatus" role="status"></div>
+</section>
+</main>
+<script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+const URL="https://jrvukdqqrmfjbtskrayy.supabase.co";
+const KEY="sb_publishable_AAHg7Xgeq_KRm6PdropyMg_V6op0enJ";
+const EMAIL="esthermoony@login.gorizont.invalid";
+const supabase=createClient(URL,KEY,{auth:{persistSession:true,autoRefreshToken:true,storageKey:"gorizont-admin-session"}});
+const $=id=>document.getElementById(id);
+let participants=[];
+let latestPassword="";
+function status(message,error=false,target="status"){$(target).textContent=message;$(target).classList.toggle("error",error);}
+async function call(name,payload={}){
+ const {data:{session}}=await supabase.auth.getSession();
+ if(!session) throw new Error("Сессия администратора завершилась. Войди снова.");
+ const res=await fetch(URL+"/functions/v1/"+name,{method:"POST",headers:{"Content-Type":"application/json","apikey":KEY,"Authorization":"Bearer "+session.access_token},body:JSON.stringify(payload)});
+ const data=await res.json().catch(()=>({}));
+ if(!res.ok||data.error) throw new Error(data.error||"Не удалось выполнить запрос.");
+ return data;
+}
+async function load(){
+ status("Загружаем участников... ",false,"dashboardStatus");
+ try{const data=await call("admin-list-participants");participants=data.participants||[];render();status("Участников: "+participants.length,false,"dashboardStatus");}
+ catch(e){status(e.message,true,"dashboardStatus");}
+}
+function render(){
+ const q=$("search").value.trim().toLowerCase();const body=$("participants");body.replaceChildren();
+ const filtered=participants.filter(p=>[p.full_name,p.nickname,p.username].some(v=>String(v||"").toLowerCase().includes(q)));
+ for(const p of filtered){
+  const tr=document.createElement("tr");
+  const name=document.createElement("td");name.textContent=p.full_name+(p.nickname?" · "+p.nickname:"");
+  const login=document.createElement("td");login.textContent=p.username;
+  const state=document.createElement("td");const pill=document.createElement("span");pill.className="status-pill"+(p.must_change_password?" warn":"");pill.textContent=p.must_change_password?"Ожидает смены пароля":"Обычный пароль";state.append(pill);
+  const action=document.createElement("td");const wrap=document.createElement("div");wrap.className="row-actions";const btn=document.createElement("button");btn.type="button";btn.textContent="Сбросить пароль";btn.addEventListener("click",()=>reset(p.username,btn));wrap.append(btn);action.append(wrap);tr.append(name,login,state,action);body.append(tr);
+ }
+ if(!filtered.length){const tr=document.createElement("tr");const td=document.createElement("td");td.colSpan=4;td.textContent="Ничего не найдено.";tr.append(td);body.append(tr);}
+}
+async function reset(username,button){
+ if(!confirm("Создать новый временный пароль для "+username+"? Старый пароль перестанет работать.")) return;
+ button.disabled=true;button.textContent="Создаём...";
+ $("passwordResult").classList.add("hidden");
+ try{
+  const data=await call("admin-reset-participant-password",{username});
+  latestPassword=data.temporary_password;
+  $("temporaryPassword").textContent=latestPassword;
+  $("expiry").textContent="Действует до: "+new Date(data.expires_at).toLocaleString("ru-RU");
+  $("passwordResult").classList.remove("hidden");
+  status("Временный пароль создан. Не закрывай страницу, пока не скопируешь его.",false,"dashboardStatus");
+  await load();
+ }catch(e){status(e.message,true,"dashboardStatus");}
+ finally{button.disabled=false;button.textContent="Сбросить пароль";}
+}
+$("loginForm").addEventListener("submit",async e=>{
+ e.preventDefault();$("loginButton").disabled=true;status("Проверяем доступ...");
+ try{
+  const {data,error}=await supabase.auth.signInWithPassword({email:EMAIL,password:$("adminPassword").value});
+  if(error) throw new Error("Не удалось войти. Проверь пароль администратора.");
+  await call("admin-list-participants");
+  $("loginPanel").classList.add("hidden");$("dashboard").classList.remove("hidden");status("");await load();
+ }catch(err){await supabase.auth.signOut();status(err.message,true);}
+ finally{$("loginButton").disabled=false;}
+});
+$("search").addEventListener("input",render);$("refresh").addEventListener("click",load);
+$("logout").addEventListener("click",async()=>{await supabase.auth.signOut();$("dashboard").classList.add("hidden");$("loginPanel").classList.remove("hidden");$("adminPassword").value="";});
+$("copyPassword").addEventListener("click",async()=>{if(!latestPassword)return;try{await navigator.clipboard.writeText(latestPassword);status("Пароль скопирован.",false,"dashboardStatus");}catch{status("Не удалось скопировать автоматически. Выдели пароль и скопируй вручную.",true,"dashboardStatus");}});
+</script>
+</body></html>
