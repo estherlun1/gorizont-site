@@ -641,6 +641,7 @@ main {
 .counselors-stage{position:absolute;inset:0;overflow:hidden;isolation:isolate}
 .counselors-layer{position:absolute;display:block;height:auto;max-width:none;pointer-events:none;user-select:none;-webkit-user-drag:none;will-change:transform}
 .counselors-layer.c-anya,.counselors-layer.c-maxim,.counselors-layer.c-lera,.counselors-layer.c-ilya{pointer-events:auto;cursor:pointer}
+.counselors-mobile-scene,.counselors-mobile-hotspots{display:none}
 .c-bg{z-index:1;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
 .c-kids-back{z-index:3;display:block;left:-1%;top:30%;width:20%;height:auto}
 .c-anya{z-index:6;left:33%;top:25%;width:22.5%;transform:none}
@@ -667,15 +668,22 @@ main {
 .counselors-quote{margin:22px 0 0;padding:16px 20px;border-left:4px solid #f36f3d;background:#fff1d8;border-radius:0 16px 16px 0;color:#5a3b24;font:italic 17px/1.55 Georgia,serif}
 .counselors-close{position:absolute;right:-10px;top:-10px;width:50px;height:50px;border:0;border-radius:50%;background:#fff9e8;color:#315c39;font-size:32px;line-height:1;cursor:pointer;box-shadow:0 10px 28px rgba(0,0,0,.28);z-index:5}
 @media(max-width:800px){
- .counselors-section{height:82svh;min-height:620px}
- .c-bg{object-fit:cover;object-position:center}
- .c-anya{left:30%;top:16%;width:26%}
- .c-maxim{left:1%;top:29%;width:57%}
- .c-lera{left:46%;top:24%;width:30%}
- .c-ilya{left:67%;top:34%;width:32%}
- .c-kids-front{width:125%;left:-12.5%}
- .counselors-hint{bottom:14px;font-size:12px;white-space:nowrap}
- .counselors-modal{padding:12px}.counselors-card{width:96vw;height:94vh;grid-template-columns:1fr;grid-template-rows:42% 58%;gap:8px;overflow:auto}.counselors-person-wrap{height:100%;min-height:210px}.counselors-person{max-height:100%;max-width:82%}.counselors-info{max-height:none;padding:24px 21px;border-radius:24px}.counselors-text{font-size:16px;line-height:1.55}.counselors-quote{font-size:15px}.counselors-close{right:4px;top:4px;width:44px;height:44px;font-size:28px}
+ .counselors-section{height:100svh;min-height:650px;max-height:900px;background:#18251e}
+ .counselors-stage{inset:0}
+ .counselors-stage .counselors-layer{display:none}
+ .counselors-mobile-scene{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;z-index:1}
+ .counselors-mobile-hotspots{display:block!important;position:absolute;inset:0;z-index:5}
+ .counselor-hotspot{position:absolute;display:block;padding:0;border:0;background:transparent;border-radius:40%;cursor:pointer;-webkit-tap-highlight-color:transparent}
+ .counselor-hotspot:focus-visible{outline:3px solid #ffe6a6;outline-offset:3px}
+ .counselor-hotspot[data-person="maxim"]{left:3%;top:25%;width:29%;height:35%}
+ .counselor-hotspot[data-person="anya"]{left:31%;top:20%;width:25%;height:36%}
+ .counselor-hotspot[data-person="lera"]{left:55%;top:20%;width:22%;height:36%}
+ .counselor-hotspot[data-person="ilya"]{left:76%;top:25%;width:22%;height:34%}
+ .counselors-hint{bottom:14px;font-size:12px;white-space:normal;width:max-content;max-width:90%;text-align:center}
+ .counselors-modal{padding:10px}.counselors-card{width:96vw;height:94svh;max-height:850px;grid-template-columns:1fr;grid-template-rows:minmax(190px,38%) 1fr;gap:6px;overflow:auto}
+ .counselors-person-wrap{height:100%;min-height:190px}.counselors-person{max-height:100%;max-width:76%}
+ .counselors-info{max-height:none;padding:22px 19px;border-radius:22px}.counselors-text{font-size:15px;line-height:1.55}.counselors-quote{font-size:14px}
+ .counselors-close{right:4px;top:4px;width:42px;height:42px;font-size:27px}
 }
 @media(prefers-reduced-motion:reduce){.counselors-layer,.counselors-person-wrap,.counselors-info{transition:none!important}}
 </style>
@@ -709,16 +717,22 @@ main {
 #legends .legend-copy p {font-size:16px;line-height:1.7;margin:0;white-space:pre-line}
 #legends .legend-close {position:absolute;right:12px;top:12px;width:42px;height:42px;border:0;border-radius:50%;background:#fff5e4;color:#53351e;font-size:30px;line-height:1;cursor:pointer;box-shadow:0 2px 10px #0002;z-index:2}
 @media(max-width:700px){
- #legends{padding:0;margin-top:0}
- #legends .legends-board{width:100%;aspect-ratio:1672/1100;background-size:100% 100%;background-position:center}
- #legends .legend-polaroid{width:74%;top:52%;max-width:760px;} 
- #legends .legend-arrow{width:9%;top:55%}
- #legends .legend-arrow.left{left:1%}
- #legends .legend-arrow.right{right:1%}
- #legends .legend-card{display:flex;flex-direction:column;max-height:92vh;width:min(760px,94vw);border-width:3px}
- #legends .legend-photo{flex:0 0 auto;width:100%;max-width:none;height:auto;max-height:none;min-height:0;object-fit:contain;padding:0}
- #legends .legend-copy{padding:22px}
- #legends .legend-copy p{font-size:14px}
+ #legends{padding:0;margin-top:0;background:#3b2417}
+ #legends .legends-board{width:100%;aspect-ratio:375/812;background:url('assets/legends-mobile-bg.png') center/100% 100% no-repeat}
+ #legends .legend-polaroid{width:68%;max-width:none;max-height:82%;top:50%;filter:drop-shadow(0 7px 10px #1b100b77)}
+ #legends .legend-polaroid img{width:100%;height:auto;max-height:82svh;object-fit:contain}
+ /* Стрелки нарисованы внизу мобильной доски; прозрачные кнопки поверх рисунка. */
+ #legends .legend-arrow{top:auto;bottom:5.5%;width:19%;height:11%;z-index:25}
+ #legends .legend-arrow img{opacity:0}
+ #legends .legend-arrow.left{left:20%;right:auto}
+ #legends .legend-arrow.right{right:20%;left:auto}
+ #legends .legend-card{display:flex;flex-direction:column;max-height:94svh;width:min(520px,94vw);border-width:3px;border-radius:20px}
+ #legends .legend-photo{flex:0 0 auto;width:100%;max-width:none;height:auto;max-height:54svh;min-height:0;object-fit:contain;padding:0;background:#fff3d9}
+ #legends .legend-copy{padding:18px 17px}
+ #legends .legend-copy h2{font-size:24px}
+ #legends .legend-copy h3{font-size:15px;margin-bottom:12px}
+ #legends .legend-copy p{font-size:14px;line-height:1.55}
+ #legends .legend-close{right:8px;top:8px;width:38px;height:38px}
 }
 @media(prefers-reduced-motion:reduce){#legends *{transition:none!important}}
 </style>
@@ -886,7 +900,7 @@ main {
 /* Мобильная обложка: отдельная вертикальная иллюстрация; компьютерная композиция не меняется. */
 .mobile-hero-art,.mobile-camp-art{display:none}
 @media (max-width:600px){
-  .hero{height:auto;min-height:0;aspect-ratio:3 / 4;max-height:none}
+  .hero{height:auto;min-height:0;aspect-ratio:375 / 812;max-height:none}
   .scene{position:absolute;inset:0}
   .scene>.bg,.scene>.characters,.scene>.grass{display:none!important}
   .mobile-hero-art{
@@ -897,7 +911,7 @@ main {
   .depth-glow{z-index:2}
   /* Две реальные HTML-кнопки поверх свободного участка неба. */
   .hero-actions{
-    display:flex;position:absolute;z-index:20;top:45.3%;left:50%;
+    display:flex;position:absolute;z-index:20;top:40%;left:50%;
     width:88%;max-width:360px;transform:translateX(-50%);
     flex-wrap:nowrap;justify-content:center;align-items:stretch;gap:7px;
     white-space:normal;
@@ -914,7 +928,7 @@ main {
   .scroll-cue{display:none}
   .hero .menu-bookmark{z-index:100}
   /* Второй блок: вертикальная иллюстрация целиком, с рабочими зонами на указателе. */
-  .camp-world{height:auto;min-height:0;aspect-ratio:3 / 4;overflow:hidden}
+  .camp-world{height:auto;min-height:0;aspect-ratio:375 / 812;overflow:hidden}
   .camp-scene{position:absolute;inset:0;perspective:none}
   .camp-scene>.camp-layer{display:none!important}
   .mobile-camp-art{
@@ -935,7 +949,7 @@ main {
   .camp-hotspot:hover{transform:none;filter:none}
 }
 @media (max-width:380px){
-  .hero-actions{top:45.1%;width:90%;gap:5px}
+  .hero-actions{top:40%;width:90%;gap:5px}
   .hero-btn{min-height:36px;padding:7px 5px;font-size:9px}
   .camp-flame-sprite{left:40%;top:71.5%;width:19%}
 }
@@ -958,7 +972,7 @@ main {
   }
 
   .map-mobile-switch {
-    display: flex;
+    display: none !important;
     position: relative;
     z-index: 45;
     gap: 8px;
@@ -990,6 +1004,7 @@ main {
     width: 100% !important;
     aspect-ratio: 1086 / 1448;
     overflow: hidden;
+    touch-action: pan-y;
     position: relative;
   }
 
@@ -1047,28 +1062,36 @@ main {
   }
 
   #huntTab {
-    position: fixed;
-    top: auto;
-    bottom: 12px;
-    left: 10px;
-    transform: none;
-    min-height: 48px;
-    width: 48px;
+    position: absolute !important;
+    top: auto !important;
+    bottom: 14px !important;
+    left: 12px !important;
+    right: auto !important;
+    transform: none !important;
+    width: 48px !important;
+    height: 48px !important;
+    min-height: 48px !important;
+    max-height: 48px !important;
     border-radius: 16px;
-    z-index: 1000;
+    z-index: 40;
   }
 
   #huntTab.open {
-    width: min(330px, calc(100vw - 20px));
-    min-height: 0;
-    bottom: 12px;
-    top: auto;
+    width: min(330px, calc(100vw - 24px)) !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: 48vh !important;
+    bottom: 14px !important;
+    top: auto !important;
   }
 
   #huntTab .tab-handle {
+    position: absolute;
+    left: 0;
+    top: 0;
     writing-mode: horizontal-tb;
-    width: 48px;
-    height: 48px;
+    width: 48px !important;
+    height: 48px !important;
     font-size: 0;
   }
 
@@ -1078,13 +1101,13 @@ main {
   }
 
   #huntTab .tab-panel {
-    width: calc(min(330px, 100vw - 20px) - 48px);
+    width: calc(min(330px, 100vw - 24px) - 48px);
     padding: 12px 10px 12px;
   }
 
   #huntTab.open .tab-panel {
-    max-height: 45vh;
-    overflow: auto;
+    max-height: 42vh;
+    overflow-y: auto;
   }
 
   #huntTab .hunt-title {
@@ -1555,6 +1578,13 @@ main {
 
 <section class="counselors-section" id="guides" aria-label="Вожатые">
   <div class="counselors-stage" id="counselorsStage">
+    <img class="counselors-mobile-scene" src="assets/camp-fire-mobile.png" alt="Вожатые и дети у костра в лагере Горизонт" loading="lazy" decoding="async">
+    <div class="counselors-mobile-hotspots" aria-label="Выбрать вожатого">
+      <button class="counselor-hotspot" data-person="maxim" aria-label="Открыть описание Матвея"></button>
+      <button class="counselor-hotspot" data-person="anya" aria-label="Открыть описание Ани"></button>
+      <button class="counselor-hotspot" data-person="lera" aria-label="Открыть описание Полины"></button>
+      <button class="counselor-hotspot" data-person="ilya" aria-label="Открыть описание Сони"></button>
+    </div>
     <img class="counselors-layer c-bg" src="assets/counselors/bg.webp" alt="Закат у озера в лагере Горизонт" loading="lazy" decoding="async">
     <img class="counselors-layer c-anya" src="assets/counselors/anya.webp" alt="Вожатая Аня" loading="lazy" decoding="async">
     <img class="counselors-layer c-maxim" src="assets/counselors/matvey.webp" alt="Вожатый с гитарой" loading="lazy" decoding="async">
@@ -1873,6 +1903,22 @@ main {
       closeDescription();
     }
     document.querySelectorAll('.map-mobile-tab').forEach(tab=>tab.addEventListener('click',()=>applyMapPage(tab.dataset.mapPage)));
+    // На телефоне переключаем карту свайпом влево/вправо.
+    let mapSwipeStart=null;
+    mapStage.addEventListener('pointerdown',e=>{
+      if(e.pointerType==='mouse') return;
+      mapSwipeStart={x:e.clientX,y:e.clientY};
+    },{passive:true});
+    mapStage.addEventListener('pointerup',e=>{
+      if(!mapSwipeStart || !isMobileMap()) return;
+      const dx=e.clientX-mapSwipeStart.x, dy=e.clientY-mapSwipeStart.y;
+      mapSwipeStart=null;
+      if(Math.abs(dx)>55 && Math.abs(dx)>Math.abs(dy)*1.25){
+        applyMapPage(activeMapPage==='stationary'?'tent':'stationary');
+      }
+    },{passive:true});
+    mapStage.addEventListener('pointercancel',()=>{mapSwipeStart=null;},{passive:true});
+
 
     chosen.forEach((file,i)=>{
       const page=mobilePages[i];
@@ -2022,6 +2068,11 @@ main {
     {el: stage.querySelector('.c-ilya'), key: 'ilya'}
   ].filter(item => item.el && data[item.key]);
 
+  const mobileHotspots=[...stage.querySelectorAll('.counselor-hotspot')];
+  mobileHotspots.forEach(el=>{
+    const key=el.dataset.person;
+    el.addEventListener('click',()=>open(key));
+  });
   hitImages.forEach(item=>{
     item.el.style.pointerEvents='auto';
     item.el.style.cursor='pointer';
@@ -2064,7 +2115,9 @@ const stories=[
   title:'След лесного хранителя',
   subtitle:'Тайна, рассказанная у вечернего костра',
   image:'assets/legends/story-moose.webp',
+  mobileImage:'assets/legend-1-vertical.png',
   modalImage:'assets/legends/story-moose-original.webp',
+  mobileModalImage:'assets/legend-1-vertical.png',
   text:'Летом 2022 года, когда наш палаточный лагерь только начинал свою историю, на одном из вечерних огоньков директор Дмитрий Александрович Горячев поделился с нами тайной.\n\nОн рассказал, что по ночам бродит невидимый хранитель здешних мест — то ли величавый лесной лось, то ли благородный олень. Он оставляет свои следы. И если ранним утром найти на лесной тропинке этот след, прикоснуться к нему и загадать самое заветное желание — оно обязательно сбудется.\n\nЧто началось потом, сложно описать словами! Всю оставшуюся смену мы, дети, превратились в настоящих следопытов: на цыпочках обходили каждую полянку, разглядывали каждую мелочь и искали то самое чудо.\n\nИ знаете, мы ведь действительно нашли. Потому что лагерное чудо — это не просто след на земле, а та искренняя вера в сказку, которую взрослые так бережно подарили нам у ночного костра.'
  },
  {
@@ -2072,7 +2125,9 @@ const stories=[
   title:'Вожатское сердце',
   subtitle:'Маленький кусочек Горизонта всегда с тобой',
   image:'assets/legends/story-heart.webp',
+  mobileImage:'assets/legend-2-vertical.png',
   modalImage:'assets/legends/story-heart-original.webp',
+  mobileModalImage:'assets/legend-2-vertical.png',
   text:'Вы замечали, почему вожатые так крепко обнимаются в последний день смены и иногда тайком вытирают слёзы?\n\nЕсть старая сказка о том, что в день разъезда вожатый отламывает от своего сердца по маленькому невидимому кусочку и прячет каждому ребёнку в кармашек куртки или прямо в ладошку.\n\nРебята уезжают домой: в разные города, школы, к своим урокам. Но если осенью или холодной зимой тебе вдруг станет одиноко, грустно или покажется, что опустились руки — просто приложи ладошку к груди и вспомни наш лагерь.\n\nТы сразу почувствуешь лёгкое, тёплое тук-тук. Это бьётся тот самый кусочек вожатского сердца из «Горизонта», который напоминает: «Ты не один. Тебя помнят, любят и очень ждут обратно».'
  }
 ];
@@ -2086,7 +2141,7 @@ function render(){
  button.type='button';
  button.setAttribute('aria-label','Открыть легенду: '+story.title);
  const image=document.createElement('img');
- image.src=story.image;
+ image.src=window.matchMedia('(max-width: 700px)').matches ? story.mobileImage : story.image;
  image.alt=story.title;
  image.draggable=false;
  button.appendChild(image);
@@ -2097,7 +2152,7 @@ function render(){
 }
 function openStory(story){
  const photo=document.getElementById('legendPhoto');
- photo.src=story.modalImage;
+ photo.src=window.matchMedia('(max-width: 700px)').matches ? story.mobileModalImage : story.modalImage;
  photo.alt=story.title;
  document.getElementById('legendTitle').textContent=story.title;
  document.getElementById('legendSubtitle').textContent=story.subtitle;
