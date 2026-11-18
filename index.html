@@ -1319,6 +1319,8 @@ main {
   .map-stage.map-page-tent #huntTab,
   .map-stage.map-page-tent .hunt-object { display: none !important; }
 }
+
+.map-mobile-arrow { display:none; }
 </style>
 
 
@@ -2141,7 +2143,8 @@ main {
       itemsEl.appendChild(slot);
     });
     updateCounter();
-    applyMapPage('stationary');
+    if(isMobileMap()) applyMapPage('stationary');
+    else mapStage.classList.add('map-page-stationary');
     window.addEventListener('resize',()=>{
       if(!isMobileMap()){
         document.querySelectorAll('.map-hit[data-map-page]').forEach(pin=>{pin.hidden=false;if(pin.dataset.desktopStyle!==undefined)pin.setAttribute('style',pin.dataset.desktopStyle);});
