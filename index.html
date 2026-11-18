@@ -1627,6 +1627,90 @@ main {
 }
 </style>
 
+
+<style id="mobile-games-adaptation">
+/* Мобильный блок игр: отдельная вертикальная иллюстрация и одна карточка за раз. */
+.games-mobile-background{display:none}
+@media (max-width:600px){
+  .games-section{width:100%;overflow:hidden;background:#167eb2}
+  .games-scene{
+    width:100%;max-width:none;height:auto;min-height:0;
+    aspect-ratio:375 / 812;overflow:hidden;position:relative;
+  }
+  .games-scene>.games-background,
+  .games-scene>.games-board,
+  .games-scene>.games-foreground{display:none!important}
+  .games-mobile-background{
+    display:block;position:absolute;inset:0;width:100%;height:100%;
+    object-fit:cover;object-position:center;z-index:0;
+    pointer-events:none;user-select:none;-webkit-user-drag:none;
+  }
+  /* Игровая карточка располагается внутри пустого пергаментного поля. */
+  .games-viewport{
+    left:8%;right:8%;top:22.5%;height:52%;
+    z-index:3;overflow:hidden;display:block;
+    touch-action:pan-y;cursor:grab;
+  }
+  .games-track{
+    width:100%;height:100%;gap:0;align-items:stretch;
+    transition:transform .34s cubic-bezier(.2,.75,.2,1);
+  }
+  .game-preview{
+    flex:0 0 100%;width:100%;height:100%;min-width:0;
+    padding:8px 7px 9px;border:0;border-radius:14px;
+    background:rgba(255,239,202,.42);box-shadow:none;
+    color:#4a2c18;justify-content:flex-start;
+  }
+  .game-preview:hover,.game-preview:focus-visible{
+    transform:none;border-color:transparent;box-shadow:none;
+  }
+  .game-preview-visual{
+    flex:0 0 38%;width:100%;border:2px solid #c58b4b;
+    border-radius:12px;background:#f9e8c4;box-shadow:0 3px 0 #a96e36;
+  }
+  .game-preview-title{
+    margin:12px 2px 7px;font-size:clamp(20px,5.3vw,24px);
+    line-height:1.12;color:#56331c;
+  }
+  .game-preview-description{
+    margin:0 auto 12px;max-width:95%;
+    font:500 clamp(13px,3.6vw,15px)/1.35 Inter,sans-serif;
+    color:#60462d;-webkit-line-clamp:3;overflow:hidden;
+  }
+  .game-preview-action{
+    min-height:42px;padding:10px 20px;font-size:15px;
+    border-radius:999px;align-self:center;min-width:64%;
+    box-shadow:0 3px 0 #b93d18;
+  }
+  .games-arrow-hit{
+    z-index:8;top:47%;width:10%;height:9%;
+    border-radius:50%;background:rgba(111,65,31,.16);
+    border:1px solid rgba(105,60,28,.35);
+  }
+  .games-arrow-hit:before{
+    display:grid;place-items:center;width:100%;height:100%;
+    color:#613719;font:700 30px/1 Inter,sans-serif;
+  }
+  .games-arrow-hit.prev:before{content:"‹"}
+  .games-arrow-hit.next:before{content:"›"}
+  .games-arrow-hit.prev{left:1.5%}.games-arrow-hit.next{right:1.5%}
+  .games-arrow-hit:disabled{opacity:.25!important;cursor:default}
+  .games-pagination{
+    z-index:9;bottom:7.5%;left:50%;gap:8px;
+    padding:7px 12px;background:rgba(255,239,202,.88);
+    box-shadow:0 2px 8px rgba(72,43,20,.12);
+  }
+  .games-dot{width:9px;height:9px}
+  .games-section-note{display:none}
+  .games-toast{z-index:12;max-width:82%;font-size:13px}
+  .games-viewport.is-dragging{cursor:grabbing}
+  .games-viewport.is-dragging .games-track{transition:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .games-track{transition:none!important}
+}
+</style>
+
 </head>
 <body>
 <div id="celebrationLayer" aria-hidden="true"></div>
@@ -1815,6 +1899,7 @@ main {
 
 <section class="games-section" id="games-section" aria-label="Игры Горизонта">
  <div class="games-scene" id="gamesScene">
+  <img class="games-mobile-background" src="assets/games-mobile-bg.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
   <img class="games-layer games-background" src="assets/games/games-background.webp" alt="Лесная поляна и домики у озера" loading="lazy" decoding="async">
   <img class="games-layer games-board" src="assets/games/games-board.webp" alt="Игры Горизонта — игровая карусель" loading="lazy" decoding="async">
   <div class="games-viewport" id="gamesViewport" aria-label="Выбор игры">
@@ -2501,7 +2586,7 @@ render();
  if(!scene||!viewport||!track||!prev||!next||!pagination)return;
  const cards=Array.from(track.querySelectorAll('.game-preview'));
  let index=0,toastTimer;
- function visibleCount(){return window.matchMedia('(max-width: 850px)').matches?2:3}
+ function visibleCount(){return window.matchMedia('(max-width: 600px)').matches?1:(window.matchMedia('(max-width: 850px)').matches?2:3)}
  function maxIndex(){return Math.max(0,cards.length-visibleCount())}
  function stepWidth(){const card=cards[0]; if(!card)return 0; const gap=parseFloat(getComputedStyle(track).gap)||0; return card.getBoundingClientRect().width+gap}
  function render(){
@@ -2510,7 +2595,7 @@ render();
   pagination.innerHTML='';
   const total=maxIndex()+1;
   for(let i=0;i<total;i++){
-   const dot=document.createElement('button');dot.type='button';dot.className='games-dot';dot.setAttribute('aria-label','Показать набор игр '+(i+1));dot.setAttribute('aria-current',String(i===index));dot.addEventListener('click',()=>{index=i;render()});pagination.appendChild(dot);
+   const dot=document.createElement('button');dot.type='button';dot.className='games-dot';dot.setAttribute('aria-label','Показать игру '+(i+1));dot.setAttribute('aria-current',String(i===index));dot.addEventListener('click',()=>{index=i;render()});pagination.appendChild(dot);
   }
   prev.disabled=index===0;next.disabled=index===maxIndex();
   prev.style.opacity=prev.disabled?'.48':'1';next.style.opacity=next.disabled?'.48':'1';
