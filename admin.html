@@ -54,10 +54,17 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const URL="https://jrvukdqqrmfjbtskrayy.supabase.co";
 const KEY="sb_publishable_AAHg7Xgeq_KRm6PdropyMg_V6op0enJ";
 const EMAIL="esthermoony@login.gorizont.invalid";
-const supabase=createClient(URL,KEY,{auth:{persistSession:true,autoRefreshToken:true,storageKey:"gorizont-admin-session"}});
+const supabase=createClient(URL,KEY,{auth:{persistSession:false,autoRefreshToken:true}});
 const $=id=>document.getElementById(id);
 let participants=[];
 let latestPassword="";
+const IDLE_LIMIT=10*60*1000;
+let idleTimer;
+function clearAdminView(){participants=[];latestPassword="";$("participants").replaceChildren();$("passwordResult").classList.add("hidden");$("temporaryPassword").textContent="";$("expiry").textContent="";$("dashboard").classList.add("hidden");$("loginPanel").classList.remove("hidden");$("adminPassword").value="";}
+async function endAdminSession(message="Сессия завершена. Войди снова."){clearTimeout(idleTimer);await supabase.auth.signOut();clearAdminView();status(message,false);}
+function armIdleTimeout(){clearTimeout(idleTimer);idleTimer=setTimeout(()=>{void endAdminSession("Выход выполнен из-за 10 минут бездействия.");},IDLE_LIMIT);}
+["pointerdown","keydown","touchstart","scroll"].forEach(event=>window.addEventListener(event,armIdleTimeout,{passive:true}));
+window.addEventListener("pagehide",()=>{clearTimeout(idleTimer);void supabase.auth.signOut();});
 function status(message,error=false,target="status"){$(target).textContent=message;$(target).classList.toggle("error",error);}
 async function call(name,payload={}){
  const {data:{session}}=await supabase.auth.getSession();
@@ -105,12 +112,12 @@ $("loginForm").addEventListener("submit",async e=>{
   const {data,error}=await supabase.auth.signInWithPassword({email:EMAIL,password:$("adminPassword").value});
   if(error) throw new Error("Не удалось войти. Проверь пароль администратора.");
   await call("admin-list-participants");
-  $("loginPanel").classList.add("hidden");$("dashboard").classList.remove("hidden");status("");await load();
+  $("loginPanel").classList.add("hidden");$("dashboard").classList.remove("hidden");armIdleTimeout();status("");await load();
  }catch(err){await supabase.auth.signOut();status(err.message,true);}
  finally{$("loginButton").disabled=false;}
 });
 $("search").addEventListener("input",render);$("refresh").addEventListener("click",load);
-$("logout").addEventListener("click",async()=>{await supabase.auth.signOut();$("dashboard").classList.add("hidden");$("loginPanel").classList.remove("hidden");$("adminPassword").value="";});
+$("logout").addEventListener("click",async()=>{await endAdminSession("Вы вышли из админ-панели.");});
 $("copyPassword").addEventListener("click",async()=>{if(!latestPassword)return;try{await navigator.clipboard.writeText(latestPassword);status("Пароль скопирован.",false,"dashboardStatus");}catch{status("Не удалось скопировать автоматически. Выдели пароль и скопируй вручную.",true,"dashboardStatus");}});
 </script>
 </body></html>
