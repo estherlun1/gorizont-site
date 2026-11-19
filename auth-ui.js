@@ -429,4 +429,9 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
     signOut: async () => supabase.auth.signOut(),
   };
   tab("register");
+  if (new URLSearchParams(window.location.search).get("auth") === "login") {
+    tab("login");
+    open();
+    history.replaceState({}, "", window.location.pathname + window.location.hash);
+  }
 })();
