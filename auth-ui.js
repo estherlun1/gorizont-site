@@ -22,6 +22,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
   const profile = document.getElementById("authProfile");
   const profileName = document.getElementById("authProfileName");
   const profileNick = document.getElementById("authProfileNick");
+  const profileAvatar = document.getElementById("authProfileAvatar");
   const logoutButton = document.getElementById("authLogout");
   const menuAccountTab = document.getElementById("menuAccountTab");
   const menuAccount = document.getElementById("menuAccount");
@@ -244,6 +245,17 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
     if (signedIn) {
       profileName.textContent = participant.full_name || participant.nickname || "Участник Горизонта";
       profileNick.textContent = `Игровой ник: ${participant.nickname || "—"} · Логин: ${participant.username || "—"}`;
+      if (profileAvatar) {
+        profileAvatar.replaceChildren();
+        if (participant.avatar_url) {
+          const image = document.createElement("img");
+          image.src = participant.avatar_url;
+          image.alt = "Твой персонаж";
+          profileAvatar.appendChild(image);
+        } else {
+          profileAvatar.textContent = "🌲";
+        }
+      }
       refreshPoints();
     }
   }
@@ -294,9 +306,16 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
       refresh_token: data.session.refresh_token,
     });
     if (error) throw error;
-    localStorage.setItem("gorizont-participant", JSON.stringify(data.participant));
-    showProfile(data.participant);
-    window.dispatchEvent(new CustomEvent("gorizont:auth-changed", { detail: { participant: data.participant } }));
+    let participantData = data.participant;
+    const { data: freshParticipant, error: profileError } = await supabase
+      .from("participants")
+      .select("id, full_name, nickname, username, avatar_url, avatar_config")
+      .eq("id", data.participant.id)
+      .maybeSingle();
+    if (!profileError && freshParticipant) participantData = { ...data.participant, ...freshParticipant };
+    localStorage.setItem("gorizont-participant", JSON.stringify(participantData));
+    showProfile(participantData);
+    window.dispatchEvent(new CustomEvent("gorizont:auth-changed", { detail: { participant: participantData } }));
     setStatus("Ты успешно вошёл в Горизонт!");
     setTimeout(() => {
       modal.classList.remove("open");
@@ -379,15 +398,21 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
       return;
     }
     try {
-      const saved = JSON.parse(localStorage.getItem("gorizont-participant") || "null");
-      if (saved) showProfile(saved);
-      else {
-        // Session exists, but no cached profile: keep the UI honest until profile reload is implemented.
-        showProfile({ nickname: "Участник", username: "", full_name: "Участник Горизонта" });
+      const { data: freshParticipant, error: profileError } = await supabase
+        .from("participants")
+        .select("id, full_name, nickname, username, avatar_url, avatar_config")
+        .eq("id", data.session.user.id)
+        .maybeSingle();
+      if (!profileError && freshParticipant) {
+        localStorage.setItem("gorizont-participant", JSON.stringify(freshParticipant));
+        showProfile(freshParticipant);
+      } else {
+        const saved = JSON.parse(localStorage.getItem("gorizont-participant") || "null");
+        showProfile(saved || { nickname: "Участник", username: "", full_name: "Участник Горизонта" });
       }
     } catch {
-      localStorage.removeItem("gorizont-participant");
-      showProfile({ nickname: "Участник", username: "", full_name: "Участник Горизонта" });
+      const saved = JSON.parse(localStorage.getItem("gorizont-participant") || "null");
+      showProfile(saved || { nickname: "Участник", username: "", full_name: "Участник Горизонта" });
     }
   });
 
