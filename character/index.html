@@ -171,9 +171,8 @@ saveAvatarButton.addEventListener('click', async ()=>{
     const {data:{session},error:sessionError}=await supabase.auth.getSession();
     if(sessionError) throw sessionError;
     if(!session?.user?.id){
-      saveAvatarButton.textContent='Сначала войди в аккаунт';
-      saveAvatarButton.disabled=false;
-      setTimeout(()=>{saveAvatarButton.textContent=originalLabel},2400);
+      saveAvatarButton.textContent='Открываем вход...';
+      window.location.href='../index.html?auth=login';
       return;
     }
     const source=document.getElementById('finalDoll');
