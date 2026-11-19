@@ -1559,7 +1559,10 @@ main {
 <style id="camp-auth-profile-styles">
 .auth-profile[hidden] { display: none !important; }
 .auth-profile { text-align: center; }
-.auth-profile-avatar { font-size: 42px; margin: 4px 0 8px; }
+.auth-profile-avatar { width:88px;height:88px;margin:4px auto 8px;border-radius:50%;display:grid;place-items:center;overflow:hidden;background:#f3e4c9;border:3px solid #d6b27b;font-size:42px;box-shadow:0 3px 12px #59452b22; }
+.auth-profile-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.auth-avatar-edit{display:inline-block;margin:0 0 14px;color:#607b43;font-size:12px;font-weight:700;text-decoration:none}
+.auth-avatar-edit:hover{text-decoration:underline}
 .auth-profile-kicker { margin: 0 0 6px; color: #a56b37; font-size: 10px; font-weight: 800; letter-spacing: .13em; }
 .auth-profile h3 { margin: 0 0 4px; color: #34483e; font-size: 25px; }
 .auth-profile-nick { margin: 0 0 18px; color: #80664a; font-size: 13px; }
@@ -2652,7 +2655,8 @@ render();
     <h2 id="authTitle">Добро пожаловать в Горизонт!</h2>
     <p class="auth-intro">Создай аккаунт, собирай горизонтики за игры и меняй их на лагерные подарки.</p>
     <div class="auth-profile" id="authProfile" hidden>
-      <div class="auth-profile-avatar" aria-hidden="true">🌲</div>
+      <div class="auth-profile-avatar" id="authProfileAvatar" aria-label="Аватар профиля">🌲</div>
+      <a class="auth-avatar-edit" href="character/index.html">Изменить аватар в игре →</a>
       <p class="auth-profile-kicker">ТЫ УЖЕ В КОМАНДЕ!</p>
       <h3 id="authProfileName">Привет!</h3>
       <p class="auth-profile-nick" id="authProfileNick"></p>
