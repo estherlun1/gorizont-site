@@ -31,6 +31,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
   const pointsHistory = document.getElementById("authPointsHistory");
   const status = document.getElementById("authStatus");
   let previousFocus = null;
+  let savedScrollY = 0;
+  let bodyLockStyles = null;
   let busy = false;
   let participant = null;
 
@@ -260,22 +262,66 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
     }
   }
 
+  function lockPageScroll() {
+    savedScrollY = window.scrollY || window.pageYOffset || 0;
+    const body = document.body;
+    bodyLockStyles = {
+      position: body.style.position,
+      top: body.style.top,
+      left: body.style.left,
+      right: body.style.right,
+      width: body.style.width,
+      overflow: body.style.overflow
+    };
+    body.style.position = "fixed";
+    body.style.top = `-${savedScrollY}px`;
+    body.style.left = "0";
+    body.style.right = "0";
+    body.style.width = "100%";
+    body.style.overflow = "hidden";
+  }
+  function unlockPageScroll() {
+    const body = document.body;
+    if (bodyLockStyles) {
+      Object.assign(body.style, bodyLockStyles);
+      bodyLockStyles = null;
+    } else {
+      body.style.position = "";
+      body.style.top = "";
+      body.style.left = "";
+      body.style.right = "";
+      body.style.width = "";
+      body.style.overflow = "";
+    }
+    window.scrollTo(0, savedScrollY);
+  }
   function open() {
+    if (modal.classList.contains("open")) return;
     previousFocus = document.activeElement;
+    lockPageScroll();
+    modal.scrollTop = 0;
+    const dialog = modal.querySelector(".auth-dialog");
+    if (dialog) dialog.scrollTop = 0;
     modal.classList.add("open");
     modal.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
     if (!participant) {
       const form = registerForm.hidden ? loginForm : registerForm;
-      form.querySelector("input")?.focus();
+      const firstInput = form.querySelector("input");
+      if (firstInput) requestAnimationFrame(() => {
+        try { firstInput.focus({ preventScroll: true }); }
+        catch { firstInput.focus(); }
+      });
     }
   }
   function close() {
     if (busy) return;
     modal.classList.remove("open");
     modal.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
-    previousFocus?.focus();
+    unlockPageScroll();
+    if (previousFocus?.isConnected) {
+      try { previousFocus.focus({ preventScroll: true }); }
+      catch { previousFocus.focus(); }
+    }
   }
   function tab(which) {
     if (passwordChangePanel) { passwordChangePanel.remove(); passwordChangePanel = null; }
@@ -318,9 +364,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
     window.dispatchEvent(new CustomEvent("gorizont:auth-changed", { detail: { participant: participantData } }));
     setStatus("Ты успешно вошёл в Горизонт!");
     setTimeout(() => {
-      modal.classList.remove("open");
-      modal.setAttribute("aria-hidden", "true");
-      document.body.style.overflow = "";
+      close();
     }, 900);
   }
 
