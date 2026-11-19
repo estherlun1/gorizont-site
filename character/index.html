@@ -214,5 +214,29 @@ saveAvatarButton.addEventListener('click', async ()=>{
   setTimeout(()=>{saveAvatarButton.textContent=originalLabel},2600);
 });
 
-[...DATA.pants,...DATA.shoes,...DATA.shirts,...DATA.hoodies,Object.values(DATA.bases),Object.values(DATA.shirtHeads),...Object.values(DATA.hoodieHeads)].flat().forEach(image);renderItems();draw();
+async function restoreSavedAvatar(){
+  try{
+    const {data:{session}}=await supabase.auth.getSession();
+    if(!session?.user?.id) return;
+    const {data:profile,error}=await supabase.from('participants')
+      .select('avatar_config')
+      .eq('id',session.user.id)
+      .maybeSingle();
+    if(error||!profile?.avatar_config) return;
+    const config=profile.avatar_config;
+    if(!['mila','misha','rosa','petya'].includes(config.character)) return;
+    selectedCharacter=config.character;
+    chosen={
+      top:Number.isInteger(config.top)&&config.top>=0&&config.top<12?config.top:null,
+      topKind:['shirts','hoodies'].includes(config.topKind)?config.topKind:null,
+      pants:Number.isInteger(config.pants)&&config.pants>=0&&config.pants<6?config.pants:null,
+      shoes:Number.isInteger(config.shoes)&&config.shoes>=0&&config.shoes<10?config.shoes:null
+    };
+    if(chosen.top===null) chosen.topKind=null;
+    kind=chosen.topKind||'shirts';
+    document.querySelectorAll('[data-switch]').forEach(b=>b.classList.toggle('active',b.dataset.switch===selectedCharacter));
+    renderItems();draw();
+  }catch(error){console.warn('Не удалось загрузить сохранённый образ:',error)}
+}
+[...DATA.pants,...DATA.shoes,...DATA.shirts,...DATA.hoodies,Object.values(DATA.bases),Object.values(DATA.shirtHeads),...Object.values(DATA.hoodieHeads)].flat().forEach(image);renderItems();draw();restoreSavedAvatar();
 </script></body></html>
