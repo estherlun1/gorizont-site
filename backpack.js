@@ -270,6 +270,7 @@ packedItems = [];
       talk('✅ ' + it.n + pick(GOOD_TALK) + ' ' + pick(CHEER), 'yes');
       if (packed === TOTAL) setTimeout(finish, 700);
     } else {
+      window.GorizontAchievements?.track('backpack_forbidden_attempt');
       if (g) back(t, g); else kick(t, 'shake');
       kick(bag, 'shake');
       talk('✋ ' + pick(BAD_TALK) + it.n + ': ' + it.why + '. Оставляем дома!', 'no');
@@ -277,6 +278,7 @@ packedItems = [];
   }
 
   function finish() {
+    window.GorizontAchievements?.track('backpack_completed');
     conf.innerHTML = '';
     var em = ['🎉', '⭐', '✨', '🎒', '☀️'];
     for (var k = 0; k < 40; k++) {
