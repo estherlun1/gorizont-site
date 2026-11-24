@@ -26,11 +26,11 @@ const levels = [
     imageB: 'assets/find-difference/level-1-b.webp',
     alt: 'Домик у озера',
     spots: [
-      { id: 1, x: 37, y: 27, label: 'Крыша домика' },
+      { id: 1, x: 34.5, y: 30, label: 'Крыша домика' },
       { id: 2, x: 16, y: 70, label: 'Рюкзак у забора' },
       { id: 3, x: 78, y: 75, label: 'Лодка у причала' },
       { id: 4, x: 20, y: 13, label: 'Птица на ветке' },
-      { id: 5, x: 24, y: 54, scale: 0.72, label: 'Столик у дома' },
+      { id: 5, x: 21.5, y: 54, scale: 0.72, label: 'Столик у дома' },
       { id: 6, x: 92, y: 9, label: 'Чайки' },
       { id: 7, x: 28, y: 93, label: 'Цветы у камней' }
     ]
