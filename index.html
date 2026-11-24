@@ -718,7 +718,7 @@ main {
 #legends .legend-close {position:absolute;right:12px;top:12px;width:42px;height:42px;border:0;border-radius:50%;background:#fff5e4;color:#53351e;font-size:30px;line-height:1;cursor:pointer;box-shadow:0 2px 10px #0002;z-index:2}
 @media(max-width:700px){
  #legends{padding:0;margin-top:0;background:#3b2417}
- #legends .legends-board{width:100%;aspect-ratio:375/812;background:url('assets/legends-mobile-bg.png') center/100% 100% no-repeat}
+ #legends .legends-board{width:100%;aspect-ratio:375/812;background:url('assets/legends-mobile-bg.webp') center/100% 100% no-repeat}
  #legends .legend-polaroid{width:68%;max-width:none;max-height:82%;top:50%;filter:drop-shadow(0 7px 10px #1b100b77)}
  #legends .legend-polaroid img{width:100%;height:auto;max-height:82svh;object-fit:contain}
  /* Стрелки нарисованы внизу мобильной доски; прозрачные кнопки поверх рисунка. */
@@ -1830,7 +1830,7 @@ main {
 
 <section class="counselors-section" id="guides" aria-label="Вожатые">
   <div class="counselors-stage" id="counselorsStage">
-    <img class="counselors-mobile-scene" src="assets/camp-fire-mobile.png" alt="Вожатые и дети у костра в лагере Горизонт" loading="lazy" decoding="async">
+    <img class="counselors-mobile-scene" src="assets/camp-fire-mobile.webp" alt="Вожатые и дети у костра в лагере Горизонт" loading="lazy" decoding="async">
     <div class="counselors-mobile-hotspots" aria-label="Выбрать вожатого">
       <button class="counselor-hotspot" data-person="maxim" aria-label="Открыть описание Матвея"></button>
       <button class="counselor-hotspot" data-person="anya" aria-label="Открыть описание Ани"></button>
@@ -1904,7 +1904,7 @@ main {
 
 <section class="games-section" id="games-section" aria-label="Игры Горизонта">
  <div class="games-scene" id="gamesScene">
-  <img class="games-mobile-background" src="assets/games-mobile-bg.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
+  <img class="games-mobile-background" src="assets/games-mobile-bg.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
   <img class="games-layer games-background" src="assets/games/games-background.webp" alt="Лесная поляна и домики у озера" loading="lazy" decoding="async">
   <img class="games-layer games-board" src="assets/games/games-board.webp" alt="Игры Горизонта — игровая карусель" loading="lazy" decoding="async">
   <div class="games-viewport" id="gamesViewport" aria-label="Выбор игры">
@@ -2376,9 +2376,9 @@ const stories=[
   title:'След лесного хранителя',
   subtitle:'Тайна, рассказанная у вечернего костра',
   image:'assets/legends/story-moose.webp',
-  mobileImage:'assets/legend-1-vertical.png',
+  mobileImage:'assets/legend-1-vertical.webp',
   modalImage:'assets/legends/story-moose-original.webp',
-  mobileModalImage:'assets/legend-1-vertical.png',
+  mobileModalImage:'assets/legend-1-vertical.webp',
   text:'Летом 2022 года, когда наш палаточный лагерь только начинал свою историю, на одном из вечерних огоньков директор Дмитрий Александрович Горячев поделился с нами тайной.\n\nОн рассказал, что по ночам бродит невидимый хранитель здешних мест — то ли величавый лесной лось, то ли благородный олень. Он оставляет свои следы. И если ранним утром найти на лесной тропинке этот след, прикоснуться к нему и загадать самое заветное желание — оно обязательно сбудется.\n\nЧто началось потом, сложно описать словами! Всю оставшуюся смену мы, дети, превратились в настоящих следопытов: на цыпочках обходили каждую полянку, разглядывали каждую мелочь и искали то самое чудо.\n\nИ знаете, мы ведь действительно нашли. Потому что лагерное чудо — это не просто след на земле, а та искренняя вера в сказку, которую взрослые так бережно подарили нам у ночного костра.'
  },
  {
@@ -2386,9 +2386,9 @@ const stories=[
   title:'Вожатское сердце',
   subtitle:'Маленький кусочек Горизонта всегда с тобой',
   image:'assets/legends/story-heart.webp',
-  mobileImage:'assets/legend-2-vertical.png',
+  mobileImage:'assets/legend-2-vertical.webp',
   modalImage:'assets/legends/story-heart-original.webp',
-  mobileModalImage:'assets/legend-2-vertical.png',
+  mobileModalImage:'assets/legend-2-vertical.webp',
   text:'Вы замечали, почему вожатые так крепко обнимаются в последний день смены и иногда тайком вытирают слёзы?\n\nЕсть старая сказка о том, что в день разъезда вожатый отламывает от своего сердца по маленькому невидимому кусочку и прячет каждому ребёнку в кармашек куртки или прямо в ладошку.\n\nРебята уезжают домой: в разные города, школы, к своим урокам. Но если осенью или холодной зимой тебе вдруг станет одиноко, грустно или покажется, что опустились руки — просто приложи ладошку к груди и вспомни наш лагерь.\n\nТы сразу почувствуешь лёгкое, тёплое тук-тук. Это бьётся тот самый кусочек вожатского сердца из «Горизонта», который напоминает: «Ты не один. Тебя помнят, любят и очень ждут обратно».'
  }
 ];
@@ -2450,13 +2450,13 @@ render();
   const live = document.getElementById('dayHorizonLive');
   if (!image || !prev || !next || !dots.length) return;
   const scenes = [
-    {src:'assets/day-scenes/01-morning.webp', mobileSrc:'assets/schedule-08-morning-mobile-375x812.png', alt:'Доброе утро в лагере Горизонт', label:'08:00 — Доброе утро'},
-    {src:'assets/day-scenes/02-workshops.webp', mobileSrc:'assets/schedule-1030-workshops-mobile-375x812.png', alt:'Дети на мастер-классах и творческих занятиях', label:'10:30 — Время открытий'},
-    {src:'assets/day-scenes/03-sports.webp', mobileSrc:'assets/schedule-15-sports-mobile-375x812.png', alt:'Спортивные активности в лагере', label:'15:00 — Время движения'},
-    {src:'assets/day-scenes/04-friends.webp', mobileSrc:'assets/schedule-17-friends-mobile-375x812.png', alt:'Дети отдыхают и общаются у озера', label:'17:00 — Время друзей'},
-    {src:'assets/day-scenes/05-preparation.webp', mobileSrc:'assets/schedule-18-preparation-mobile-375x812.png', alt:'Подготовка к вечернему мероприятию', label:'18:00 — Готовимся к вечеру'},
-    {src:'assets/day-scenes/06-evening.webp', mobileSrc:'assets/schedule-20-evening-mobile-375x812.png', alt:'Большой вечер в лагере: концерт и костёр', label:'20:00 — Большой вечер'},
-    {src:'assets/day-scenes/07-night.webp', mobileSrc:'assets/schedule-2130-rest-mobile-375x812.png', alt:'Тихий вечер и подготовка ко сну в лагере', label:'21:30 — Время отдыха'}
+    {src:'assets/day-scenes/01-morning.webp', mobileSrc:'assets/schedule-08-morning-mobile-375x812.webp', alt:'Доброе утро в лагере Горизонт', label:'08:00 — Доброе утро'},
+    {src:'assets/day-scenes/02-workshops.webp', mobileSrc:'assets/schedule-1030-workshops-mobile-375x812.webp', alt:'Дети на мастер-классах и творческих занятиях', label:'10:30 — Время открытий'},
+    {src:'assets/day-scenes/03-sports.webp', mobileSrc:'assets/schedule-15-sports-mobile-375x812.webp', alt:'Спортивные активности в лагере', label:'15:00 — Время движения'},
+    {src:'assets/day-scenes/04-friends.webp', mobileSrc:'assets/schedule-17-friends-mobile-375x812.webp', alt:'Дети отдыхают и общаются у озера', label:'17:00 — Время друзей'},
+    {src:'assets/day-scenes/05-preparation.webp', mobileSrc:'assets/schedule-18-preparation-mobile-375x812.webp', alt:'Подготовка к вечернему мероприятию', label:'18:00 — Готовимся к вечеру'},
+    {src:'assets/day-scenes/06-evening.webp', mobileSrc:'assets/schedule-20-evening-mobile-375x812.webp', alt:'Большой вечер в лагере: концерт и костёр', label:'20:00 — Большой вечер'},
+    {src:'assets/day-scenes/07-night.webp', mobileSrc:'assets/schedule-2130-rest-mobile-375x812.webp', alt:'Тихий вечер и подготовка ко сну в лагере', label:'21:30 — Время отдыха'}
   ];
   let current = 0;
   function show(index) {
