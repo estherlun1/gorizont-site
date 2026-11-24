@@ -23,6 +23,10 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
   const profileName = document.getElementById("authProfileName");
   const profileNick = document.getElementById("authProfileNick");
   const profileAvatar = document.getElementById("authProfileAvatar");
+  const heroCard = document.getElementById("authHeroCard");
+  const heroPrimary = document.getElementById("authHeroPrimary");
+  const heroSecondary = document.getElementById("authHeroSecondary");
+  const heroNextChange = document.getElementById("authHeroNextChange");
   const logoutButton = document.getElementById("authLogout");
   const menuAccountTab = document.getElementById("menuAccountTab");
   const menuAccount = document.getElementById("menuAccount");
@@ -247,6 +251,21 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
     if (signedIn) {
       profileName.textContent = participant.full_name || participant.nickname || "Участник Горизонта";
       profileNick.textContent = `Игровой ник: ${participant.nickname || "—"} · Логин: ${participant.username || "—"}`;
+      const personalityNames = {explorer:"Исследователь",creator:"Творец",energizer:"Энерджайзер",social:"Душа компании",guardian:"Хранитель",inventor:"Изобретатель"};
+      const heroPersonality = participant.avatar_config?.personality;
+      if(heroCard){
+        const valid = heroPersonality?.primary && heroPersonality?.secondary && personalityNames[heroPersonality.primary] && personalityNames[heroPersonality.secondary];
+        heroCard.hidden = !valid;
+        if(valid){
+          heroPrimary.textContent = personalityNames[heroPersonality.primary];
+          heroSecondary.textContent = "Дополнительный характер: " + personalityNames[heroPersonality.secondary];
+          const changedAt = participant.avatar_config?.personality_changed_at;
+          if(changedAt){
+            const next = new Date(changedAt); next.setMonth(next.getMonth()+1);
+            heroNextChange.textContent = "Характер можно будет изменить с " + next.toLocaleDateString("ru-RU",{day:"numeric",month:"long"}) + ".";
+          }else heroNextChange.textContent = "Ты можешь выбрать новый характер в конструкторе героя.";
+        }
+      }
       if (profileAvatar) {
         profileAvatar.replaceChildren();
         if (participant.avatar_url) {
