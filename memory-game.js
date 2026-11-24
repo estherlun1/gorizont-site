@@ -1,5 +1,23 @@
 (() => {
 "use strict";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+const SUPABASE_URL = "https://jrvukdqqrmfjbtskrayy.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_AAHg7Xgeq_KRm6PdropyMg_V6op0enJ";
+const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false,storageKey:"gorizont-auth-session"}});
+async function submitDailyReward(gameSlug, score, statusElement) {
+ try {
+  const {data:{session}} = await supabase.auth.getSession();
+  if(!session?.access_token){statusElement.textContent="Войди в аккаунт, чтобы получить горизонтики.";return;}
+  const response=await fetch(SUPABASE_URL+"/functions/v1/complete-daily-game",{method:"POST",headers:{"Content-Type":"application/json","apikey":SUPABASE_PUBLISHABLE_KEY,"Authorization":"Bearer "+session.access_token},body:JSON.stringify({game_slug:gameSlug,score,idempotency_key:crypto.randomUUID()})});
+  const result=await response.json();
+  if(!response.ok)throw new Error(result.error||"Не удалось подтвердить результат");
+  if(result.status==="awarded")statusElement.textContent="Начислено "+result.points_awarded+" горизонтиков!";
+  else if(result.status==="daily_limit")statusElement.textContent="Ты уже получил(а) награду за эту игру сегодня.";
+  else if(result.status==="duplicate_request")statusElement.textContent=result.points_awarded>0?"Награда уже начислена: "+result.points_awarded+" горизонтиков.":"Результат уже был отправлен.";
+  else statusElement.textContent="Результат принят.";
+ } catch(error) { console.error("Daily reward:",error);statusElement.textContent="Не удалось начислить горизонтики. Проверь подключение и попробуй ещё раз."; }
+}
+
 const SCENES = [
  {
   key:"picnic", title:"Лесной пикник", image:"assets/games/memory-picnic.webp",
@@ -145,6 +163,7 @@ function finish(){
  $("resultTitle").textContent=percent===1?"Безупречная память!":percent>=.7?"Отличная память!":percent>=.4?"Хорошая попытка!":"Попробуй ещё раз!";
  $("resultSubtitle").textContent=`Сюжет: ${scene.title}. Уровень: ${LEVELS[levelKey].label}. Ты ответил правильно на ${score} из ${total} вопросов.`;
  $("resultScore").textContent=`${score} / ${total}`;
+ const rewardStatus=$("resultSubtitle"); rewardStatus.textContent += " Проверяем результат…"; submitDailyReward("memory_"+levelKey,score,rewardStatus);
  const list=$("reviewList");list.replaceChildren();
  questions.forEach((q,i)=>{const item=document.createElement("div");item.className="review-item";const title=document.createElement("b");title.textContent=`${i+1}. ${q.q}`;const answer=document.createElement("div");answer.textContent=`Правильный ответ: ${q.a[q.correct]}. ${q.why}`;item.append(title,answer);list.appendChild(item);});
 }
