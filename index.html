@@ -2593,7 +2593,7 @@ render();
  let index=0,toastTimer;
  function visibleCount(){return window.matchMedia('(max-width: 600px)').matches?1:(window.matchMedia('(max-width: 850px)').matches?2:3)}
  function maxIndex(){return Math.max(0,cards.length-visibleCount())}
- function stepWidth(){const card=cards[0]; if(!card)return 0; const gap=parseFloat(getComputedStyle(track).gap)||0; return card.getBoundingClientRect().width+gap}
+ function stepWidth(){if(cards.length>1)return cards[1].offsetLeft-cards[0].offsetLeft;return cards[0]?.getBoundingClientRect().width||0}
  function render(){
   index=Math.max(0,Math.min(index,maxIndex()));
   track.style.transform='translateX('+(-index*stepWidth())+'px)';
@@ -2613,7 +2613,8 @@ render();
   if(e.pointerType==='mouse'&&e.button!==0)return;
   dragStartX=e.clientX;dragStartY=e.clientY;dragStartOffset=-index*stepWidth();
   dragging=true;dragMoved=false;horizontalGesture=false;
-  try{viewport.setPointerCapture(e.pointerId);}catch(_){}
+  // Не захватываем указатель контейнером: иначе браузер может потерять исходную ссылку карточки,
+  // и обычный клик по «Играть» не сработает.
  });
  window.addEventListener('pointermove',e=>{
   if(!dragging)return;
