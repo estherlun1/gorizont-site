@@ -188,7 +188,7 @@ packedItems = [];
     completionKey = null;
     rewardRequestStarted = false;
     update();
-    talk(pick([
+    talk((window.GorizontPersonalityText?window.GorizontPersonalityText.instruction()+' ':'')+pick([
       'Поехали! Выбирай вещи для лагеря и перетаскивай их в рюкзак.',
       'Проверим твою лагерную интуицию: что действительно нужно взять?',
       'Рюкзак открыт! Собери всё полезное, а лишнее оставь дома.',
@@ -288,8 +288,8 @@ packedItems = [];
       conf.appendChild(s);
     }
     win.hidden = false;
-    var winMessage = $('winMessage');
-    if (winMessage && window.GorizontPersonalityText) winMessage.textContent = window.GorizontPersonalityText.win();
+    var winPersonality = $('winPersonality');
+    if (winPersonality && window.GorizontPersonalityText) winPersonality.textContent = window.GorizontPersonalityText.win();
     submitBackpackResult();
     $('again').focus();
   }
