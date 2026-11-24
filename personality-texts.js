@@ -32,6 +32,10 @@
   if(mood)line+=' '+(mood.line.charAt(0).toUpperCase()+mood.line.slice(1))+'.';
   return line;
  }
+ function instruction(){
+  const v=get(),lines={explorer:'Приглядывайся к деталям — они подскажут верный путь.',creator:'Подключи воображение и попробуй свой подход.',energizer:'Готов? Тогда вперёд, не теряй темп!',social:'Давай справимся с этим приключением вместе!',guardian:'Будь внимателен и не забывай о мелочах.',inventor:'Проверь разные варианты — смекалка пригодится!'};
+  const mood=MOODS[v.secondary];return (lines[v.primary]||'Готов? Тогда начинаем!')+(mood?' '+mood.line.charAt(0).toUpperCase()+mood.line.slice(1)+'.':'');
+ }
  function win(){
   const v=get(),main=MAIN[v.primary]||{win:'Отличная работа! Ты справился!'},mood=MOODS[v.secondary];
   if(!mood)return main.win;
@@ -49,5 +53,5 @@
   };
   return main.win+' '+(endings[v.secondary]||'');
  }
- window.GorizontPersonalityText={get,intro,win,moods:MOODS};
+ window.GorizontPersonalityText={get,intro,instruction,win,moods:MOODS};
 })();
