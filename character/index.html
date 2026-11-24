@@ -86,7 +86,7 @@
   inset:0;
   z-index:-1;
   pointer-events:none;
-  background:#263c2b url("../assets/dressup-bg-mobile.png") center center / cover no-repeat;
+  background:#263c2b url("../assets/dressup-bg-mobile.webp") center center / cover no-repeat;
  }
  .game-shell{padding:54px 10px 18px}
  .site-back{left:10px;top:10px;padding:8px 12px;font-size:12px}
@@ -128,10 +128,10 @@
 
 <div class="layout" id="game"><section class="hero-column">
 <div class="character-switch" aria-label="Выбор персонажа">
-<button class="character-chip active" data-switch="mila" title="Мила"><img src="assets/icon_mila.png" alt=""><span>Мила</span></button>
-<button class="character-chip" data-switch="misha" title="Миша"><img src="assets/icon_misha.png" alt=""><span>Миша</span></button>
-<button class="character-chip" data-switch="rosa" title="Роза"><img src="assets/icon_rosa.png" alt=""><span>Роза</span></button>
-<button class="character-chip" data-switch="petya" title="Петя"><img src="assets/icon_petya.png" alt=""><span>Петя</span></button>
+<button class="character-chip active" data-switch="mila" title="Мила"><img src="assets/icon_mila.webp" alt=""><span>Мила</span></button>
+<button class="character-chip" data-switch="misha" title="Миша"><img src="assets/icon_misha.webp" alt=""><span>Миша</span></button>
+<button class="character-chip" data-switch="rosa" title="Роза"><img src="assets/icon_rosa.webp" alt=""><span>Роза</span></button>
+<button class="character-chip" data-switch="petya" title="Петя"><img src="assets/icon_petya.webp" alt=""><span>Петя</span></button>
 </div>
 <div class="character-stage"><canvas id="doll" width="292" height="724"></canvas></div>
 </section>
@@ -146,14 +146,14 @@ const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_AAHg7Xgeq_KRm6PdropyMg_V6op0enJ
 const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
   auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false, storageKey: "gorizont-auth-session" }
 });
-const DATA={bases:{mila:'base.png',misha:'misha_base.png',rosa:'rosa_base.png',petya:'petya_base.png'},pants:Array.from({length:6},(_,i)=>'pants_'+(i+1)+'.png'),shoes:Array.from({length:10},(_,i)=>'shoe_'+(i+1)+'.png'),shirts:Array.from({length:12},(_,i)=>'shirt_'+(i+1)+'.png'),hoodies:Array.from({length:12},(_,i)=>'hoodie_'+(i+1)+'.png'),shirtHeads:{mila:'shirt_head.png',misha:'misha_shirt_head.png',rosa:'rosa_shirt_head.png',petya:'petya_shirt_head.png'},hoodieHeads:{mila:[...Array.from({length:11},(_,i)=>'hoodie_head_'+(i+1)+'.png'),'mila_hoodie_head_12.png'],misha:Array.from({length:12},(_,i)=>'misha_hoodie_head_'+(i+1)+'.png'),rosa:Array.from({length:12},(_,i)=>'rosa_hoodie_head_'+(i+1)+'.png'),petya:Array.from({length:12},(_,i)=>'petya_hoodie_head_'+(i+1)+'.png')}};
+const DATA={bases:{mila:'base.webp',misha:'misha_base.webp',rosa:'rosa_base.webp',petya:'petya_base.webp'},pants:Array.from({length:6},(_,i)=>'pants_'+(i+1)+'.webp'),shoes:Array.from({length:10},(_,i)=>'shoe_'+(i+1)+'.webp'),shirts:Array.from({length:12},(_,i)=>'shirt_'+(i+1)+'.webp'),hoodies:Array.from({length:12},(_,i)=>'hoodie_'+(i+1)+'.webp'),shirtHeads:{mila:'shirt_head.webp',misha:'misha_shirt_head.webp',rosa:'rosa_shirt_head.webp',petya:'petya_shirt_head.webp'},hoodieHeads:{mila:[...Array.from({length:11},(_,i)=>'hoodie_head_'+(i+1)+'.webp'),'mila_hoodie_head_12.webp'],misha:Array.from({length:12},(_,i)=>'misha_hoodie_head_'+(i+1)+'.webp'),rosa:Array.from({length:12},(_,i)=>'rosa_hoodie_head_'+(i+1)+'.webp'),petya:Array.from({length:12},(_,i)=>'petya_hoodie_head_'+(i+1)+'.webp')}};
 const A='assets/',cache={};let selectedCharacter='mila',kind='shirts',chosen={top:null,topKind:null,pants:null,shoes:null};
 function image(file){if(!cache[file]){const im=new Image();im.src=A+file;cache[file]=im;im.onload=draw}return cache[file]}
 function drawTo(c){const x=c.getContext('2d');x.clearRect(0,0,292,724);const put=f=>{const im=image(f);if(im.complete&&im.naturalWidth)x.drawImage(im,0,0,292,724)};put(DATA.bases[selectedCharacter]);if(chosen.shoes!==null)put(DATA.shoes[chosen.shoes]);if(chosen.pants!==null)put(DATA.pants[chosen.pants]);if(chosen.top!==null){put((chosen.topKind==='hoodies'?DATA.hoodies:DATA.shirts)[chosen.top]);put(chosen.topKind==='hoodies'?DATA.hoodieHeads[selectedCharacter][chosen.top]:DATA.shirtHeads[selectedCharacter])}}
 function draw(){drawTo(document.getElementById('doll'));if(!document.getElementById('result').classList.contains('hidden'))drawTo(document.getElementById('finalDoll'))}
 function setCharacter(ch){selectedCharacter=ch;document.querySelectorAll('[data-switch]').forEach(b=>b.classList.toggle('active',b.dataset.switch===ch));draw();renderItems()}
 function showGame(ch){setCharacter(ch);document.getElementById('result').classList.add('hidden');document.getElementById('game').classList.remove('hidden')}
-function renderItems(){const box=document.getElementById('items');box.innerHTML='';DATA[kind].forEach((file,i)=>{const b=document.createElement('button');b.className='item';const selected=kind==='shirts'?chosen.top===i&&chosen.topKind==='shirts':kind==='hoodies'?chosen.top===i&&chosen.topKind==='hoodies':kind==='pants'?chosen.pants===i:chosen.shoes===i;if(selected)b.classList.add('selected');const im=document.createElement('img');im.src=A+file.replace('.png','_thumb.png');im.alt='Вариант одежды';b.append(im);b.onclick=()=>{if(kind==='shirts'||kind==='hoodies'){chosen.top=i;chosen.topKind=kind}else if(kind==='pants')chosen.pants=i;else chosen.shoes=i;renderItems();draw()};box.append(b)});document.querySelectorAll('[data-kind]').forEach(b=>b.classList.toggle('active',b.dataset.kind===kind));document.getElementById('hint').textContent={shirts:'Выбери футболку для своего героя.',hoodies:'Подбери уютную толстовку.',pants:'Выбери брюки или джинсы.',shoes:'Заверши образ подходящей обувью.'}[kind]}
+function renderItems(){const box=document.getElementById('items');box.innerHTML='';DATA[kind].forEach((file,i)=>{const b=document.createElement('button');b.className='item';const selected=kind==='shirts'?chosen.top===i&&chosen.topKind==='shirts':kind==='hoodies'?chosen.top===i&&chosen.topKind==='hoodies':kind==='pants'?chosen.pants===i:chosen.shoes===i;if(selected)b.classList.add('selected');const im=document.createElement('img');im.src=A+file.replace('.webp','_thumb.webp');im.alt='Вариант одежды';b.append(im);b.onclick=()=>{if(kind==='shirts'||kind==='hoodies'){chosen.top=i;chosen.topKind=kind}else if(kind==='pants')chosen.pants=i;else chosen.shoes=i;renderItems();draw()};box.append(b)});document.querySelectorAll('[data-kind]').forEach(b=>b.classList.toggle('active',b.dataset.kind===kind));document.getElementById('hint').textContent={shirts:'Выбери футболку для своего героя.',hoodies:'Подбери уютную толстовку.',pants:'Выбери брюки или джинсы.',shoes:'Заверши образ подходящей обувью.'}[kind]}
 document.querySelectorAll('[data-character]').forEach(b=>b.onclick=()=>showGame(b.dataset.character));document.querySelectorAll('[data-switch]').forEach(b=>b.onclick=()=>setCharacter(b.dataset.switch));document.querySelectorAll('[data-kind]').forEach(b=>b.onclick=()=>{kind=b.dataset.kind;renderItems()});
 
 document.getElementById('randomLook').onclick=()=>{const r=n=>Math.floor(Math.random()*n);chosen.topKind=Math.random()<.5?'shirts':'hoodies';chosen.top=r(12);chosen.pants=r(6);chosen.shoes=r(10);kind=chosen.topKind;renderItems();draw()};
