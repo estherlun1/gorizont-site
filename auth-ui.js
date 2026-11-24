@@ -216,6 +216,65 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
     refreshPoints();
   });
 
+  let socialPanelInitialized = false;
+  async function socialRequest(payload) {
+    const {data:{session}} = await supabase.auth.getSession();
+    if(!session?.access_token) throw new Error("Войди в аккаунт.");
+    const response=await fetch(SUPABASE_URL+"/functions/v1/gorizont-social-achievements",{method:"POST",headers:{"Content-Type":"application/json","apikey":SUPABASE_PUBLISHABLE_KEY,"Authorization":"Bearer "+session.access_token},body:JSON.stringify(payload)});
+    const result=await response.json().catch(()=>({}));
+    if(!response.ok) throw new Error(result.error||"Не удалось выполнить действие.");
+    return result;
+  }
+  function addFriendRow(container, person, action) {
+    const row=document.createElement("div"); row.style.cssText="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 0;border-bottom:1px solid #e1e8dc";
+    const name=document.createElement("span"); name.textContent=person.nickname||person.full_name||"Участник";
+    const button=document.createElement("button"); button.type="button"; button.textContent=action.label; button.style.cssText="border:0;border-radius:10px;padding:8px 10px;background:#315846;color:#fff;font-weight:700;cursor:pointer";
+    button.addEventListener("click",async()=>{button.disabled=true;try{await action.run();button.textContent=action.done||"Готово";}catch(e){button.disabled=false;setStatus(e.message,true);}});
+    row.append(name,button);container.appendChild(row);
+  }
+  async function loadFriends() {
+    const incoming=document.getElementById("gorizont-friend-incoming"), list=document.getElementById("gorizont-friend-list"); if(!incoming||!list)return;
+    incoming.textContent="Загружаем…";list.textContent="Загружаем…";
+    try {
+      const results=await Promise.all([socialRequest({action:"friend_incoming"}),socialRequest({action:"friend_list"})]);
+      const requests=results[0],friends=results[1]; incoming.replaceChildren();list.replaceChildren();
+      if(!requests.results.length) incoming.textContent="Новых заявок пока нет.";
+      requests.results.forEach(item=>addFriendRow(incoming,item.person||{nickname:"Участник"},{label:"Принять",done:"Принято",run:async()=>{await socialRequest({action:"friend_respond",request_id:item.id,accept:true});await loadFriends();}}));
+      if(!friends.results.length) list.textContent="Пока нет друзей. Найди знакомых по игровому нику!";
+      friends.results.forEach(person=>{const row=document.createElement("div");row.style.cssText="padding:9px 0;border-bottom:1px solid #e1e8dc";row.textContent=person.nickname||person.full_name||"Участник";list.appendChild(row);});
+    } catch(e) { incoming.textContent=e.message;list.textContent="Не удалось загрузить друзей."; }
+  }
+  async function loadAchievements() {
+    const target=document.getElementById("gorizont-achievement-list"); if(!target||!participant)return; target.textContent="Загружаем достижения…";
+    try {
+      const results=await Promise.all([supabase.from("achievements").select("id,code,name,description,reward_points,category,icon_path,is_secret,hint,criteria,sort_order").eq("is_active",true).order("sort_order"),supabase.from("achievement_progress").select("achievement_id,progress,level").eq("participant_id",participant.id),supabase.from("participant_achievements").select("achievement_id,level,earned_at").eq("participant_id",participant.id)]);
+      const defs=results[0].data||[], progress=results[1].data||[], earned=results[2].data||[]; const err=results.find(x=>x.error); if(err)throw err.error;
+      target.replaceChildren();
+      defs.forEach(a=>{
+        const p=progress.find(x=>x.achievement_id===a.id), earnedRow=earned.find(x=>x.achievement_id===a.id), thresholds=Array.isArray(a.criteria?.thresholds)?a.criteria.thresholds:[1];
+        const unlocked=!!earnedRow, secret=a.is_secret&&!unlocked;
+        const card=document.createElement("article");card.style.cssText="padding:10px;border-radius:13px;background:#fff;box-shadow:0 1px 5px #60451a18;text-align:center;min-width:0";
+        const img=document.createElement("img");img.src=a.icon_path||"assets/achievements/first-look.png";img.alt="";img.loading="lazy";img.style.cssText="width:76px;height:76px;object-fit:contain;"+(unlocked?"":"filter:grayscale(1);opacity:.55");
+        const title=document.createElement("strong");title.style.cssText="display:block;font-size:13px;margin:5px 0";title.textContent=secret?"Секретное достижение":a.name;
+        const desc=document.createElement("small");desc.style.cssText="display:block;font-size:11px;line-height:1.35;color:#75664e";desc.textContent=secret?(a.hint||"Здесь скрыта маленькая тайна."):a.description||"";
+        const status=document.createElement("small");status.style.cssText="display:block;margin-top:6px;font-size:11px;color:#47734f;font-weight:700";
+        status.textContent=unlocked?"Получено · уровень "+(earnedRow.level||1):"Прогресс: "+(p?.progress||0)+(thresholds.length>1?" / "+(thresholds[Math.min(p?.level||0,thresholds.length-1)]||thresholds[thresholds.length-1]):"")+" · награда "+a.reward_points+" горизонтиков";
+        card.append(img,title,desc,status);target.appendChild(card);
+      });
+    } catch(e) { target.textContent="Не удалось загрузить достижения. "+e.message; }
+  }
+  function initSocialAndAchievements() {
+    if(socialPanelInitialized||!participant)return; socialPanelInitialized=true;
+    document.getElementById("gorizont-friend-search")?.addEventListener("submit",async event=>{
+      event.preventDefault();const q=document.getElementById("gorizont-friend-query").value.trim(),out=document.getElementById("gorizont-friend-search-results");
+      if(q.length<2){out.textContent="Введи хотя бы 2 символа.";return;} out.textContent="Ищем…";
+      try { const data=await socialRequest({action:"friend_search",query:q});out.replaceChildren();if(!data.results.length){out.textContent="Никого не нашли. Проверь написание ника.";return;}
+        data.results.forEach(person=>addFriendRow(out,person,{label:"Добавить",done:"Заявка отправлена",run:async()=>{await socialRequest({action:"friend_send",participant_id:person.id});}}));
+      } catch(e) { out.textContent=e.message; }
+    });
+    loadAchievements();loadFriends();
+  }
+
   function showProfile(data) {
     participant = data || null;
     const signedIn = !!participant;
@@ -278,7 +337,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
         }
       }
       refreshPoints();
-    }
+      initSocialAndAchievements();
+    } else { socialPanelInitialized = false; }
   }
 
   function lockPageScroll() {
