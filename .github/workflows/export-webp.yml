@@ -67,7 +67,7 @@ jobs:
                   original = file.read_text(encoding="utf-8")
               except (UnicodeDecodeError, OSError):
                   continue
-              revised = re.sub(r"(?i)\\.png(?=([?#\\s\"'\\)>\\]}]|$))", ".webp", original)
+              revised = re.sub(r"(?i)\.png(?=([?#\\s\"'\\)>\\]}]|$))", ".webp", original)
               if revised != original:
                   file.write_text(revised, encoding="utf-8")
                   updated_files += 1
