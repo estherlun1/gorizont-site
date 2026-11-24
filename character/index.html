@@ -157,7 +157,7 @@
 <section class="result hidden" id="result"><h2>🌲 Образ готов!</h2><p>Герой готов к новым приключениям.</p><div class="result-stage"><canvas id="finalDoll" width="292" height="724"></canvas></div>
 <div class="personality-panel" id="personalityPanel">
   <h3>Какой характер у твоего героя?</h3>
-  <p>Выбери две черты: основную и дополнительную. Они будут влиять на реплики Медведя и Волка и небольшие детали сайта.</p>
+  <p>Выбери две черты: основную и дополнительную. Основной характер и дополнительная черта будут менять отдельные реплики на сайте и в играх.</p>
   <div class="personality-grid" id="personalityGrid">
     <article class="personality-card" data-personality-card="explorer"><strong>🔎 Исследователь</strong><small>Любознательный, замечает детали и любит открытия.</small><div class="personality-actions"><button type="button" data-personality="explorer" data-role="primary">Основной</button></div></article>
     <article class="personality-card" data-personality-card="creator"><strong>🎨 Творец</strong><small>Фантазирует, придумывает и создаёт новое.</small><div class="personality-actions"><button type="button" data-personality="creator" data-role="primary">Основной</button></div></article>
@@ -248,6 +248,8 @@ saveAvatarButton.addEventListener('click', async ()=>{
     if(existingRowError) throw existingRowError;
     const existingConfig=existingRow?.avatar_config||{};
     const existingPersonality=existingConfig.personality||{};
+    const legacyMood={explorer:'curious',creator:'dreamy',energizer:'determined',social:'sociable',guardian:'calm',inventor:'thoughtful'};
+    if(legacyMood[existingPersonality.secondary]) existingPersonality.secondary=legacyMood[existingPersonality.secondary];
     const hasExistingPersonality=!!(PERSONALITY_NAMES[existingPersonality.primary]&&PERSONALITY_NAMES[existingPersonality.secondary]);
     const nextAllowed=nextPersonalityDate(existingConfig.personality_changed_at);
     const canChange=!hasExistingPersonality||!nextAllowed||Date.now()>=nextAllowed.getTime();
@@ -255,7 +257,7 @@ saveAvatarButton.addEventListener('click', async ()=>{
       personality={primary:existingPersonality.primary,secondary:existingPersonality.secondary,changedAt:existingConfig.personality_changed_at};
     }else if(!personality.primary||!personality.secondary){
       saveAvatarButton.disabled=false;
-      saveAvatarButton.textContent='Сначала выбери два характера';
+      saveAvatarButton.textContent='Сначала выбери основной характер и дополнительную черту';
       setTimeout(()=>{saveAvatarButton.textContent=originalLabel},2500);
       return;
     }
@@ -320,7 +322,9 @@ async function restoreSavedAvatar(){
     const config=profile.avatar_config;
     if(!['mila','misha','rosa','petya'].includes(config.character)) return;
     if(config.personality?.primary){
-      personality={primary:config.personality.primary,secondary:config.personality.secondary,changedAt:config.personality_changed_at||null};
+      const legacyMood={explorer:'curious',creator:'dreamy',energizer:'determined',social:'sociable',guardian:'calm',inventor:'thoughtful'};
+      const secondary=legacyMood[config.personality.secondary]||config.personality.secondary;
+      personality={primary:config.personality.primary,secondary,changedAt:config.personality_changed_at||null};
       renderPersonality();
     }
     selectedCharacter=config.character;
