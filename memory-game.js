@@ -134,6 +134,8 @@ function chooseScene(){
  for(let i=0;i<dateKey.length;i++){hash^=dateKey.charCodeAt(i);hash=Math.imul(hash,16777619);}
  scene=SCENES[(hash>>>0)%SCENES.length];
  $("memoryScreen").querySelector(".art").src=scene.image;
+ const memoryLead=$("memoryScreen").querySelector(".lead");
+ if(memoryLead&&window.GorizontPersonalityText) memoryLead.textContent=window.GorizontPersonalityText.instruction()+" Постарайся запомнить цвета, предметы и мелкие детали. Когда время закончится, картинка исчезнет.";
 }
 function start(level){
  levelKey=level;const cfg=LEVELS[level];chooseScene();
@@ -163,7 +165,7 @@ function finish(){
  $("resultTitle").textContent=percent===1?"Безупречная память!":percent>=.7?"Отличная память!":percent>=.4?"Хорошая попытка!":"Попробуй ещё раз!";
  $("resultSubtitle").textContent=`Сюжет: ${scene.title}. Уровень: ${LEVELS[levelKey].label}. Ты ответил правильно на ${score} из ${total} вопросов.`;
  $("resultScore").textContent=`${score} / ${total}`;
- if (window.GorizontPersonalityText) $("resultSubtitle").textContent += " "+window.GorizontPersonalityText.win();
+ if (window.GorizontPersonalityText) $("resultPersonality").textContent = window.GorizontPersonalityText.win();
  const rewardStatus=$("resultSubtitle"); rewardStatus.textContent += " Проверяем результат…"; submitDailyReward("memory_"+levelKey,score,rewardStatus);
  const list=$("reviewList");list.replaceChildren();
  questions.forEach((q,i)=>{const item=document.createElement("div");item.className="review-item";const title=document.createElement("b");title.textContent=`${i+1}. ${q.q}`;const answer=document.createElement("div");answer.textContent=`Правильный ответ: ${q.a[q.correct]}. ${q.why}`;item.append(title,answer);list.appendChild(item);});
