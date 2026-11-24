@@ -128,7 +128,7 @@
 .personality-panel{margin:16px auto 10px;max-width:560px;padding:16px;background:#fff7e8;border:2px solid #d7aa70;border-radius:18px;text-align:left}
 .personality-panel h3{margin:0 0 5px;color:#684326;font-size:20px;text-align:center}
 .personality-panel>p{margin:0 0 12px;color:#876342;font:13px/1.45 Arial,sans-serif;text-align:center}
-.personality-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.personality-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.personality-subtitle{margin:14px 0 8px;text-align:center;color:#684326;font-size:16px}.mood-grid .personality-card{padding:8px}.mood-grid .personality-card small{min-height:30px}
 .personality-card{padding:10px;border:1px solid #d8b17d;border-radius:13px;background:linear-gradient(#fffdf5,#f2dfbf);color:#684326;text-align:left}
 .personality-card strong{display:block;font:700 14px Georgia,serif;margin-bottom:4px}
 .personality-card small{display:block;min-height:34px;font:11px/1.35 Arial,sans-serif;color:#896b4c}
@@ -159,13 +159,14 @@
   <h3>Какой характер у твоего героя?</h3>
   <p>Выбери две черты: основную и дополнительную. Они будут влиять на реплики Медведя и Волка и небольшие детали сайта.</p>
   <div class="personality-grid" id="personalityGrid">
-    <article class="personality-card" data-personality-card="explorer"><strong>🔎 Исследователь</strong><small>Любознательный, замечает детали и любит открытия.</small><div class="personality-actions"><button type="button" data-personality="explorer" data-role="primary">Основной</button><button type="button" data-personality="explorer" data-role="secondary">Дополнительный</button></div></article>
-    <article class="personality-card" data-personality-card="creator"><strong>🎨 Творец</strong><small>Фантазирует, придумывает и создаёт новое.</small><div class="personality-actions"><button type="button" data-personality="creator" data-role="primary">Основной</button><button type="button" data-personality="creator" data-role="secondary">Дополнительный</button></div></article>
-    <article class="personality-card" data-personality-card="energizer"><strong>⚡ Энерджайзер</strong><small>Активный, решительный, любит движение.</small><div class="personality-actions"><button type="button" data-personality="energizer" data-role="primary">Основной</button><button type="button" data-personality="energizer" data-role="secondary">Дополнительный</button></div></article>
-    <article class="personality-card" data-personality-card="social"><strong>🤝 Душа компании</strong><small>Дружелюбный, общительный, объединяет друзей.</small><div class="personality-actions"><button type="button" data-personality="social" data-role="primary">Основной</button><button type="button" data-personality="social" data-role="secondary">Дополнительный</button></div></article>
-    <article class="personality-card" data-personality-card="guardian"><strong>🌿 Хранитель</strong><small>Заботливый, внимательный к людям и природе.</small><div class="personality-actions"><button type="button" data-personality="guardian" data-role="primary">Основной</button><button type="button" data-personality="guardian" data-role="secondary">Дополнительный</button></div></article>
-    <article class="personality-card" data-personality-card="inventor"><strong>💡 Изобретатель</strong><small>Находчивый, любит эксперименты и решения.</small><div class="personality-actions"><button type="button" data-personality="inventor" data-role="primary">Основной</button><button type="button" data-personality="inventor" data-role="secondary">Дополнительный</button></div></article>
+    <article class="personality-card" data-personality-card="explorer"><strong>🔎 Исследователь</strong><small>Любознательный, замечает детали и любит открытия.</small><div class="personality-actions"><button type="button" data-personality="explorer" data-role="primary">Основной</button></div></article>
+    <article class="personality-card" data-personality-card="creator"><strong>🎨 Творец</strong><small>Фантазирует, придумывает и создаёт новое.</small><div class="personality-actions"><button type="button" data-personality="creator" data-role="primary">Основной</button></div></article>
+    <article class="personality-card" data-personality-card="energizer"><strong>⚡ Энерджайзер</strong><small>Активный, решительный, любит движение.</small><div class="personality-actions"><button type="button" data-personality="energizer" data-role="primary">Основной</button></div></article>
+    <article class="personality-card" data-personality-card="social"><strong>🤝 Душа компании</strong><small>Дружелюбный, общительный, объединяет друзей.</small><div class="personality-actions"><button type="button" data-personality="social" data-role="primary">Основной</button></div></article>
+    <article class="personality-card" data-personality-card="guardian"><strong>🌿 Хранитель</strong><small>Заботливый, внимательный к людям и природе.</small><div class="personality-actions"><button type="button" data-personality="guardian" data-role="primary">Основной</button></div></article>
+    <article class="personality-card" data-personality-card="inventor"><strong>💡 Изобретатель</strong><small>Находчивый, любит эксперименты и решения.</small><div class="personality-actions"><button type="button" data-personality="inventor" data-role="primary">Основной</button></div></article>
   </div>
+  <h4 class="personality-subtitle">А какой он по настроению?</h4><div class="personality-grid mood-grid"><article class="personality-card"><strong>☀️ Позитивный</strong><small>Часто радуется и старается видеть хорошее.</small><div class="personality-actions"><button type="button" data-mood="positive">Выбрать черту</button></div></article><article class="personality-card"><strong>☁️ Мечтательный</strong><small>Любит фантазировать и замечать красоту.</small><div class="personality-actions"><button type="button" data-mood="dreamy">Выбрать черту</button></div></article><article class="personality-card"><strong>💬 Общительный</strong><small>Легко знакомится и любит поболтать.</small><div class="personality-actions"><button type="button" data-mood="sociable">Выбрать черту</button></div></article><article class="personality-card"><strong>🍃 Спокойный</strong><small>Не торопится и любит размеренность.</small><div class="personality-actions"><button type="button" data-mood="calm">Выбрать черту</button></div></article><article class="personality-card"><strong>🌸 Застенчивый</strong><small>Немного стесняется, но искренне открыт.</small><div class="personality-actions"><button type="button" data-mood="shy">Выбрать черту</button></div></article><article class="personality-card"><strong>😄 Весёлый</strong><small>Любит шутить и поднимать настроение.</small><div class="personality-actions"><button type="button" data-mood="cheerful">Выбрать черту</button></div></article><article class="personality-card"><strong>🌙 Задумчивый</strong><small>Часто размышляет и всё обдумывает.</small><div class="personality-actions"><button type="button" data-mood="thoughtful">Выбрать черту</button></div></article><article class="personality-card"><strong>🦊 Озорной</strong><small>Любит добрые шалости и сюрпризы.</small><div class="personality-actions"><button type="button" data-mood="mischievous">Выбрать черту</button></div></article><article class="personality-card"><strong>🧭 Решительный</strong><small>Не боится пробовать и идти к цели.</small><div class="personality-actions"><button type="button" data-mood="determined">Выбрать черту</button></div></article><article class="personality-card"><strong>🔍 Любопытный</strong><small>Постоянно задаёт вопросы и ищет ответы.</small><div class="personality-actions"><button type="button" data-mood="curious">Выбрать черту</button></div></article></div>
   <div class="personality-summary" id="personalitySummary">Основной характер: не выбран · Дополнительный: не выбран</div>
   <div class="personality-lock" id="personalityLock" aria-live="polite"></div>
 </div>
@@ -179,7 +180,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
 });
 const DATA={bases:{mila:'base.webp',misha:'misha_base.webp',rosa:'rosa_base.webp',petya:'petya_base.webp'},pants:Array.from({length:6},(_,i)=>'pants_'+(i+1)+'.webp'),shoes:Array.from({length:10},(_,i)=>'shoe_'+(i+1)+'.webp'),shirts:Array.from({length:12},(_,i)=>'shirt_'+(i+1)+'.webp'),hoodies:Array.from({length:12},(_,i)=>'hoodie_'+(i+1)+'.webp'),shirtHeads:{mila:'shirt_head.webp',misha:'misha_shirt_head.webp',rosa:'rosa_shirt_head.webp',petya:'petya_shirt_head.webp'},hoodieHeads:{mila:[...Array.from({length:11},(_,i)=>'hoodie_head_'+(i+1)+'.webp'),'mila_hoodie_head_12.webp'],misha:Array.from({length:12},(_,i)=>'misha_hoodie_head_'+(i+1)+'.webp'),rosa:Array.from({length:12},(_,i)=>'rosa_hoodie_head_'+(i+1)+'.webp'),petya:Array.from({length:12},(_,i)=>'petya_hoodie_head_'+(i+1)+'.webp')}};
 const A='assets/',cache={};let selectedCharacter='mila',kind='shirts',chosen={top:null,topKind:null,pants:null,shoes:null};
-const PERSONALITY_NAMES={explorer:'Исследователь',creator:'Творец',energizer:'Энерджайзер',social:'Душа компании',guardian:'Хранитель',inventor:'Изобретатель'};
+const PERSONALITY_NAMES={explorer:'Исследователь',creator:'Творец',energizer:'Энерджайзер',social:'Душа компании',guardian:'Хранитель',inventor:'Изобретатель',positive:'Позитивный',dreamy:'Мечтательный',sociable:'Общительный',calm:'Спокойный',shy:'Застенчивый',cheerful:'Весёлый',thoughtful:'Задумчивый',mischievous:'Озорной',determined:'Решительный',curious:'Любопытный'};
 let personality={primary:null,secondary:null,changedAt:null};
 function nextPersonalityDate(value){if(!value)return null;const d=new Date(value);if(Number.isNaN(d.getTime()))return null;const day=d.getDate();d.setDate(1);d.setMonth(d.getMonth()+1);d.setDate(Math.min(day,new Date(d.getFullYear(),d.getMonth()+1,0).getDate()));return d}
 function personalityCanChange(){const next=nextPersonalityDate(personality.changedAt);return !next||Date.now()>=next.getTime()}
@@ -191,9 +192,10 @@ function renderPersonality(){
   button.classList.toggle('active',personality[role]===id);
   button.disabled=!canChange;
  });
+ grid.querySelectorAll('[data-mood]').forEach(button=>{button.classList.toggle('active',personality.secondary===button.dataset.mood);button.disabled=!canChange;});
  const primary=PERSONALITY_NAMES[personality.primary]||'не выбран';
  const secondary=PERSONALITY_NAMES[personality.secondary]||'не выбран';
- document.getElementById('personalitySummary').textContent='Основной характер: '+primary+' · Дополнительный: '+secondary;
+ document.getElementById('personalitySummary').textContent='Основной характер: '+primary+' · Дополнительная черта: '+secondary;
  const lock=document.getElementById('personalityLock');
  if(!canChange){
   const next=nextPersonalityDate(personality.changedAt);
@@ -201,6 +203,7 @@ function renderPersonality(){
  }else lock.textContent='Характер можно будет изменить через месяц. Внешность героя можно менять когда угодно.';
 }
 document.getElementById('personalityGrid')?.addEventListener('click',event=>{
+ const moodButton=event.target.closest('[data-mood]');if(moodButton&&!moodButton.disabled){personality.secondary=personality.secondary===moodButton.dataset.mood?null:moodButton.dataset.mood;renderPersonality();return;}
  const button=event.target.closest('[data-personality]');if(!button||button.disabled)return;
  const id=button.dataset.personality,role=button.dataset.role;
  if(role==='primary'){
@@ -316,7 +319,7 @@ async function restoreSavedAvatar(){
     if(error||!profile?.avatar_config) return;
     const config=profile.avatar_config;
     if(!['mila','misha','rosa','petya'].includes(config.character)) return;
-    if(config.personality?.primary&&config.personality?.secondary){
+    if(config.personality?.primary){
       personality={primary:config.personality.primary,secondary:config.personality.secondary,changedAt:config.personality_changed_at||null};
       renderPersonality();
     }
