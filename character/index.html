@@ -240,12 +240,39 @@ saveAvatarButton.addEventListener('click', async ()=>{
       window.location.href='../index.html?auth=login';
       return;
     }
+
+    const {data:existingRow,error:existingRowError}=await supabase.from('participants').select('avatar_config').eq('id',session.user.id).maybeSingle();
+    if(existingRowError) throw existingRowError;
+    const existingConfig=existingRow?.avatar_config||{};
+    const existingPersonality=existingConfig.personality||{};
+    const hasExistingPersonality=!!(PERSONALITY_NAMES[existingPersonality.primary]&&PERSONALITY_NAMES[existingPersonality.secondary]);
+    const nextAllowed=nextPersonalityDate(existingConfig.personality_changed_at);
+    const canChange=!hasExistingPersonality||!nextAllowed||Date.now()>=nextAllowed.getTime();
+    if(!canChange){
+      personality={primary:existingPersonality.primary,secondary:existingPersonality.secondary,changedAt:existingConfig.personality_changed_at};
+    }else if(!personality.primary||!personality.secondary){
+      saveAvatarButton.disabled=false;
+      saveAvatarButton.textContent='Сначала выбери два характера';
+      setTimeout(()=>{saveAvatarButton.textContent=originalLabel},2500);
+      return;
+    }
+
+    let savedPersonality=existingPersonality;
+    let personalityChangedAt=existingConfig.personality_changed_at||null;
+    const samePersonality=existingPersonality.primary===personality.primary&&existingPersonality.secondary===personality.secondary;
+    if(!hasExistingPersonality||(canChange&&!samePersonality)){
+      savedPersonality={primary:personality.primary,secondary:personality.secondary};
+      personalityChangedAt=new Date().toISOString();
+      personality.changedAt=personalityChangedAt;
+    }else if(canChange&&samePersonality){
+      savedPersonality={primary:personality.primary,secondary:personality.secondary};
+    }
+
     const source=document.getElementById('finalDoll');
     const avatarCanvas=document.createElement('canvas');
     avatarCanvas.width=256; avatarCanvas.height=256;
     const ctx=avatarCanvas.getContext('2d');
     ctx.clearRect(0,0,256,256);
-    // Квадратный портрет: лицо и верхняя часть собранного образа.
     ctx.drawImage(source,0,0,292,292,0,0,256,256);
     const blob=await new Promise((resolve,reject)=>avatarCanvas.toBlob(b=>b?resolve(b):reject(new Error('Не удалось подготовить изображение.')),'image/webp',0.9));
     const path=`${session.user.id}/avatar.webp`;
@@ -253,24 +280,6 @@ saveAvatarButton.addEventListener('click', async ()=>{
     if(uploadError) throw uploadError;
     const {data:{publicUrl}}=supabase.storage.from('participant-avatars').getPublicUrl(path);
     const avatarUrl=`${publicUrl}?v=${Date.now()}`;
-    const {data:existingRow,error:existingRowError}=await supabase.from('participants').select('avatar_config').eq('id',session.user.id).maybeSingle();
-    if(existingRowError) throw existingRowError;
-    const existingConfig=existingRow?.avatar_config||{};
-    const existingPersonality=existingConfig.personality||{};
-    const hasExistingPersonality=!!(existingPersonality.primary&&PERSONALITY_NAMES[existingPersonality.primary]&&existingPersonality.secondary&&PERSONALITY_NAMES[existingPersonality.secondary]);
-    const nextAllowed=nextPersonalityDate(existingConfig.personality_changed_at);
-    const canChange=!hasExistingPersonality||!nextAllowed||Date.now()>=nextAllowed.getTime();
-    if(!personality.primary||!personality.secondary){
-      saveAvatarButton.disabled=false;saveAvatarButton.textContent='Сначала выбери два характера';setTimeout(()=>{saveAvatarButton.textContent=originalLabel},2500);return;
-    }
-    let savedPersonality=existingPersonality;
-    let personalityChangedAt=existingConfig.personality_changed_at||null;
-    const samePersonality=existingPersonality.primary===personality.primary&&existingPersonality.secondary===personality.secondary;
-    if(!hasExistingPersonality||(canChange&&!samePersonality)){
-      if(canChange){savedPersonality={primary:personality.primary,secondary:personality.secondary};personalityChangedAt=new Date().toISOString();}
-    }else if(canChange&&samePersonality){
-      savedPersonality={primary:personality.primary,secondary:personality.secondary};
-    }
     const avatarConfig={
       version:1,
       character:selectedCharacter,
@@ -281,15 +290,13 @@ saveAvatarButton.addEventListener('click', async ()=>{
       personality:savedPersonality,
       personality_changed_at:personalityChangedAt
     };
-    const {error:updateError}=await supabase.from('participants').update({
-      avatar_url:avatarUrl,
-      avatar_config:avatarConfig
-    }).eq('id',session.user.id);
+    const {error:updateError}=await supabase.from('participants').update({avatar_url:avatarUrl,avatar_config:avatarConfig}).eq('id',session.user.id);
     if(updateError) throw updateError;
+    renderPersonality();
     saveAvatarButton.textContent='Аватарка сохранена ✓';
     window.dispatchEvent(new CustomEvent('gorizont:avatar-updated',{detail:{avatar_url:avatarUrl,avatar_config:avatarConfig}}));
   }catch(error){
-    console.error('Не удалось сохранить аватар:',error);
+    console.error('Не удалось сохранить героя:',error);
     saveAvatarButton.textContent=error.message||'Не удалось сохранить';
     setTimeout(()=>{saveAvatarButton.textContent=originalLabel;saveAvatarButton.disabled=false},3000);
     return;
