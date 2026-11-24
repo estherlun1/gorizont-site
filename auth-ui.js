@@ -241,7 +241,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
       if(!requests.results.length) incoming.textContent="Новых заявок пока нет.";
       requests.results.forEach(item=>addFriendRow(incoming,item.person||{nickname:"Участник"},{label:"Принять",done:"Принято",run:async()=>{await socialRequest({action:"friend_respond",request_id:item.id,accept:true});await loadFriends();}}));
       if(!friends.results.length) list.textContent="Пока нет друзей. Найди знакомых по игровому нику!";
-      friends.results.forEach(person=>{const row=document.createElement("div");row.style.cssText="padding:9px 0;border-bottom:1px solid #e1e8dc";row.textContent=person.nickname||person.full_name||"Участник";list.appendChild(row);});
+      friends.results.forEach(person=>{const row=document.createElement("div");row.style.cssText="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 0;border-bottom:1px solid #e1e8dc";const name=document.createElement("span");name.textContent=person.nickname||person.full_name||"Участник";const btn=document.createElement("button");btn.type="button";btn.textContent="Прогресс";btn.style.cssText="border:0;border-radius:10px;padding:8px 10px;background:#315846;color:white;font-weight:700";btn.addEventListener("click",async()=>{const out=document.getElementById("gorizont-friend-progress");out.textContent="Загружаем достижения…";try{const data=await socialRequest({action:"friend_progress",participant_id:person.id});out.replaceChildren();const title=document.createElement("h5");title.textContent="Достижения · "+(data.person?.nickname||name.textContent);out.appendChild(title);(data.achievements||[]).forEach(x=>{const line=document.createElement("p");line.style.cssText="font-size:12px;margin:5px 0";line.textContent=(x.unlocked?"🏅 ":"🔒 ")+x.name+" · "+(x.unlocked?"открыто · уровень "+x.level:"прогресс "+x.progress+" / "+(x.thresholds?.[Math.min(x.level||0,(x.thresholds||[1]).length-1)]||1));out.appendChild(line);});}catch(e){out.textContent=e.message;}});row.append(name,btn);list.appendChild(row);});
     } catch(e) { incoming.textContent=e.message;list.textContent="Не удалось загрузить друзей."; }
   }
   async function loadAchievements() {
@@ -272,6 +272,9 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
         data.results.forEach(person=>addFriendRow(out,person,{label:"Добавить",done:"Заявка отправлена",run:async()=>{await socialRequest({action:"friend_send",participant_id:person.id});}}));
       } catch(e) { out.textContent=e.message; }
     });
+    const nicknameForm=document.getElementById("gorizont-nickname-form");
+    nicknameForm?.addEventListener("submit",async event=>{event.preventDefault();const input=document.getElementById("gorizont-nickname-input"),out=document.getElementById("gorizont-nickname-status"),button=nicknameForm.querySelector("button");button.disabled=true;out.textContent="Проверяем ник…";try{const result=await socialRequest({action:"nickname_change",nickname:input.value});participant={...participant,nickname:result.nickname};localStorage.setItem("gorizont-participant",JSON.stringify(participant));profileNick.textContent="Игровой ник: "+result.nickname+" · Логин: "+(participant.username||"—");if(mainOpener)mainOpener.firstChild.textContent="Мой профиль · "+result.nickname;if(menuAccountTab)menuAccountTab.textContent="Привет, "+result.nickname+"!";input.value=result.nickname;out.textContent="Ник успешно изменён.";}catch(e){out.textContent=e.message;}finally{button.disabled=false;}});
+    const nicknameInput=document.getElementById("gorizont-nickname-input");if(nicknameInput)nicknameInput.value=participant.nickname||"";
     loadAchievements();loadFriends();
   }
 
