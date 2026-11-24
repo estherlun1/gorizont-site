@@ -181,7 +181,7 @@ const DATA={bases:{mila:'base.webp',misha:'misha_base.webp',rosa:'rosa_base.webp
 const A='assets/',cache={};let selectedCharacter='mila',kind='shirts',chosen={top:null,topKind:null,pants:null,shoes:null};
 const PERSONALITY_NAMES={explorer:'Исследователь',creator:'Творец',energizer:'Энерджайзер',social:'Душа компании',guardian:'Хранитель',inventor:'Изобретатель'};
 let personality={primary:null,secondary:null,changedAt:null};
-function nextPersonalityDate(value){if(!value)return null;const d=new Date(value);if(Number.isNaN(d.getTime()))return null;d.setMonth(d.getMonth()+1);return d}
+function nextPersonalityDate(value){if(!value)return null;const d=new Date(value);if(Number.isNaN(d.getTime()))return null;const day=d.getDate();d.setDate(1);d.setMonth(d.getMonth()+1);d.setDate(Math.min(day,new Date(d.getFullYear(),d.getMonth()+1,0).getDate()));return d}
 function personalityCanChange(){const next=nextPersonalityDate(personality.changedAt);return !next||Date.now()>=next.getTime()}
 function renderPersonality(){
  const grid=document.getElementById('personalityGrid');if(!grid)return;
