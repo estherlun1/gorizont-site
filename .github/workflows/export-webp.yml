@@ -73,3 +73,5 @@ jobs:
           name: gorizont-site-webp
           path: gorizont-site-webp.zip
           retention-days: 7
+
+# trigger export job
