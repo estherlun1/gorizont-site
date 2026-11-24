@@ -29,7 +29,7 @@
  function intro(){
   const v=get(),main=MAIN[v.primary]||{intro:'Заглянем сюда поближе —',win:'Отличная работа! Ты справился!'},mood=MOODS[v.secondary];
   let line=main.intro;
-  if(mood)line+=' '+(mood.line.charAt(0).toUpperCase()+mood.line.slice(1))+'.';
+  if(mood)line+=' Настроение героя — '+mood.name.toLowerCase()+'.';
   return line;
  }
  function instruction(){
