@@ -2349,7 +2349,7 @@ main {
   ].filter(item => item.el && data[item.key]);
 
 
-  const visitedCounselors=new Set();
+  const visitedCounselors=new Set(JSON.parse(localStorage.getItem('gorizont-visited-counselors')||'[]'));
   const letterTrigger=document.getElementById('mysteryLetterTrigger');
   const letterModal=document.getElementById('mysteryLetterModal');
   const letterText=document.getElementById('mysteryLetterText');
@@ -2363,7 +2363,7 @@ main {
    inventor:'Необычные вопросы приводят к удивительным открытиям. Продолжай искать собственные решения — миру нужны люди, которые умеют смотреть иначе.',
    default:'Если ты читаешь это письмо, значит, любопытство привело тебя в нужное место. Пусть в Горизонте у тебя будет много открытий, верных друзей и историй, к которым захочется возвращаться.'
   };
-  function revealLetter(){if(letterTrigger)letterTrigger.hidden=false;}
+  function revealLetter(){if(letterTrigger)letterTrigger.hidden=false;localStorage.setItem('gorizont-letter-discovered','1');}
   function openLetter(){
    const saved=JSON.parse(localStorage.getItem('gorizont-participant')||'null');
    const personality=saved?.avatar_config?.personality?.primary||'default';
@@ -2378,7 +2378,7 @@ main {
   const mobileHotspots=[...stage.querySelectorAll('.counselor-hotspot')];
   mobileHotspots.forEach(el=>{
     const key=el.dataset.person;
-    el.addEventListener('click',()=>{visitedCounselors.add(key);if(visitedCounselors.size===4)revealLetter();open(key);});
+    el.addEventListener('click',()=>{visitedCounselors.add(key);localStorage.setItem('gorizont-visited-counselors',JSON.stringify([...visitedCounselors]));if(visitedCounselors.size===4)revealLetter();open(key);});
   });
   hitImages.forEach(item=>{
     item.el.style.pointerEvents='auto';
@@ -2389,7 +2389,7 @@ main {
     item.el.addEventListener('click',e=>{
       e.preventDefault();
       e.stopPropagation();
-      visitedCounselors.add(item.key);if(visitedCounselors.size===4)revealLetter();
+      visitedCounselors.add(item.key);localStorage.setItem('gorizont-visited-counselors',JSON.stringify([...visitedCounselors]));if(visitedCounselors.size===4)revealLetter();
       open(item.key);
     });
     item.el.addEventListener('keydown',e=>{
