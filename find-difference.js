@@ -142,6 +142,8 @@ function checkSpot(spot) {
   count.textContent = found.size;
   status.textContent = `Отличие найдено! ${spot.label}.`;
   if (found.size === levels[levelIndex].total) {
+    window.GorizontAchievements?.track('difference_level_completed');
+    if (levelIndex === levels.length - 1) window.GorizontAchievements?.track('difference_all_completed');
     status.textContent = 'Все отличия найдены!';
     $('#win-title').textContent = `Ура, уровень «${levels[levelIndex].title}» пройден!`;
     if (window.GorizontPersonalityText) $('#win-personality').textContent = window.GorizontPersonalityText.win();
