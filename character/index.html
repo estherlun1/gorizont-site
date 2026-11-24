@@ -179,6 +179,40 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
 });
 const DATA={bases:{mila:'base.webp',misha:'misha_base.webp',rosa:'rosa_base.webp',petya:'petya_base.webp'},pants:Array.from({length:6},(_,i)=>'pants_'+(i+1)+'.webp'),shoes:Array.from({length:10},(_,i)=>'shoe_'+(i+1)+'.webp'),shirts:Array.from({length:12},(_,i)=>'shirt_'+(i+1)+'.webp'),hoodies:Array.from({length:12},(_,i)=>'hoodie_'+(i+1)+'.webp'),shirtHeads:{mila:'shirt_head.webp',misha:'misha_shirt_head.webp',rosa:'rosa_shirt_head.webp',petya:'petya_shirt_head.webp'},hoodieHeads:{mila:[...Array.from({length:11},(_,i)=>'hoodie_head_'+(i+1)+'.webp'),'mila_hoodie_head_12.webp'],misha:Array.from({length:12},(_,i)=>'misha_hoodie_head_'+(i+1)+'.webp'),rosa:Array.from({length:12},(_,i)=>'rosa_hoodie_head_'+(i+1)+'.webp'),petya:Array.from({length:12},(_,i)=>'petya_hoodie_head_'+(i+1)+'.webp')}};
 const A='assets/',cache={};let selectedCharacter='mila',kind='shirts',chosen={top:null,topKind:null,pants:null,shoes:null};
+const PERSONALITY_NAMES={explorer:'Исследователь',creator:'Творец',energizer:'Энерджайзер',social:'Душа компании',guardian:'Хранитель',inventor:'Изобретатель'};
+let personality={primary:null,secondary:null,changedAt:null};
+function nextPersonalityDate(value){if(!value)return null;const d=new Date(value);if(Number.isNaN(d.getTime()))return null;d.setMonth(d.getMonth()+1);return d}
+function personalityCanChange(){const next=nextPersonalityDate(personality.changedAt);return !next||Date.now()>=next.getTime()}
+function renderPersonality(){
+ const grid=document.getElementById('personalityGrid');if(!grid)return;
+ const canChange=personalityCanChange();
+ grid.querySelectorAll('[data-personality]').forEach(button=>{
+  const id=button.dataset.personality,role=button.dataset.role;
+  button.classList.toggle('active',personality[role]===id);
+  button.disabled=!canChange;
+ });
+ const primary=PERSONALITY_NAMES[personality.primary]||'не выбран';
+ const secondary=PERSONALITY_NAMES[personality.secondary]||'не выбран';
+ document.getElementById('personalitySummary').textContent='Основной характер: '+primary+' · Дополнительный: '+secondary;
+ const lock=document.getElementById('personalityLock');
+ if(!canChange){
+  const next=nextPersonalityDate(personality.changedAt);
+  lock.textContent='Характер уже выбран. Следующее изменение будет доступно '+next.toLocaleDateString('ru-RU',{day:'numeric',month:'long'})+'. Внешность героя можно менять и сейчас.';
+ }else lock.textContent='Характер можно будет изменить через месяц. Внешность героя можно менять когда угодно.';
+}
+document.getElementById('personalityGrid')?.addEventListener('click',event=>{
+ const button=event.target.closest('[data-personality]');if(!button||button.disabled)return;
+ const id=button.dataset.personality,role=button.dataset.role;
+ if(role==='primary'){
+  if(personality.primary===id){personality.primary=personality.secondary;personality.secondary=null}
+  else {if(personality.secondary===id)personality.secondary=personality.primary;personality.primary=id}
+ }else{
+  if(personality.secondary===id)personality.secondary=null;
+  else if(personality.primary===id)return;
+  else personality.secondary=id;
+ }
+ renderPersonality();
+});
 function image(file){if(!cache[file]){const im=new Image();im.src=A+file;cache[file]=im;im.onload=draw}return cache[file]}
 function drawTo(c){const x=c.getContext('2d');x.clearRect(0,0,292,724);const put=f=>{const im=image(f);if(im.complete&&im.naturalWidth)x.drawImage(im,0,0,292,724)};put(DATA.bases[selectedCharacter]);if(chosen.shoes!==null)put(DATA.shoes[chosen.shoes]);if(chosen.pants!==null)put(DATA.pants[chosen.pants]);if(chosen.top!==null){put((chosen.topKind==='hoodies'?DATA.hoodies:DATA.shirts)[chosen.top]);put(chosen.topKind==='hoodies'?DATA.hoodieHeads[selectedCharacter][chosen.top]:DATA.shirtHeads[selectedCharacter])}}
 function draw(){drawTo(document.getElementById('doll'));if(!document.getElementById('result').classList.contains('hidden'))drawTo(document.getElementById('finalDoll'))}
@@ -188,7 +222,7 @@ function renderItems(){const box=document.getElementById('items');box.innerHTML=
 document.querySelectorAll('[data-character]').forEach(b=>b.onclick=()=>showGame(b.dataset.character));document.querySelectorAll('[data-switch]').forEach(b=>b.onclick=()=>setCharacter(b.dataset.switch));document.querySelectorAll('[data-kind]').forEach(b=>b.onclick=()=>{kind=b.dataset.kind;renderItems()});
 
 document.getElementById('randomLook').onclick=()=>{const r=n=>Math.floor(Math.random()*n);chosen.topKind=Math.random()<.5?'shirts':'hoodies';chosen.top=r(12);chosen.pants=r(6);chosen.shoes=r(10);kind=chosen.topKind;renderItems();draw()};
-document.getElementById('finish').onclick=()=>{document.getElementById('game').classList.add('hidden');document.getElementById('result').classList.remove('hidden');draw()};
+document.getElementById('finish').onclick=()=>{document.getElementById('game').classList.add('hidden');document.getElementById('result').classList.remove('hidden');renderPersonality();draw()};
 document.getElementById('again').onclick=()=>{chosen={top:null,topKind:null,pants:null,shoes:null};kind='shirts';document.getElementById('result').classList.add('hidden');document.getElementById('game').classList.remove('hidden');renderItems();draw()};
 document.getElementById('backToSite')?.addEventListener('click',()=>{if(history.length>1)history.back();else location.href='../index.html'});
 
@@ -219,13 +253,33 @@ saveAvatarButton.addEventListener('click', async ()=>{
     if(uploadError) throw uploadError;
     const {data:{publicUrl}}=supabase.storage.from('participant-avatars').getPublicUrl(path);
     const avatarUrl=`${publicUrl}?v=${Date.now()}`;
+    const {data:existingRow,error:existingRowError}=await supabase.from('participants').select('avatar_config').eq('id',session.user.id).maybeSingle();
+    if(existingRowError) throw existingRowError;
+    const existingConfig=existingRow?.avatar_config||{};
+    const existingPersonality=existingConfig.personality||{};
+    const hasExistingPersonality=!!(existingPersonality.primary&&PERSONALITY_NAMES[existingPersonality.primary]&&existingPersonality.secondary&&PERSONALITY_NAMES[existingPersonality.secondary]);
+    const nextAllowed=nextPersonalityDate(existingConfig.personality_changed_at);
+    const canChange=!hasExistingPersonality||!nextAllowed||Date.now()>=nextAllowed.getTime();
+    if(!personality.primary||!personality.secondary){
+      saveAvatarButton.disabled=false;saveAvatarButton.textContent='Сначала выбери два характера';setTimeout(()=>{saveAvatarButton.textContent=originalLabel},2500);return;
+    }
+    let savedPersonality=existingPersonality;
+    let personalityChangedAt=existingConfig.personality_changed_at||null;
+    const samePersonality=existingPersonality.primary===personality.primary&&existingPersonality.secondary===personality.secondary;
+    if(!hasExistingPersonality||(canChange&&!samePersonality)){
+      if(canChange){savedPersonality={primary:personality.primary,secondary:personality.secondary};personalityChangedAt=new Date().toISOString();}
+    }else if(canChange&&samePersonality){
+      savedPersonality={primary:personality.primary,secondary:personality.secondary};
+    }
     const avatarConfig={
       version:1,
       character:selectedCharacter,
       top:chosen.top,
       topKind:chosen.topKind,
       pants:chosen.pants,
-      shoes:chosen.shoes
+      shoes:chosen.shoes,
+      personality:savedPersonality,
+      personality_changed_at:personalityChangedAt
     };
     const {error:updateError}=await supabase.from('participants').update({
       avatar_url:avatarUrl,
@@ -255,6 +309,10 @@ async function restoreSavedAvatar(){
     if(error||!profile?.avatar_config) return;
     const config=profile.avatar_config;
     if(!['mila','misha','rosa','petya'].includes(config.character)) return;
+    if(config.personality?.primary&&config.personality?.secondary){
+      personality={primary:config.personality.primary,secondary:config.personality.secondary,changedAt:config.personality_changed_at||null};
+      renderPersonality();
+    }
     selectedCharacter=config.character;
     chosen={
       top:Number.isInteger(config.top)&&config.top>=0&&config.top<12?config.top:null,
@@ -268,5 +326,5 @@ async function restoreSavedAvatar(){
     renderItems();draw();
   }catch(error){console.warn('Не удалось загрузить сохранённый образ:',error)}
 }
-[...DATA.pants,...DATA.shoes,...DATA.shirts,...DATA.hoodies,Object.values(DATA.bases),Object.values(DATA.shirtHeads),...Object.values(DATA.hoodieHeads)].flat().forEach(image);renderItems();draw();restoreSavedAvatar();
+[...DATA.pants,...DATA.shoes,...DATA.shirts,...DATA.hoodies,Object.values(DATA.bases),Object.values(DATA.shirtHeads),...Object.values(DATA.hoodieHeads)].flat().forEach(image);renderItems();draw();renderPersonality();restoreSavedAvatar();
 </script></body></html>
