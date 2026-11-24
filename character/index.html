@@ -123,6 +123,22 @@
 .character-chip{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:0;padding:3px 4px 2px}
 .character-chip img{width:100%;height:67px;display:block;object-fit:contain;object-position:center center}
 .character-chip span{line-height:15px}
+
+/* Personality selection */
+.personality-panel{margin:16px auto 10px;max-width:560px;padding:16px;background:#fff7e8;border:2px solid #d7aa70;border-radius:18px;text-align:left}
+.personality-panel h3{margin:0 0 5px;color:#684326;font-size:20px;text-align:center}
+.personality-panel>p{margin:0 0 12px;color:#876342;font:13px/1.45 Arial,sans-serif;text-align:center}
+.personality-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.personality-card{padding:10px;border:1px solid #d8b17d;border-radius:13px;background:linear-gradient(#fffdf5,#f2dfbf);color:#684326;text-align:left}
+.personality-card strong{display:block;font:700 14px Georgia,serif;margin-bottom:4px}
+.personality-card small{display:block;min-height:34px;font:11px/1.35 Arial,sans-serif;color:#896b4c}
+.personality-actions{display:flex;gap:5px;margin-top:8px}
+.personality-actions button{flex:1;border:1px solid #c89a60;border-radius:8px;background:#fff7e8;color:#704522;padding:6px 4px;font:700 10px Arial;cursor:pointer}
+.personality-actions button.active{background:#607a43;color:#fff;border-color:#4f6636}
+.personality-actions button:disabled{opacity:.4;cursor:not-allowed}
+.personality-summary{margin:12px 0 0;padding:10px;border-radius:11px;background:#e9efd9;color:#405a31;font:12px/1.45 Arial,sans-serif}
+.personality-lock{margin-top:8px;color:#8b6036;font:11px/1.4 Arial,sans-serif}
+@media(max-width:600px){.personality-panel{padding:12px}.personality-card{padding:8px}.personality-card small{min-height:42px}}
 </style><link rel="stylesheet" href="../assets/bear-paw-cursor.css">
 </head><body><a class="site-back" href="../index.html" aria-label="Вернуться на сайт">← На сайт</a><main class="game-shell">
 
@@ -138,7 +154,22 @@
 <section class="wardrobe"><div class="wardrobe-heading"><h2>Гардероб</h2><span>Выбери детали образа</span></div>
 <div class="category-tabs"><button class="category-tab active" data-kind="shirts"><span class="symbol">👕</span><small>Футболки</small></button><button class="category-tab" data-kind="hoodies"><span class="symbol">🧥</span><small>Толстовки</small></button><button class="category-tab" data-kind="pants"><span class="symbol">👖</span><small>Брюки</small></button><button class="category-tab" data-kind="shoes"><span class="symbol">👟</span><small>Обувь</small></button></div>
 <div class="items-wrap"><div class="items-grid" id="items"></div></div><div class="wardrobe-footer"><div class="wardrobe-hint" id="hint">Нажимай на вещи, чтобы примерить их на героя.</div><div class="footer-buttons"><button class="wood-button" id="randomLook">Случайный образ</button><button class="wood-button green" id="finish">Готово ✓</button></div></div></section></div>
-<section class="result hidden" id="result"><h2>🌲 Образ готов!</h2><p>Герой готов к новым приключениям.</p><div class="result-stage"><canvas id="finalDoll" width="292" height="724"></canvas></div><button class="wood-button green" id="saveAvatar" type="button">Сохранить аватарку</button><button class="wood-button" id="again">Собрать ещё один образ</button></section></main>
+<section class="result hidden" id="result"><h2>🌲 Образ готов!</h2><p>Герой готов к новым приключениям.</p><div class="result-stage"><canvas id="finalDoll" width="292" height="724"></canvas></div>
+<div class="personality-panel" id="personalityPanel">
+  <h3>Какой характер у твоего героя?</h3>
+  <p>Выбери две черты: основную и дополнительную. Они будут влиять на реплики Медведя и Волка и небольшие детали сайта.</p>
+  <div class="personality-grid" id="personalityGrid">
+    <article class="personality-card" data-personality-card="explorer"><strong>🔎 Исследователь</strong><small>Любознательный, замечает детали и любит открытия.</small><div class="personality-actions"><button type="button" data-personality="explorer" data-role="primary">Основной</button><button type="button" data-personality="explorer" data-role="secondary">Дополнительный</button></div></article>
+    <article class="personality-card" data-personality-card="creator"><strong>🎨 Творец</strong><small>Фантазирует, придумывает и создаёт новое.</small><div class="personality-actions"><button type="button" data-personality="creator" data-role="primary">Основной</button><button type="button" data-personality="creator" data-role="secondary">Дополнительный</button></div></article>
+    <article class="personality-card" data-personality-card="energizer"><strong>⚡ Энерджайзер</strong><small>Активный, решительный, любит движение.</small><div class="personality-actions"><button type="button" data-personality="energizer" data-role="primary">Основной</button><button type="button" data-personality="energizer" data-role="secondary">Дополнительный</button></div></article>
+    <article class="personality-card" data-personality-card="social"><strong>🤝 Душа компании</strong><small>Дружелюбный, общительный, объединяет друзей.</small><div class="personality-actions"><button type="button" data-personality="social" data-role="primary">Основной</button><button type="button" data-personality="social" data-role="secondary">Дополнительный</button></div></article>
+    <article class="personality-card" data-personality-card="guardian"><strong>🌿 Хранитель</strong><small>Заботливый, внимательный к людям и природе.</small><div class="personality-actions"><button type="button" data-personality="guardian" data-role="primary">Основной</button><button type="button" data-personality="guardian" data-role="secondary">Дополнительный</button></div></article>
+    <article class="personality-card" data-personality-card="inventor"><strong>💡 Изобретатель</strong><small>Находчивый, любит эксперименты и решения.</small><div class="personality-actions"><button type="button" data-personality="inventor" data-role="primary">Основной</button><button type="button" data-personality="inventor" data-role="secondary">Дополнительный</button></div></article>
+  </div>
+  <div class="personality-summary" id="personalitySummary">Основной характер: не выбран · Дополнительный: не выбран</div>
+  <div class="personality-lock" id="personalityLock" aria-live="polite"></div>
+</div>
+<button class="wood-button green" id="saveAvatar" type="button">Сохранить аватарку</button><button class="wood-button" id="again">Собрать ещё один образ</button></section></main>
 <script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const SUPABASE_URL = "https://jrvukdqqrmfjbtskrayy.supabase.co";
