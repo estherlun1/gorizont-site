@@ -1563,6 +1563,14 @@ main {
 .auth-profile-avatar img{width:100%;height:100%;object-fit:cover;display:block}
 .auth-avatar-edit{display:inline-block;margin:0 0 14px;color:#607b43;font-size:12px;font-weight:700;text-decoration:none}
 .auth-avatar-edit:hover{text-decoration:underline}
+.auth-hero-card{margin:0 0 16px;padding:12px 14px;border:1px solid #d9c39d;border-radius:15px;background:linear-gradient(135deg,#f8edda,#e9efdc);text-align:left;color:#4f6840}
+.auth-hero-card[hidden]{display:none!important}
+.auth-hero-kicker{margin:0 0 5px;font-size:9px;letter-spacing:.12em;font-weight:800;color:#9b713f}
+.auth-hero-card strong,.auth-hero-card span,.auth-hero-card small{display:block}
+.auth-hero-card strong{font-size:15px}
+.auth-hero-card span{margin-top:3px;font-size:12px;color:#7a664d}
+.auth-hero-card small{margin-top:7px;font-size:10px;line-height:1.4;color:#8a765e}
+
 .auth-profile-kicker { margin: 0 0 6px; color: #a56b37; font-size: 10px; font-weight: 800; letter-spacing: .13em; }
 .auth-profile h3 { margin: 0 0 4px; color: #34483e; font-size: 25px; }
 .auth-profile-nick { margin: 0 0 18px; color: #80664a; font-size: 13px; }
@@ -2687,6 +2695,12 @@ render();
     <div class="auth-profile" id="authProfile" hidden>
       <div class="auth-profile-avatar" id="authProfileAvatar" aria-label="Аватар профиля">🌲</div>
       <a class="auth-avatar-edit" href="character/index.html">Изменить аватар в игре →</a>
+      <div class="auth-hero-card" id="authHeroCard" hidden>
+        <p class="auth-hero-kicker">ХАРАКТЕР ТВОЕГО ГЕРОЯ</p>
+        <strong id="authHeroPrimary"></strong>
+        <span id="authHeroSecondary"></span>
+        <small id="authHeroNextChange"></small>
+      </div>
       <p class="auth-profile-kicker">ТЫ УЖЕ В КОМАНДЕ!</p>
       <h3 id="authProfileName">Привет!</h3>
       <p class="auth-profile-nick" id="authProfileNick"></p>
