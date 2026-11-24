@@ -62,7 +62,7 @@ button{font:inherit}
 .story-shell{max-width:1180px;margin:0 auto;padding:72px 20px}.section-card{background:rgba(255,250,241,.94);border-radius:32px;padding:44px;box-shadow:0 18px 45px rgba(40,72,58,.10);margin-bottom:28px}.section-card h2{font-family:Oswald,sans-serif;font-size:48px;margin:0 0 14px}.section-card p{line-height:1.7}
 .quick-links{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.quick-links a{padding:20px;border-radius:20px;background:#eaf3ec;font-weight:700;transition:.25s}.quick-links a:hover{transform:translateY(-4px)}
 .parent{display:flex;align-items:center;justify-content:space-between;gap:20px;background:#244c3b;color:#fff;border-radius:28px;padding:30px}.parent a{background:var(--orange);padding:13px 17px;border-radius:14px;font-weight:800;color:#fff}
-footer{background:#244c3b;color:#fff;padding:35px 6vw;display:flex;justify-content:space-between;gap:20px}.footer-links{display:flex;gap:15px;flex-wrap:wrap}
+footer{background:#244c3b;color:#fff;padding:16px 6vw;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:64px}.footer-name{font-size:12px;line-height:1.35}.parent-site-link{padding:9px 13px;font-size:12px;white-space:nowrap}.footer-links{display:flex;gap:15px;flex-wrap:wrap}
 
 @media (max-width:900px){
   .hero{min-height:590px}
@@ -170,6 +170,15 @@ main {
 
 .hero {
   margin-top: 0 !important;
+
+#mysteryLetterTrigger{position:absolute;z-index:8;right:8%;top:26%;width:58px;height:58px;border:0;border-radius:50%;background:#fff4d7;box-shadow:0 8px 24px #1a302b66;font-size:30px;cursor:pointer;animation:letterBob 2.4s ease-in-out infinite}
+@keyframes letterBob{50%{transform:translateY(-9px) rotate(5deg)}}
+.mystery-letter-modal{position:fixed;inset:0;z-index:100020;background:#12241dcc;display:grid;place-items:center;padding:20px}
+.mystery-letter-modal[hidden]{display:none}
+.mystery-letter-card{position:relative;width:min(520px,100%);padding:34px 28px 28px;border-radius:22px;background:#fff5dc;color:#4b3824;box-shadow:0 24px 80px #0008;text-align:center;animation:letterArrive .75s cubic-bezier(.16,1,.3,1)}
+@keyframes letterArrive{from{opacity:0;transform:translateY(80px) scale(.35) rotate(-8deg)}to{opacity:1;transform:none}}
+.mystery-letter-card #mysteryLetterClose{position:absolute;right:12px;top:10px;border:0;background:transparent;font-size:26px;color:#5b432b;cursor:pointer}
+.mystery-letter-card #mysteryLetterVisual{font-size:70px;margin-bottom:10px}.mystery-letter-card p{white-space:pre-line;line-height:1.7;font-family:Georgia,serif;font-size:16px}.mystery-letter-card small{color:#8a6b43}
 </style>
 <style>
 
@@ -1851,9 +1860,10 @@ main {
     <img class="counselors-layer c-lera" src="assets/counselors/polina.webp" alt="Вожатая Полина" loading="lazy" decoding="async">
     <img class="counselors-layer c-ilya" src="assets/counselors/sonya.webp" alt="Вожатая Соня" loading="lazy" decoding="async">
     <img class="counselors-layer c-kids-front" src="assets/counselors/foreground.webp" alt="Дети собрались у костра" loading="lazy" decoding="async">
-    <div class="counselors-hint">нажми на вожатого — познакомимся поближе</div>
+    <div class="counselors-hint">нажми на вожатого — познакомимся поближе</div><button id="mysteryLetterTrigger" type="button" aria-label="Открыть найденное письмо" hidden>✉️</button>
   </div>
 </section>
+<div id="mysteryLetterModal" class="mystery-letter-modal" hidden role="dialog" aria-modal="true" aria-labelledby="mysteryLetterTitle"><div class="mystery-letter-card"><button id="mysteryLetterClose" type="button" aria-label="Закрыть">×</button><div id="mysteryLetterVisual" aria-hidden="true">✉️</div><h2 id="mysteryLetterTitle">Письмо для тебя</h2><p id="mysteryLetterText"></p><small>Твой Горизонт 🌲</small></div></div>
 
 <div class="counselors-shade" id="counselorsShade"></div>
 <div class="counselors-modal" id="counselorsModal" role="dialog" aria-modal="true" aria-labelledby="counselorsName">
@@ -2338,10 +2348,37 @@ main {
     {el: stage.querySelector('.c-ilya'), key: 'ilya'}
   ].filter(item => item.el && data[item.key]);
 
+
+  const visitedCounselors=new Set();
+  const letterTrigger=document.getElementById('mysteryLetterTrigger');
+  const letterModal=document.getElementById('mysteryLetterModal');
+  const letterText=document.getElementById('mysteryLetterText');
+  const letterClose=document.getElementById('mysteryLetterClose');
+  const letterLines={
+   explorer:'Ты замечаешь тропинки там, где другие видят только лес. Не теряй любопытства: самые важные открытия часто начинаются с маленького шага в неизвестность.',
+   creator:'У тебя внутри целый мир идей. Не бойся придумывать, пробовать и оставлять после себя что-то своё — именно так рождаются истории, которые хочется помнить.',
+   energizer:'Ты умеешь зажигать искру вокруг себя. Помни: даже самому яркому огоньку иногда нужен отдых, а твоя энергия особенно ценна, когда ею делишься.',
+   social:'Самые тёплые воспоминания рождаются рядом с людьми. Продолжай собирать вокруг себя друзей — вместе даже обычный день становится приключением.',
+   guardian:'Внимание и забота — тихая суперсила. Иногда одно доброе слово помогает кому-то почувствовать себя дома. Не забывай беречь и себя.',
+   inventor:'Необычные вопросы приводят к удивительным открытиям. Продолжай искать собственные решения — миру нужны люди, которые умеют смотреть иначе.',
+   default:'Если ты читаешь это письмо, значит, любопытство привело тебя в нужное место. Пусть в Горизонте у тебя будет много открытий, верных друзей и историй, к которым захочется возвращаться.'
+  };
+  function revealLetter(){if(letterTrigger)letterTrigger.hidden=false;}
+  function openLetter(){
+   const saved=JSON.parse(localStorage.getItem('gorizont-participant')||'null');
+   const personality=saved?.avatar_config?.personality?.primary||'default';
+   letterText.textContent=letterLines[personality]||letterLines.default;
+   letterModal.hidden=false;
+   window.GorizontAchievements?.track('letter_opened');
+  }
+  letterTrigger?.addEventListener('click',openLetter);
+  letterClose?.addEventListener('click',()=>letterModal.hidden=true);
+  letterModal?.addEventListener('click',e=>{if(e.target===letterModal)letterModal.hidden=true;});
+
   const mobileHotspots=[...stage.querySelectorAll('.counselor-hotspot')];
   mobileHotspots.forEach(el=>{
     const key=el.dataset.person;
-    el.addEventListener('click',()=>open(key));
+    el.addEventListener('click',()=>{visitedCounselors.add(key);if(visitedCounselors.size===4)revealLetter();open(key);});
   });
   hitImages.forEach(item=>{
     item.el.style.pointerEvents='auto';
@@ -2352,11 +2389,13 @@ main {
     item.el.addEventListener('click',e=>{
       e.preventDefault();
       e.stopPropagation();
+      visitedCounselors.add(item.key);if(visitedCounselors.size===4)revealLetter();
       open(item.key);
     });
     item.el.addEventListener('keydown',e=>{
       if(e.key==='Enter' || e.key===' '){
         e.preventDefault();
+        visitedCounselors.add(item.key);if(visitedCounselors.size===4)revealLetter();
         open(item.key);
       }
     });
@@ -2714,6 +2753,7 @@ render();
         <strong>Что такое горизонтики?</strong>
         <p>Это валюта лагеря «Горизонт». Зарабатывай её за игры, достижения и участие в мероприятиях, а потом обменивай на мерч и подарки в лагерном магазине!</p>
       </div>
+      <section id="gorizont-nickname-editor" style="margin:18px 0;padding:14px;border:1px solid #e2d2ad;border-radius:16px;background:#fff9ec"><h4 style="margin:0 0 8px;color:#315846">Игровой ник</h4><form id="gorizont-nickname-form" style="display:flex;gap:8px;flex-wrap:wrap"><input id="gorizont-nickname-input" minlength="2" maxlength="30" required aria-label="Новый игровой ник" style="flex:1;min-width:150px;padding:10px;border:1px solid #d8e0d7;border-radius:10px"><button type="submit" style="border:0;border-radius:10px;padding:10px 14px;background:#315846;color:white;font-weight:700">Сохранить</button></form><small id="gorizont-nickname-status">Ник должен быть корректным и доброжелательным.</small></section>
       <section id="gorizont-achievements" style="margin:18px 0;padding:16px;border:1px solid #e2d2ad;border-radius:18px;background:#fff9ec">
         <h4 style="margin:0 0 10px;color:#315846">Мои достижения</h4>
         <p style="margin:0 0 12px;font-size:13px;color:#76644c">Открывай значки за игры и собирай горизонтики.</p>
@@ -2729,7 +2769,7 @@ render();
         <h5 style="margin:14px 0 8px;color:#315846">Входящие заявки</h5>
         <div id="gorizont-friend-incoming"><p style="font-size:13px">Загружаем…</p></div>
         <h5 style="margin:14px 0 8px;color:#315846">Мои друзья</h5>
-        <div id="gorizont-friend-list"><p style="font-size:13px">Загружаем…</p></div>
+        <div id="gorizont-friend-list"><p style="font-size:13px">Загружаем…</p></div><div id="gorizont-friend-progress" style="margin-top:12px"></div>
       </section>
       <section class="auth-points-history" aria-live="polite">
         <h4>История операций</h4>
@@ -2743,7 +2783,7 @@ render();
     </div>
     <form class="auth-form" id="authRegisterForm">
       <label>Имя и фамилия<input name="full_name" autocomplete="name" placeholder="Например, Маша Иванова" required maxlength="100"></label>
-      <label>Твой игровой ник<input name="nickname" autocomplete="nickname" placeholder="Как тебя будут видеть друзья?" required maxlength="40"></label>
+      <label>Твой игровой ник<input name="nickname" autocomplete="nickname" placeholder="Как тебя будут видеть друзья?" required minlength="2" maxlength="30"></label><p class="auth-legal" style="margin:-6px 0 8px">Никнейм увидят другие участники. Используй доброжелательное имя без оскорблений, мата, угроз, личных данных и неприличных выражений. Его можно будет изменить в профиле.</p>
       <label>Логин<input name="username" autocomplete="username" placeholder="Латинские буквы и цифры" required minlength="3" maxlength="24" pattern="[a-zA-Z0-9_]+"></label>
       <label>Пароль<input name="password" type="password" autocomplete="new-password" placeholder="Не менее 10 символов" required minlength="10"></label>
       <button class="auth-submit" type="submit">Создать аккаунт <span>→</span></button>
