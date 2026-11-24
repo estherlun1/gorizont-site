@@ -1,4 +1,4 @@
-name: Export site images as WebP
+name: Export PNG images as WebP
 on:
   push:
     paths:
@@ -6,7 +6,6 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
-  actions: write
 jobs:
   export:
     runs-on: ubuntu-latest
@@ -15,63 +14,42 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Convert raster images
+      - name: Convert PNG files only
         run: |
           python -m pip install --quiet pillow
           python - <<'PY'
           from pathlib import Path
           from PIL import Image
-          import zipfile, shutil
+          import zipfile
           root = Path(".")
-          out = Path("webp-export")
+          out = Path("png-to-webp")
           out.mkdir(exist_ok=True)
           converted = 0
-          copied = 0
-          skipped = 0
-          for p in root.rglob("*"):
-              if not p.is_file() or ".git" in p.parts or "webp-export" in p.parts:
-                  continue
-              ext = p.suffix.lower()
-              if ext not in {".png", ".jpg", ".jpeg", ".bmp", ".tif", ".tiff", ".gif", ".webp"}:
+          for p in root.rglob("*.png"):
+              if ".git" in p.parts or "png-to-webp" in p.parts:
                   continue
               rel = p.relative_to(root)
               dest = (out / rel).with_suffix(".webp")
               dest.parent.mkdir(parents=True, exist_ok=True)
-              try:
-                  with Image.open(p) as im:
-                      if getattr(im, "is_animated", False):
-                          frames = []
-                          durations = []
-                          for frame in range(im.n_frames):
-                              im.seek(frame)
-                              frames.append(im.convert("RGBA" if "A" in im.getbands() else "RGB").copy())
-                              durations.append(im.info.get("duration", 100))
-                          frames[0].save(dest, "WEBP", save_all=True, append_images=frames[1:], duration=durations, loop=im.info.get("loop", 0), quality=88, method=6)
-                      else:
-                          im.save(dest, "WEBP", quality=88, method=6)
-                  converted += 1
-              except Exception as e:
-                  skipped += 1
-                  print(f"SKIPPED {rel}: {e}")
-          readme = out / "README.txt"
-          readme.write_text(
-              "Экспорт изображений сайта Горизонт в WebP.\n"
-              "Структура папок сохранена; исходные файлы сайта не изменялись.\n"
-              "SVG-файлы не включены, так как это векторная графика и WebP для них не требуется.\n"
-              f"Файлов WebP: {converted}; пропущено: {skipped}.\n"
-              "При замене в проекте обновляйте ссылки/расширения .png/.jpg на .webp там, где это необходимо.\n",
+              with Image.open(p) as im:
+                  # Keep transparency and full image dimensions.
+                  im.save(dest, "WEBP", lossless=True, method=6)
+              converted += 1
+          (out / "README.txt").write_text(
+              "Конвертация только исходных PNG-файлов сайта Горизонт в WebP.\\n"
+              "Сохранена структура папок. Изображения записаны без потерь (lossless), прозрачность сохранена.\\n"
+              "Исходные PNG и файлы сайта не изменялись.\\n"
+              f"Конвертировано PNG: {converted}.\\n",
               encoding="utf-8"
           )
-          with zipfile.ZipFile("gorizont-site-webp.zip", "w", zipfile.ZIP_DEFLATED) as z:
+          with zipfile.ZipFile("gorizont-png-to-webp.zip", "w", zipfile.ZIP_DEFLATED) as z:
               for f in out.rglob("*"):
                   if f.is_file():
                       z.write(f, f.relative_to(out))
-          print(f"Created archive; converted={converted}, skipped={skipped}")
+          print(f"Converted {converted} PNG files.")
           PY
       - uses: actions/upload-artifact@v4
         with:
-          name: gorizont-site-webp
-          path: gorizont-site-webp.zip
+          name: gorizont-png-to-webp
+          path: gorizont-png-to-webp.zip
           retention-days: 7
-
-# trigger export job
