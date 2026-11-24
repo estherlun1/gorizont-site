@@ -225,7 +225,7 @@ function renderItems(){const box=document.getElementById('items');box.innerHTML=
 document.querySelectorAll('[data-character]').forEach(b=>b.onclick=()=>showGame(b.dataset.character));document.querySelectorAll('[data-switch]').forEach(b=>b.onclick=()=>setCharacter(b.dataset.switch));document.querySelectorAll('[data-kind]').forEach(b=>b.onclick=()=>{kind=b.dataset.kind;renderItems()});
 
 document.getElementById('randomLook').onclick=()=>{const r=n=>Math.floor(Math.random()*n);chosen.topKind=Math.random()<.5?'shirts':'hoodies';chosen.top=r(12);chosen.pants=r(6);chosen.shoes=r(10);kind=chosen.topKind;renderItems();draw()};
-document.getElementById('finish').onclick=()=>{document.getElementById('game').classList.add('hidden');document.getElementById('result').classList.remove('hidden');renderPersonality();draw()};
+document.getElementById('finish').onclick=()=>{window.GorizontAchievements?.track('character_completed');document.getElementById('game').classList.add('hidden');document.getElementById('result').classList.remove('hidden');renderPersonality();draw()};
 document.getElementById('again').onclick=()=>{chosen={top:null,topKind:null,pants:null,shoes:null};kind='shirts';document.getElementById('result').classList.add('hidden');document.getElementById('game').classList.remove('hidden');renderItems();draw()};
 document.getElementById('backToSite')?.addEventListener('click',()=>{if(history.length>1)history.back();else location.href='../index.html'});
 
@@ -297,6 +297,7 @@ saveAvatarButton.addEventListener('click', async ()=>{
     };
     const {error:updateError}=await supabase.from('participants').update({avatar_url:avatarUrl,avatar_config:avatarConfig}).eq('id',session.user.id);
     if(updateError) throw updateError;
+    window.GorizontAchievements?.track('avatar_saved');
     renderPersonality();
     saveAvatarButton.textContent='Аватарка сохранена ✓';
     window.dispatchEvent(new CustomEvent('gorizont:avatar-updated',{detail:{avatar_url:avatarUrl,avatar_config:avatarConfig}}));
@@ -341,4 +342,5 @@ async function restoreSavedAvatar(){
   }catch(error){console.warn('Не удалось загрузить сохранённый образ:',error)}
 }
 [...DATA.pants,...DATA.shoes,...DATA.shirts,...DATA.hoodies,Object.values(DATA.bases),Object.values(DATA.shirtHeads),...Object.values(DATA.hoodieHeads)].flat().forEach(image);renderItems();draw();renderPersonality();restoreSavedAvatar();
-</script></body></html>
+</script><script type="module" src="../achievement-tracker.js"></script>
+</body></html>
