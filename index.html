@@ -2560,6 +2560,7 @@ render();
 })();
 </script>
 
+<script src="personality-texts.js"></script>
 <script>
 (function(){
  const host=document.getElementById('daySignHotspots'), image=document.getElementById('dayHorizonImage'); if(!host||!image)return;
@@ -2578,7 +2579,7 @@ render();
  function close(){modal.classList.remove('open');shade.classList.remove('open')}
  document.getElementById('daySignClose').addEventListener('click',close);shade.addEventListener('click',close);document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
  const oldShow=window.__gorizontDayShow;
- function render(){const n=Number((image.getAttribute('src').match(/0([1-7])-/)||[])[1]||1);host.innerHTML='';(sets[n]||[]).forEach(o=>{const b=document.createElement('button');b.className='day-sign-hit';b.type='button';b.style.left=o.x+'%';b.style.top=o.y+'%';b.style.width=o.w+'%';b.style.height=o.h+'%';b.setAttribute('aria-label',o.t);b.title=o.t;b.addEventListener('click',()=>{title.textContent=o.t;text.textContent=o.d;modal.classList.add('open');shade.classList.add('open')});host.appendChild(b)});}
+ function render(){const n=Number((image.getAttribute('src').match(/0([1-7])-/)||[])[1]||1);host.innerHTML='';(sets[n]||[]).forEach(o=>{const b=document.createElement('button');b.className='day-sign-hit';b.type='button';b.style.left=o.x+'%';b.style.top=o.y+'%';b.style.width=o.w+'%';b.style.height=o.h+'%';b.setAttribute('aria-label',o.t);b.title=o.t;b.addEventListener('click',()=>{title.textContent=o.t;text.textContent=(window.GorizontPersonalityText?window.GorizontPersonalityText.intro()+' ':'')+o.d;modal.classList.add('open');shade.classList.add('open')});host.appendChild(b)});}
  new MutationObserver(render).observe(image,{attributes:true,attributeFilter:['src']});render();
  // Different bedtime story each time the final scene is opened.
  const bedtime=['Жил-был маленький светлячок, который боялся темноты. Однажды он понял: даже крошечного огонька достаточно, чтобы помочь другу найти дорогу домой.','На краю леса жил ёжик, собиравший хорошие воспоминания вместо яблок. Перед сном он вспоминал смех друзей — и ему снились самые добрые приключения.','Однажды звёзды устроили перекличку над лагерем. Самая маленькая звёздочка опоздала, потому что задержалась послушать песни у костра. С тех пор она каждую ночь первой загорается над «Горизонтом».'];
