@@ -251,14 +251,14 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
     if (signedIn) {
       profileName.textContent = participant.full_name || participant.nickname || "Участник Горизонта";
       profileNick.textContent = `Игровой ник: ${participant.nickname || "—"} · Логин: ${participant.username || "—"}`;
-      const personalityNames = {explorer:"Исследователь",creator:"Творец",energizer:"Энерджайзер",social:"Душа компании",guardian:"Хранитель",inventor:"Изобретатель"};
+      const personalityNames = {explorer:"Исследователь",creator:"Творец",energizer:"Энерджайзер",social:"Душа компании",guardian:"Хранитель",inventor:"Изобретатель",positive:"Позитивный",dreamy:"Мечтательный",sociable:"Общительный",calm:"Спокойный",shy:"Застенчивый",cheerful:"Весёлый",thoughtful:"Задумчивый",mischievous:"Озорной",determined:"Решительный",curious:"Любопытный"};
       const heroPersonality = participant.avatar_config?.personality;
       if(heroCard){
         const valid = heroPersonality?.primary && heroPersonality?.secondary && personalityNames[heroPersonality.primary] && personalityNames[heroPersonality.secondary];
         heroCard.hidden = !valid;
         if(valid){
           heroPrimary.textContent = personalityNames[heroPersonality.primary];
-          heroSecondary.textContent = "Дополнительный характер: " + personalityNames[heroPersonality.secondary];
+          heroSecondary.textContent = "Дополнительная черта: " + personalityNames[heroPersonality.secondary];
           const changedAt = participant.avatar_config?.personality_changed_at;
           if(changedAt){
             const next = new Date(changedAt); const day = next.getDate(); next.setDate(1); next.setMonth(next.getMonth()+1); next.setDate(Math.min(day,new Date(next.getFullYear(),next.getMonth()+1,0).getDate()));
