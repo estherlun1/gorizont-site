@@ -288,6 +288,8 @@ packedItems = [];
       conf.appendChild(s);
     }
     win.hidden = false;
+    var winMessage = $('winMessage');
+    if (winMessage && window.GorizontPersonalityText) winMessage.textContent = window.GorizontPersonalityText.win();
     submitBackpackResult();
     $('again').focus();
   }
