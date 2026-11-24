@@ -2713,6 +2713,23 @@ render();
         <strong>Что такое горизонтики?</strong>
         <p>Это валюта лагеря «Горизонт». Зарабатывай её за игры, достижения и участие в мероприятиях, а потом обменивай на мерч и подарки в лагерном магазине!</p>
       </div>
+      <section id="gorizont-achievements" style="margin:18px 0;padding:16px;border:1px solid #e2d2ad;border-radius:18px;background:#fff9ec">
+        <h4 style="margin:0 0 10px;color:#315846">Мои достижения</h4>
+        <p style="margin:0 0 12px;font-size:13px;color:#76644c">Открывай значки за игры и собирай горизонтики.</p>
+        <div id="gorizont-achievement-list" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px"><p>Загружаем достижения…</p></div>
+      </section>
+      <section id="gorizont-friends" style="margin:18px 0;padding:16px;border:1px solid #d3e1d2;border-radius:18px;background:#f5fbf3">
+        <h4 style="margin:0 0 10px;color:#315846">Друзья</h4>
+        <form id="gorizont-friend-search" style="display:flex;gap:8px;margin-bottom:12px">
+          <input id="gorizont-friend-query" type="search" minlength="2" placeholder="Найти по игровому нику" aria-label="Найти друга по нику" style="flex:1;min-width:0;padding:11px;border:1px solid #cbd8c7;border-radius:12px">
+          <button type="submit" style="padding:10px 14px;border:0;border-radius:12px;background:#315846;color:white;font-weight:700">Найти</button>
+        </form>
+        <div id="gorizont-friend-search-results" aria-live="polite"></div>
+        <h5 style="margin:14px 0 8px;color:#315846">Входящие заявки</h5>
+        <div id="gorizont-friend-incoming"><p style="font-size:13px">Загружаем…</p></div>
+        <h5 style="margin:14px 0 8px;color:#315846">Мои друзья</h5>
+        <div id="gorizont-friend-list"><p style="font-size:13px">Загружаем…</p></div>
+      </section>
       <section class="auth-points-history" aria-live="polite">
         <h4>История операций</h4>
         <div id="authPointsHistory"><p class="auth-history-empty">Загружаем историю...</p></div>
