@@ -23,3 +23,4 @@ async function track(event){
 }
 window.GorizontAchievements={track};
 window.addEventListener("gorizont:map-hunt-completed",()=>track("map_run_completed"));
+document.addEventListener("click",event=>{if(event.target.closest(".camp-hotspot-fire"))track("fires_button_clicked");});
