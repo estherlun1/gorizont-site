@@ -26,13 +26,13 @@ const levels = [
     imageB: 'assets/find-difference/level-1-b.webp',
     alt: 'Домик у озера',
     spots: [
-      { id: 1, x: 37, y: 32, label: 'Крыша домика' },
+      { id: 1, x: 37, y: 27, label: 'Крыша домика' },
       { id: 2, x: 16, y: 70, label: 'Рюкзак у забора' },
-      { id: 3, x: 75, y: 75, label: 'Лодка у причала' },
-      { id: 4, x: 13, y: 10, label: 'Птица на ветке' },
-      { id: 5, x: 17, y: 53, label: 'Столик у дома' },
-      { id: 6, x: 92, y: 14, label: 'Чайки' },
-      { id: 7, x: 24, y: 90, label: 'Цветы у камней' }
+      { id: 3, x: 78, y: 75, label: 'Лодка у причала' },
+      { id: 4, x: 20, y: 13, label: 'Птица на ветке' },
+      { id: 5, x: 24, y: 54, scale: 0.72, label: 'Столик у дома' },
+      { id: 6, x: 92, y: 9, label: 'Чайки' },
+      { id: 7, x: 28, y: 93, label: 'Цветы у камней' }
     ]
   },
   {
@@ -60,7 +60,7 @@ const levels = [
     imageB: 'assets/find-difference/level-3-b.webp',
     alt: 'Дети на рыбацком мостике у озера',
     spots: [
-      { id: 1, x: 88, y: 80, label: 'Лодка у причала' },
+      { id: 1, x: 88, y: 77, label: 'Лодка у причала' },
       { id: 2, x: 8, y: 63, label: 'Рюкзак у дерева' },
       { id: 3, x: 76, y: 72, label: 'Спасательный круг' },
       { id: 4, x: 49, y: 73, label: 'Ведро на мостике' },
@@ -79,12 +79,12 @@ const levels = [
     alt: 'Дети проходят верёвочный маршрут среди деревьев',
     spots: [
       { id: 1, x: 61, y: 10, label: 'Птица в небе' },
-      { id: 2, x: 51, y: 29, label: 'Флажок на гирлянде' },
+      { id: 2, x: 51, y: 29, scale: 0.72, label: 'Флажок на гирлянде' },
       { id: 3, x: 70, y: 51, label: 'Парусник на озере' },
-      { id: 4, x: 8, y: 80, label: 'Рюкзак у дерева' },
+      { id: 4, x: 11, y: 80, label: 'Рюкзак у дерева' },
       { id: 5, x: 11, y: 94, label: 'Цветок у камней' },
       { id: 6, x: 68, y: 86, label: 'Компас на карте' },
-      { id: 7, x: 82, y: 81, label: 'Термос на столе' }
+      { id: 7, x: 85, y: 81, label: 'Термос на столе' }
     ]
   }
 ];
@@ -122,6 +122,7 @@ function render() {
       button.type = 'button';
       button.style.left = `${spot.x}%`;
       button.style.top = `${spot.y}%`;
+      if (spot.scale) button.style.setProperty('--spot-scale', spot.scale);
       button.setAttribute('aria-label', `Проверить отличие: ${spot.label}`);
       button.title = spot.label;
       button.addEventListener('click', () => checkSpot(spot));
