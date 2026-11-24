@@ -1,6 +1,9 @@
 name: Convert site PNG assets to WebP
 
 on:
+  push:
+    paths:
+      - '.github/workflows/export-webp.yml'
   workflow_dispatch:
 
 permissions:
