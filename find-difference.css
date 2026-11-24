@@ -10,7 +10,7 @@ body{font-family:"Trebuchet MS",Arial,sans-serif;color:var(--ink)}button,a{font:
 .back-link{position:absolute;z-index:10;left:1.3%;top:1.3%;color:#fff8df;text-decoration:none;background:#204b3bdb;border:1px solid #f4d79c;padding:.55em .9em;border-radius:22px;font-size:clamp(10px,.8vw,15px);font-weight:800}
 .pictures{position:absolute;left:15.85%;top:26.9%;width:67.05%;height:40.3%;display:grid;grid-template-columns:1fr 1fr;gap:2.15%}
 .picture-wrap{position:relative;min-width:0;min-height:0;overflow:hidden;border-radius:clamp(8px,.9vw,17px);background:#fbe9c1}
-.picture-wrap img{display:block;width:100%;height:100%;object-fit:cover;user-select:none;-webkit-user-drag:none}
+.picture-wrap img{display:block;width:100%;height:100%;object-fit:contain;user-select:none;-webkit-user-drag:none;pointer-events:none}
 .picture-label{position:absolute;left:1.3%;top:1.5%;z-index:3;width:clamp(20px,2vw,36px);aspect-ratio:1;display:grid;place-items:center;border-radius:50%;background:#fff0c9;border:2px solid #b77b39;font-weight:900;font-size:clamp(10px,.9vw,16px)}
 .hotspots{position:absolute;inset:0}
 .spot{position:absolute;transform:translate(-50%,-50%);width:clamp(24px,3vw,54px);aspect-ratio:1;border:3px solid transparent;border-radius:50%;background:transparent;cursor:pointer;padding:0;z-index:4}
