@@ -104,7 +104,7 @@ function render() {
   rewardRequestStarted = false;
   const level = levels[levelIndex];
   $('#level-title').textContent = level.title;
-  $('.instruction').textContent = level.instruction;
+  $('.instruction').textContent = (window.GorizontPersonalityText ? window.GorizontPersonalityText.instruction()+' ' : '') + level.instruction;
   $('#total-count').textContent = level.total;
   count.textContent = found.size;
   const images = $$('.picture-wrap img');
@@ -144,7 +144,7 @@ function checkSpot(spot) {
   if (found.size === levels[levelIndex].total) {
     status.textContent = 'Все отличия найдены!';
     $('#win-title').textContent = `Ура, уровень «${levels[levelIndex].title}» пройден!`;
-    if (window.GorizontPersonalityText) $('#win-message').textContent = window.GorizontPersonalityText.win();
+    if (window.GorizontPersonalityText) $('#win-personality').textContent = window.GorizontPersonalityText.win();
     $('#win-message').textContent = levelIndex < levels.length - 1
       ? 'Отличная работа! Готов попробовать следующий сюжет?'
       : 'Ты прошёл все доступные уровни. Скоро добавим новые приключения!';
