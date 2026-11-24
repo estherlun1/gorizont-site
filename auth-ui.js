@@ -261,7 +261,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
           heroSecondary.textContent = "Дополнительный характер: " + personalityNames[heroPersonality.secondary];
           const changedAt = participant.avatar_config?.personality_changed_at;
           if(changedAt){
-            const next = new Date(changedAt); next.setMonth(next.getMonth()+1);
+            const next = new Date(changedAt); const day = next.getDate(); next.setDate(1); next.setMonth(next.getMonth()+1); next.setDate(Math.min(day,new Date(next.getFullYear(),next.getMonth()+1,0).getDate()));
             heroNextChange.textContent = "Характер можно будет изменить с " + next.toLocaleDateString("ru-RU",{day:"numeric",month:"long"}) + ".";
           }else heroNextChange.textContent = "Ты можешь выбрать новый характер в конструкторе героя.";
         }
