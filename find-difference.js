@@ -144,6 +144,7 @@ function checkSpot(spot) {
   if (found.size === levels[levelIndex].total) {
     status.textContent = 'Все отличия найдены!';
     $('#win-title').textContent = `Ура, уровень «${levels[levelIndex].title}» пройден!`;
+    if (window.GorizontPersonalityText) $('#win-message').textContent = window.GorizontPersonalityText.win();
     $('#win-message').textContent = levelIndex < levels.length - 1
       ? 'Отличная работа! Готов попробовать следующий сюжет?'
       : 'Ты прошёл все доступные уровни. Скоро добавим новые приключения!';
