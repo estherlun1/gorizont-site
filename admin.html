@@ -44,7 +44,7 @@ form{display:grid;gap:12px;max-width:420px}.field{display:grid;gap:6px}.hidden{d
 <h1>Участники лагеря</h1>
 <p class="muted">Найди участника по имени или логину и при необходимости выдай временный пароль. Он действует 24 часа и требует обязательной смены при входе.</p>
 <div class="toolbar"><input id="search" type="search" placeholder="Поиск по имени или логину"><button id="refresh" class="secondary" type="button">Обновить список</button><button id="logout" class="secondary" type="button">Выйти</button></div>
-<div class="table-wrap"><table><thead><tr><th>Участник</th><th>Логин</th><th>Статус пароля</th><th>Действие</th></tr></thead><tbody id="participants"></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>Участник</th><th>Игровой ник</th><th>Логин</th><th>Статус пароля</th><th>Действие</th></tr></thead><tbody id="participants"></tbody></table></div>
 <div id="passwordResult" class="hidden"><strong>Временный пароль создан</strong><p class="muted">Передай его участнику лично. Он будет показан только сейчас.</p><div id="temporaryPassword" class="password"></div><p id="expiry" class="muted"></p><button id="copyPassword" type="button">Скопировать пароль</button></div>
 <div id="dashboardStatus" role="status"></div>
 </section>
@@ -85,11 +85,12 @@ function render(){
  for(const p of filtered){
   const tr=document.createElement("tr");
   const name=document.createElement("td");name.textContent=p.full_name+(p.nickname?" · "+p.nickname:"");
+  const nick=document.createElement("td");const nickInput=document.createElement("input");nickInput.value=p.nickname||"";nickInput.maxLength=30;nickInput.style.minWidth="140px";nickInput.setAttribute("aria-label","Игровой ник");nick.append(nickInput);
   const login=document.createElement("td");login.textContent=p.username;
   const state=document.createElement("td");const pill=document.createElement("span");pill.className="status-pill"+(p.must_change_password?" warn":"");pill.textContent=p.must_change_password?"Ожидает смены пароля":"Обычный пароль";state.append(pill);
   const action=document.createElement("td");const wrap=document.createElement("div");wrap.className="row-actions";const btn=document.createElement("button");btn.type="button";btn.textContent="Сбросить пароль";btn.addEventListener("click",()=>reset(p.username,btn));wrap.append(btn);action.append(wrap);tr.append(name,login,state,action);body.append(tr);
  }
- if(!filtered.length){const tr=document.createElement("tr");const td=document.createElement("td");td.colSpan=4;td.textContent="Ничего не найдено.";tr.append(td);body.append(tr);}
+ if(!filtered.length){const tr=document.createElement("tr");const td=document.createElement("td");td.colSpan=5;td.textContent="Ничего не найдено.";tr.append(td);body.append(tr);}
 }
 async function reset(username,button){
  if(!confirm("Создать новый временный пароль для "+username+"? Старый пароль перестанет работать.")) return;
