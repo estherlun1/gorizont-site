@@ -2613,28 +2613,30 @@ render();
   if(e.pointerType==='mouse'&&e.button!==0)return;
   dragStartX=e.clientX;dragStartY=e.clientY;dragStartOffset=-index*stepWidth();
   dragging=true;dragMoved=false;horizontalGesture=false;
+  try{viewport.setPointerCapture(e.pointerId);}catch(_){}
  });
  window.addEventListener('pointermove',e=>{
   if(!dragging)return;
   const dx=e.clientX-dragStartX,dy=e.clientY-dragStartY;
-  if(!horizontalGesture&&Math.max(Math.abs(dx),Math.abs(dy))>8){
-   if(Math.abs(dx)<=Math.abs(dy)*1.2){dragging=false;return;}
+  if(!horizontalGesture&&Math.max(Math.abs(dx),Math.abs(dy))>6){
+   if(Math.abs(dx)<=Math.abs(dy)*1.15){dragging=false;return;}
    horizontalGesture=true;viewport.classList.add('is-dragging');
   }
   if(!horizontalGesture)return;
+  e.preventDefault();
   dragMoved=true;
-  const max=0,min=-maxIndex()*stepWidth();
-  const raw=dragStartOffset+dx;
-  const resisted=raw>max?max+(raw-max)*.22:raw<min?min+(raw-min)*.22:raw;
-  track.style.transform='translateX('+resisted+'px)';
- });
+  track.style.transform='translateX('+(dragStartOffset+dx)+'px)';
+ },{passive:false});
  function finishDrag(e){
   if(!dragging&&!horizontalGesture)return;
   const dx=e.clientX-dragStartX;
   dragging=false;viewport.classList.remove('is-dragging');
-  if(horizontalGesture&&Math.abs(dx)>35){index+=dx<0?1:-1;}
+  if(horizontalGesture&&Math.abs(dx)>28){
+   const steps=Math.max(1,Math.round(Math.abs(dx)/Math.max(1,stepWidth())));
+   index+=dx<0?steps:-steps;
+  }
   render();
-  if(dragMoved){ignoreClickUntil=Date.now()+350;}
+  if(dragMoved){ignoreClickUntil=Date.now()+400;}
   horizontalGesture=false;
  }
  window.addEventListener('pointerup',finishDrag);
