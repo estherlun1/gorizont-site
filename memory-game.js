@@ -163,6 +163,7 @@ function finish(){
  $("resultTitle").textContent=percent===1?"Безупречная память!":percent>=.7?"Отличная память!":percent>=.4?"Хорошая попытка!":"Попробуй ещё раз!";
  $("resultSubtitle").textContent=`Сюжет: ${scene.title}. Уровень: ${LEVELS[levelKey].label}. Ты ответил правильно на ${score} из ${total} вопросов.`;
  $("resultScore").textContent=`${score} / ${total}`;
+ if (window.GorizontPersonalityText) $("resultSubtitle").textContent += " "+window.GorizontPersonalityText.win();
  const rewardStatus=$("resultSubtitle"); rewardStatus.textContent += " Проверяем результат…"; submitDailyReward("memory_"+levelKey,score,rewardStatus);
  const list=$("reviewList");list.replaceChildren();
  questions.forEach((q,i)=>{const item=document.createElement("div");item.className="review-item";const title=document.createElement("b");title.textContent=`${i+1}. ${q.q}`;const answer=document.createElement("div");answer.textContent=`Правильный ответ: ${q.a[q.correct]}. ${q.why}`;item.append(title,answer);list.appendChild(item);});
