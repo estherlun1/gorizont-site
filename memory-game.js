@@ -98,20 +98,23 @@ const SCENES = [
 
 ];
 const LEVELS = {
- easy:{label:"Лёгкий",seconds:60,count:5},
- medium:{label:"Средний",seconds:45,count:8},
- hard:{label:"Сложный",seconds:30,count:10}
+ easy:{label:"Лёгкий",seconds:90,count:5},
+ medium:{label:"Средний",seconds:90,count:8},
+ hard:{label:"Сложный",seconds:90,count:10}
 };
 const $=id=>document.getElementById(id);
 const screens=["startScreen","memoryScreen","quizScreen","resultScreen"];
-let levelKey="medium",scene=null,questions=[],index=0,score=0,timerId=null,remaining=0,locked=false,lastSceneKey=null;
+let levelKey="medium",scene=null,questions=[],index=0,score=0,timerId=null,remaining=0,locked=false;
 function show(id){screens.forEach(x=>$(x).classList.toggle("hidden",x!==id));window.scrollTo({top:0,behavior:"smooth"});}
 function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function formatTime(s){return `00:${String(s).padStart(2,"0")}`;}
 function chooseScene(){
- const options=SCENES.filter(x=>x.key!==lastSceneKey);
- scene=options[Math.floor(Math.random()*options.length)]||SCENES[0];
- lastSceneKey=scene.key;
+ // Один и тот же сюжет для всех игроков в течение московского календарного дня.
+ const parts=new Intl.DateTimeFormat("en-CA",{timeZone:"Europe/Moscow",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date());
+ const dateKey=parts.find(x=>x.type==="year").value+parts.find(x=>x.type==="month").value+parts.find(x=>x.type==="day").value;
+ let hash=2166136261;
+ for(let i=0;i<dateKey.length;i++){hash^=dateKey.charCodeAt(i);hash=Math.imul(hash,16777619);}
+ scene=SCENES[(hash>>>0)%SCENES.length];
  $("memoryScreen").querySelector(".art").src=scene.image;
 }
 function start(level){
