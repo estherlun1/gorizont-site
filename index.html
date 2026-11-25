@@ -2823,5 +2823,14 @@ render();
 }
 @media(min-width:601px){#mysteryLetterTrigger{position:absolute}}
 </style>
+<style>
+#gamesScene .games-arrow-hit{display:grid;place-items:center;width:5.2%;height:15%;top:48%;border:2px solid #b77c43;border-radius:50%;background:linear-gradient(145deg,#fff2d4,#e7bd7e);box-shadow:0 4px 0 #8b572d,0 6px 14px #34200f55;color:#5a351c;text-indent:0;z-index:12}
+#gamesScene .games-arrow-hit::before{font:900 clamp(24px,3vw,42px)/1 Georgia,serif}
+#gamesScene .games-arrow-hit.prev::before{content:'‹'}
+#gamesScene .games-arrow-hit.next::before{content:'›'}
+#gamesScene .games-arrow-hit.prev{left:2%}
+#gamesScene .games-arrow-hit.next{right:2%}
+@media(max-width:850px){#gamesScene .games-arrow-hit{width:9%;height:14%;top:47%;background:linear-gradient(145deg,#fff1d2,#dcae6b)}}
+</style>
 </body>
 </html>
