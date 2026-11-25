@@ -92,6 +92,24 @@ const levels = [
 let levelIndex = 0;
 let found = new Set();
 let hintTimer = null;
+let hintsUsed = 0;
+let hintAttemptId = makeHintId();
+let pendingHintRequest = null;
+function makeHintId() {
+  return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : "hint-" + Date.now() + "-" + Math.random().toString(36).slice(2);
+}
+function nextHintCost() {
+  return hintsUsed < 2 ? 0 : hintsUsed < 5 ? 5 : 10;
+}
+function syncHintButton() {
+  const button = $('#hint-btn');
+  if (!button) return;
+  const cost = nextHintCost();
+  const number = hintsUsed + 1;
+  button.textContent = cost === 0
+    ? "Подсказка · бесплатно (" + number + "/2)"
+    : "Подсказка · " + cost + " горизонтиков";
+}
 let rewardRequestStarted = false;
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -102,6 +120,10 @@ const nextButton = $('#next-level-btn');
 
 function render() {
   rewardRequestStarted = false;
+  hintsUsed = 0;
+  hintAttemptId = makeHintId();
+  pendingHintRequest = null;
+  syncHintButton();
   const level = levels[levelIndex];
   $('#level-title').textContent = level.title;
   $('.instruction').textContent = (window.GorizontPersonalityText ? window.GorizontPersonalityText.instruction()+' ' : '') + level.instruction;
@@ -184,16 +206,72 @@ nextButton.addEventListener('click', () => {
   found.clear();
   render();
 });
-$('#hint-btn').addEventListener('click', () => {
+async function showNextHint() {
   const remaining = levels[levelIndex].spots.filter((spot) => !found.has(spot.id));
   if (!remaining.length) return;
+  const nextNumber = hintsUsed + 1;
+  const cost = nextHintCost();
+
+  if (cost > 0) {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session?.access_token) {
+      status.textContent = "Первые две подсказки бесплатны. Для следующих войди в аккаунт: они стоят 5, затем 10 горизонтиков.";
+      return;
+    }
+    if (!pendingHintRequest) {
+      pendingHintRequest = {
+        idempotency_key: makeHintId(),
+        hint_number: nextNumber
+      };
+    }
+    const button = $('#hint-btn');
+    button.disabled = true;
+    try {
+      const response = await fetch(SUPABASE_URL + "/functions/v1/use-game-hint", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_PUBLISHABLE_KEY,
+          "Authorization": "Bearer " + session.access_token
+        },
+        body: JSON.stringify({
+          game_slug: "find_difference_" + (levelIndex + 1),
+          attempt_id: hintAttemptId,
+          hint_number: pendingHintRequest.hint_number,
+          idempotency_key: pendingHintRequest.idempotency_key
+        })
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error || "Не удалось применить подсказку.");
+      if (result.status === "insufficient_funds") {
+        status.textContent = "Не хватает горизонтиков: следующая подсказка стоит " + result.cost + ", а у тебя " + result.balance + ".";
+        return;
+      }
+      hintsUsed = Math.max(hintsUsed, Number(result.hint_number) || nextNumber);
+      pendingHintRequest = null;
+      syncHintButton();
+      status.textContent = "Списано " + (result.cost || 0) + " горизонтиков. Осталось: " + result.balance + ".";
+    } catch (error) {
+      status.textContent = error.message || "Не удалось применить подсказку. Попробуй ещё раз.";
+      return;
+    } finally {
+      button.disabled = false;
+    }
+  } else {
+    hintsUsed = nextNumber;
+    syncHintButton();
+    status.textContent = "Подсказка " + nextNumber + " из 2 — бесплатно.";
+  }
+
   const target = remaining[0];
-  $$('.hotspots .spot').forEach((button, index) => {
+  $('.hotspots .spot').forEach((button, index) => {
     if (levels[levelIndex].spots[index]?.id === target.id) button.classList.add('hint');
   });
-  status.textContent = `Подсказка: присмотрись к области «${target.label}».`;
+  const prefix = cost > 0 ? "Подсказка применена. " : "";
+  status.textContent = prefix + "Присмотрись к области «" + target.label + "».";
   clearTimeout(hintTimer);
-  hintTimer = setTimeout(() => $$('.spot.hint').forEach((button) => button.classList.remove('hint')), 1800);
-});
+  hintTimer = setTimeout(() => $('.spot.hint').forEach((button) => button.classList.remove('hint')), 1800);
+}
+$('#hint-btn').addEventListener('click', showNextHint);
 
 render();
