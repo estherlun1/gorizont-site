@@ -2666,7 +2666,7 @@ render();
  let dragStartX=0,dragStartY=0,dragStartOffset=0,dragging=false,dragMoved=false,horizontalGesture=false,ignoreClickUntil=0;
  viewport.querySelectorAll('img').forEach(img=>{img.draggable=false;img.addEventListener('dragstart',e=>e.preventDefault());});
  viewport.addEventListener('pointerdown',e=>{
-  if(e.pointerType==='mouse'&&e.button!==0)return;
+  if(e.pointerType==='mouse')return;
   dragStartX=e.clientX;dragStartY=e.clientY;dragStartOffset=-index*stepWidth();
   dragging=true;dragMoved=false;horizontalGesture=false;
   // Не захватываем указатель контейнером: иначе браузер может потерять исходную ссылку карточки,
