@@ -27,6 +27,12 @@ form{display:grid;gap:12px;max-width:420px}.field{display:grid;gap:6px}.hidden{d
 #passwordResult{border:1px dashed #e5a36f;background:#fff5e9;border-radius:16px;padding:18px;margin-top:18px}
 .password{font:700 20px ui-monospace,monospace;word-break:break-all;margin:8px 0 14px}
 @media(max-width:600px){header{align-items:flex-start;flex-direction:column}.toolbar input{max-width:none}}
+.access-panel{border:1px solid #e4e9df;background:#f7f8ef;border-radius:18px;padding:18px;margin:18px 0}
+.access-actions{display:flex;gap:9px;flex-wrap:wrap;margin:12px 0}
+.access-actions button{border-radius:12px}
+.access-actions button.active{outline:3px solid #f3b08d;outline-offset:2px}
+#accessModeStatus{font-size:13px;color:#52675b;margin:8px 0 0}
+
 </style>
 </head>
 <body>
@@ -44,6 +50,16 @@ form{display:grid;gap:12px;max-width:420px}.field{display:grid;gap:6px}.hidden{d
 <h1>Участники лагеря · модерация</h1>
 <p class="muted">Поиск работает по настоящему имени, игровому нику и логину. Игровой ник виден другим участникам; логин используется для входа. Здесь можно менять роль участника, начислять и списывать горизонтики, смотреть историю операций и сбрасывать пароль.</p>
 <div class="toolbar"><input id="search" type="search" placeholder="Поиск: имя, игровой ник или логин"><button id="refresh" class="secondary" type="button">Обновить список</button><button id="logout" class="secondary" type="button">Выйти</button></div>
+<section class="access-panel" aria-labelledby="accessHeading">
+<h2 id="accessHeading">Режим доступа к сайту</h2>
+<p class="muted">Переключение выполняется вручную. Администратор и создатель сохраняют полный доступ при любом режиме.</p>
+<div class="access-actions">
+<button id="modeWinter" type="button">Открыть сайт для зимнего теста</button>
+<button id="modeClosed" type="button" class="secondary">Завершить зимний тест</button>
+<button id="modeOpen" type="button" class="secondary">Открыть сайт для всех участников</button>
+</div>
+<p id="accessModeStatus" role="status">Загружаем текущий режим…</p>
+</section>
 <div class="table-wrap"><table><thead><tr><th>Участник</th><th>Игровой ник</th><th>Логин</th><th>Роль</th><th>Баланс</th><th>Статус пароля</th><th>Действие</th></tr></thead><tbody id="participants"></tbody></table></div><section id="historyPanel" class="panel hidden" style="margin-top:22px;padding:20px"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><div><h2 id="historyTitle">История горизонтиков</h2><p id="historyBalance" class="muted"></p></div><button id="closeHistory" class="secondary" type="button">Закрыть</button></div><div class="table-wrap"><table><thead><tr><th>Дата</th><th>Операция</th><th>Причина</th><th>Сумма</th></tr></thead><tbody id="historyRows"></tbody></table></div><p id="historyStatus" class="muted"></p></section>
 <div id="passwordResult" class="hidden"><strong>Временный пароль создан</strong><p class="muted">Передай его участнику лично. Он будет показан только сейчас.</p><div id="temporaryPassword" class="password"></div><p id="expiry" class="muted"></p><button id="copyPassword" type="button">Скопировать пароль</button></div>
 <div id="dashboardStatus" role="status"></div>
@@ -58,6 +74,8 @@ const $=id=>document.getElementById(id);
 let participants=[];
 let latestPassword="";
 const IDLE_LIMIT=10*60*1000;
+const ACCESS_MODE_LABELS={open_all:"Сайт открыт для всех участников",winter_test:"Идёт зимний тест",closed_profile:"Зимний тест завершён: доступен только профиль"};
+
 let idleTimer;
 function clearAdminView(){participants=[];latestPassword="";$("participants").replaceChildren();$("passwordResult").classList.add("hidden");$("temporaryPassword").textContent="";$("expiry").textContent="";$("dashboard").classList.add("hidden");$("loginPanel").classList.remove("hidden");$("adminPassword").value="";}
 async function endAdminSession(message="Сессия завершена. Войди снова."){clearTimeout(idleTimer);await supabase.auth.signOut();clearAdminView();status(message,false);}
@@ -73,6 +91,36 @@ async function call(name,payload={}){
  if(!res.ok||data.error) throw new Error(data.error||"Не удалось выполнить запрос.");
  return data;
 }
+async function loadAccessMode(){
+ try{
+  const data=await call("admin-manage-site-access");
+  const mode=data.mode||"open_all";
+  $("accessModeStatus").textContent="Текущий режим: "+(ACCESS_MODE_LABELS[mode]||mode);
+  $("modeWinter").classList.toggle("active",mode==="winter_test");
+  $("modeClosed").classList.toggle("active",mode==="closed_profile");
+  $("modeOpen").classList.toggle("active",mode==="open_all");
+ }catch(e){$("accessModeStatus").textContent="Не удалось загрузить режим: "+e.message;}
+}
+async function setAccessMode(mode){
+ const labels={winter_test:"Открыть сайт для зимнего теста",closed_profile:"Завершить зимний тест",open_all:"Открыть сайт для всех участников"};
+ const explanations={
+  winter_test:"Все зарегистрированные участники получат роль «Зимний тест». Новые регистрации тоже будут автоматически получать эту роль. Начисления за тест пойдут в отдельный зимний кошелёк.",
+  closed_profile:"Участникам останется доступен только профиль. Игры, задания, магазин и регистрация будут закрыты.",
+  open_all:"Полный доступ вернётся всем участникам. Участники зимнего теста снова получат роль «Участник», а новые регистрации — обычную роль."
+ };
+ if(!confirm(labels[mode]+"?\\n\\n"+explanations[mode]))return;
+ const buttons=[$("modeWinter"),$("modeClosed"),$("modeOpen")];buttons.forEach(b=>b.disabled=true);
+ try{
+  const data=await call("admin-manage-site-access",{mode});
+  $("accessModeStatus").textContent="Режим изменён: "+(ACCESS_MODE_LABELS[data.mode]||data.mode)+". Обновлено профилей: "+Number(data.participants_updated||0)+".";
+  await loadAccessMode();
+  await load();
+ }catch(e){status(e.message,true,"dashboardStatus");await loadAccessMode();}
+ finally{buttons.forEach(b=>b.disabled=false);}
+}
+$("modeWinter").addEventListener("click",()=>setAccessMode("winter_test"));
+$("modeClosed").addEventListener("click",()=>setAccessMode("closed_profile"));
+$("modeOpen").addEventListener("click",()=>setAccessMode("open_all"));
 async function load(){
  status("Загружаем участников... ",false,"dashboardStatus");
  try{const data=await call("admin-list-participants");participants=data.participants||[];render();status("Участников: "+participants.length,false,"dashboardStatus");}
@@ -88,7 +136,7 @@ function render(){
   const login=document.createElement("td");login.textContent=p.username;
   const roleCell=document.createElement("td");
   if(p.is_admin){
-   const adminPill=document.createElement("span");adminPill.className="status-pill";adminPill.textContent="Администратор";roleCell.append(adminPill);
+   const adminPill=document.createElement("span");adminPill.className="status-pill";adminPill.textContent=p.staff_role==="creator"?"Создатель":"Администратор";roleCell.append(adminPill);
   }else{
    const roleSelect=document.createElement("select");roleSelect.style.cssText="font:600 12px Inter;padding:8px 10px;border:1px solid #d8e0d7;border-radius:10px;background:white;color:#244c3b;min-width:130px";
    roleSelect.innerHTML='<option value="participant">Участник</option><option value="winter_test">Зимний тест</option>';
@@ -106,7 +154,7 @@ function render(){
   const penalty=document.createElement("input");penalty.type="number";penalty.min="0";penalty.max="100";penalty.value="0";penalty.style.width="72px";penalty.setAttribute("aria-label","Штраф в горизонтиках");penalty.placeholder="штраф";
   const fine=document.createElement("button");fine.type="button";fine.textContent="Штраф";fine.addEventListener("click",async()=>{const amount=Math.floor(Number(penalty.value)||0);if(amount<=0)return status("Укажи штраф от 1 до 100 горизонтиков.",true,"dashboardStatus");if(!confirm("Списать "+amount+" горизонтиков за некорректный никнейм?"))return;fine.disabled=true;try{const r=await call("admin-deduct-points",{participant_id:p.id,amount,reason:"Некорректный игровой никнейм"});r.wallet_type==="winter_test"?(p.winter_test_balance=Number(p.winter_test_balance||0)-amount):(p.balance=Number(p.balance||0)-amount);regularBalance.textContent=Number(p.balance||0).toLocaleString("ru-RU")+" ⭐";winterBalance.textContent="Зимний тест: "+Number(p.winter_test_balance||0).toLocaleString("ru-RU")+" ⭐";status("Списано "+r.amount+" горизонтиков.",false,"dashboardStatus");}catch(e){status(e.message,true,"dashboardStatus");}finally{fine.disabled=false;}});wrap.append(penalty,fine);
   const awardAmount=document.createElement("input");awardAmount.type="number";awardAmount.min="1";awardAmount.max="1000";awardAmount.step="1";awardAmount.value="10";awardAmount.style.width="68px";awardAmount.setAttribute("aria-label","Количество начисляемых горизонтиков");awardAmount.title="От 1 до 1000 горизонтиков";
-  const award=document.createElement("button");award.type="button";award.textContent="Начислить";award.addEventListener("click",async()=>{const amount=Math.floor(Number(awardAmount.value)||0);if(amount<1||amount>1000)return status("Укажи от 1 до 1000 горизонтиков.",true,"dashboardStatus");const reason=prompt("За что начислить "+amount+" горизонтиков участнику "+p.full_name+"?");if(reason===null)return;if(reason.trim().length<3)return status("Укажи причину начисления не короче 3 символов.",true,"dashboardStatus");if(!confirm("Начислить "+amount+" горизонтиков? Причина: "+reason.trim()))return;award.disabled=true;try{await call("admin-award-points",{participant_id:p.id,amount,reason:reason.trim()});p.balance=Number(p.balance||0)+amount;balanceCell.textContent=p.balance.toLocaleString("ru-RU")+" ⭐";status("Начислено "+amount+" горизонтиков участнику "+p.full_name+".",false,"dashboardStatus");}catch(e){status(e.message,true,"dashboardStatus");}finally{award.disabled=false;}});wrap.append(awardAmount,award);
+  const award=document.createElement("button");award.type="button";award.textContent="Начислить";award.addEventListener("click",async()=>{const amount=Math.floor(Number(awardAmount.value)||0);if(amount<1||amount>1000)return status("Укажи от 1 до 1000 горизонтиков.",true,"dashboardStatus");const reason=prompt("За что начислить "+amount+" горизонтиков участнику "+p.full_name+"?");if(reason===null)return;if(reason.trim().length<3)return status("Укажи причину начисления не короче 3 символов.",true,"dashboardStatus");if(!confirm("Начислить "+amount+" горизонтиков? Причина: "+reason.trim()))return;award.disabled=true;try{const result=await call("admin-award-points",{participant_id:p.id,amount,reason:reason.trim()});if(result.wallet_type==="winter_test"){p.winter_test_balance=Number(p.winter_test_balance||0)+amount;}else{p.balance=Number(p.balance||0)+amount;}regularBalance.textContent=Number(p.balance||0).toLocaleString("ru-RU")+" ⭐";winterBalance.textContent="Зимний тест: "+Number(p.winter_test_balance||0).toLocaleString("ru-RU")+" ⭐";status("Начислено "+amount+" горизонтиков участнику "+p.full_name+".",false,"dashboardStatus");}catch(e){status(e.message,true,"dashboardStatus");}finally{award.disabled=false;}});wrap.append(awardAmount,award);
   const history=document.createElement("button");history.type="button";history.textContent="История";history.className="secondary";history.addEventListener("click",()=>showHistory(p,history));wrap.append(history);
   const btn=document.createElement("button");btn.type="button";btn.textContent="Сбросить пароль";btn.addEventListener("click",()=>reset(p.username,btn));wrap.append(btn);action.append(wrap);tr.append(name,nick,login,roleCell,balanceCell,state,action);body.append(tr);
  }
@@ -159,7 +207,7 @@ $("loginForm").addEventListener("submit",async e=>{
   const {data,error}=await supabase.auth.signInWithPassword({email:username+"@login.gorizont.invalid",password:$("adminPassword").value});
   if(error) throw new Error("Не удалось войти. Проверь пароль администратора.");
   await call("admin-list-participants");
-  $("loginPanel").classList.add("hidden");$("dashboard").classList.remove("hidden");armIdleTimeout();status("");await load();
+  $("loginPanel").classList.add("hidden");$("dashboard").classList.remove("hidden");armIdleTimeout();status("");await loadAccessMode();await load();
  }catch(err){await supabase.auth.signOut();status(err.message,true);}
  finally{$("loginButton").disabled=false;}
 });
