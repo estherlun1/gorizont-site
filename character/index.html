@@ -157,7 +157,7 @@
 <section class="result hidden" id="result"><h2>🌲 Образ готов!</h2><p>Герой готов к новым приключениям.</p><div class="result-stage"><canvas id="finalDoll" width="292" height="724"></canvas></div>
 <div class="personality-panel" id="personalityPanel">
   <h3>Какой характер у твоего героя?</h3>
-  <p>Выбери две черты: основную и дополнительную. Основной характер и дополнительная черта будут менять отдельные реплики на сайте и в играх.</p>
+  <p>Выбери основную и дополнительную черты. Характер выбирается один раз; изменить его снова можно будет через месяц. Внешность героя разрешено менять когда угодно.</p>
   <div class="personality-grid" id="personalityGrid">
     <article class="personality-card" data-personality-card="explorer"><strong>🔎 Исследователь</strong><small>Любознательный, замечает детали и любит открытия.</small><div class="personality-actions"><button type="button" data-personality="explorer" data-role="primary">Основной</button></div></article>
     <article class="personality-card" data-personality-card="creator"><strong>🎨 Творец</strong><small>Фантазирует, придумывает и создаёт новое.</small><div class="personality-actions"><button type="button" data-personality="creator" data-role="primary">Основной</button></div></article>
@@ -192,7 +192,7 @@ function renderPersonality(){
   button.classList.toggle('active',personality[role]===id);
   button.disabled=!canChange;
  });
- grid.querySelectorAll('[data-mood]').forEach(button=>{button.classList.toggle('active',personality.secondary===button.dataset.mood);button.disabled=!canChange;});
+ document.querySelectorAll('.mood-grid [data-mood]').forEach(button=>{button.classList.toggle('active',personality.secondary===button.dataset.mood);button.disabled=!canChange;});
  const primary=PERSONALITY_NAMES[personality.primary]||'не выбран';
  const secondary=PERSONALITY_NAMES[personality.secondary]||'не выбран';
  document.getElementById('personalitySummary').textContent='Основной характер: '+primary+' · Дополнительная черта: '+secondary;
@@ -202,7 +202,7 @@ function renderPersonality(){
   lock.textContent='Характер уже выбран. Следующее изменение будет доступно '+next.toLocaleDateString('ru-RU',{day:'numeric',month:'long'})+'. Внешность героя можно менять и сейчас.';
  }else lock.textContent='Характер можно будет изменить через месяц. Внешность героя можно менять когда угодно.';
 }
-document.getElementById('personalityGrid')?.addEventListener('click',event=>{
+document.querySelector('.personality-panel')?.addEventListener('click',event=>{
  const moodButton=event.target.closest('[data-mood]');if(moodButton&&!moodButton.disabled){personality.secondary=personality.secondary===moodButton.dataset.mood?null:moodButton.dataset.mood;renderPersonality();return;}
  const button=event.target.closest('[data-personality]');if(!button||button.disabled)return;
  const id=button.dataset.personality,role=button.dataset.role;
