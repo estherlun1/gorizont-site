@@ -212,8 +212,7 @@ function personalityCanChange(){const next=nextPersonalityDate(personality.chang
 function renderPersonality(){
  const grid=document.getElementById('personalityGrid');if(!grid)return;
  const canChange=personalityCanChange();
- // Clear handlers before rebinding after state updates.
- grid.querySelectorAll('button[data-personality],button[data-mood]').forEach(button=>{button.onclick=null;button.onpointerup=null;});
+
  const panel=document.getElementById('personalityPanel'),status=document.getElementById('personalityStatus');
  const hasSaved=!!(personality.primary&&personality.secondary&&personality.changedAt);
  if(panel)panel.hidden=hasSaved&&!canChange;
@@ -222,9 +221,9 @@ function renderPersonality(){
   const id=button.dataset.personality,role=button.dataset.role;
   button.classList.toggle('active',personality[role]===id);
   button.disabled=hasSaved&&!canChange;
+  button.setAttribute('aria-pressed',String(personality[role]===id));
  });
- document.querySelectorAll('.mood-grid [data-mood]').forEach(button=>{button.classList.toggle('active',personality.secondary===button.dataset.mood);button.disabled=hasSaved&&!canChange;});
- bindPersonalityButtons();
+ document.querySelectorAll('.mood-grid [data-mood]').forEach(button=>{button.classList.toggle('active',personality.secondary===button.dataset.mood);button.disabled=hasSaved&&!canChange;button.setAttribute('aria-pressed',String(personality.secondary===button.dataset.mood));});
  const primary=PERSONALITY_NAMES[personality.primary]||'не выбран';
  const secondary=PERSONALITY_NAMES[personality.secondary]||'не выбран';
  document.getElementById('personalitySummary').textContent='Основной характер: '+primary+' · Дополнительная черта: '+secondary;
@@ -249,18 +248,22 @@ function choosePersonality(button){
  }
  renderPersonality();
 }
-function bindPersonalityButtons(){
- document.querySelectorAll('#personalityPanel button[data-personality],#personalityPanel button[data-mood]').forEach(button=>{
-  button.onpointerup=event=>{event.preventDefault();event.stopPropagation();if(!button.disabled)choosePersonality(button);};
-  button.onclick=event=>{if(event.detail!==0)return;event.preventDefault();event.stopPropagation();if(!button.disabled)choosePersonality(button);};
- });
-}
+// One delegated native click handler for both grids. The mood grid is a sibling
+// of #personalityGrid, so binding only to that inner grid misses every secondary choice.
+document.addEventListener('click',event=>{
+ const target=event.target;
+ const button=target instanceof Element?target.closest('#personalityPanel button[data-personality],#personalityPanel button[data-mood]'):null;
+ if(!button)return;
+ event.preventDefault();
+ event.stopPropagation();
+ if(button.disabled||!personalityCanChange())return;
+ choosePersonality(button);
+},true);
 window.GorizontPersonality={choose(id,role='primary'){
  const selector=role==='primary'?'[data-personality="'+id+'"]':'[data-mood="'+id+'"]';
  const button=document.querySelector('#personalityPanel '+selector);
  if(button&&!button.disabled)choosePersonality(button);
 },getSelection(){return {...personality};}};
-bindPersonalityButtons();
 
 function image(file){if(!cache[file]){const im=new Image();im.src=A+file;cache[file]=im;im.onload=draw}return cache[file]}
 function drawTo(c){const x=c.getContext('2d');x.clearRect(0,0,292,724);const put=f=>{const im=image(f);if(im.complete&&im.naturalWidth)x.drawImage(im,0,0,292,724)};put(DATA.bases[selectedCharacter]);if(chosen.shoes!==null)put(DATA.shoes[chosen.shoes]);if(chosen.pants!==null)put(DATA.pants[chosen.pants]);if(chosen.top!==null){put((chosen.topKind==='hoodies'?DATA.hoodies:DATA.shirts)[chosen.top]);put(chosen.topKind==='hoodies'?DATA.hoodieHeads[selectedCharacter][chosen.top]:DATA.shirtHeads[selectedCharacter])}}
