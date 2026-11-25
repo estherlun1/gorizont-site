@@ -342,4 +342,4 @@ g.restore();let v=g.createRadialGradient(W/2,H/2,Math.min(W,H)*.2,W/2,H/2,Math.m
 function loop(t){if(!active)return;let dt=Math.min(.05,(t-last)/1000);last=t;update(dt);draw();if(active)requestAnimationFrame(loop)}
 addEventListener('keydown',e=>{keys[e.code]=true;if(e.code.startsWith('Arrow'))e.preventDefault()});addEventListener('keyup',e=>keys[e.code]=false);addEventListener('blur',()=>{keys={};touch={}});document.querySelectorAll('#touch button').forEach(b=>{let d=b.dataset.d;b.addEventListener('contextmenu',e=>e.preventDefault());b.addEventListener('selectstart',e=>e.preventDefault());b.onpointerdown=e=>{e.preventDefault();touch[d]=true;try{b.setPointerCapture(e.pointerId)}catch(_){}};['pointerup','pointercancel','lostpointercapture','pointerleave'].forEach(v=>b.addEventListener(v,()=>touch[d]=false))});setupTutorial();chooseArt();draw();
 })();
-</script><script type="module" src="achievement-tracker.js"></script></html>
+</script><script type="module" src="achievement-tracker.js?v=20261125-letter-achievement-fix"></script></html>
