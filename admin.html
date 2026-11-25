@@ -36,7 +36,7 @@ form{display:grid;gap:12px;max-width:420px}.field{display:grid;gap:6px}.hidden{d
 <h1>Вход администратора</h1>
 <p class="muted">Этот раздел предназначен только для сотрудников с административными правами.</p>
 <form id="loginForm">
-<div class="field"><label for="adminPassword">Пароль администратора</label><input id="adminPassword" type="password" autocomplete="current-password" required></div>
+<div class="field"><label for="adminUsername">Логин администратора</label><input id="adminUsername" type="text" autocomplete="username" placeholder="Например, lunni" required></div><div class="field"><label for="adminPassword">Пароль</label><input id="adminPassword" type="password" autocomplete="current-password" required></div>
 <button id="loginButton" type="submit">Войти</button>
 </form><div id="status" role="status"></div>
 </section>
@@ -44,7 +44,7 @@ form{display:grid;gap:12px;max-width:420px}.field{display:grid;gap:6px}.hidden{d
 <h1>Участники лагеря · модерация</h1>
 <p class="muted">Найди участника по имени или логину. В колонке «Игровой ник» можно изменить ник, а рядом — списать от 1 до 100 горизонтиков за нарушение. Сброс пароля доступен отдельно.</p>
 <div class="toolbar"><input id="search" type="search" placeholder="Поиск по имени или логину"><button id="refresh" class="secondary" type="button">Обновить список</button><button id="logout" class="secondary" type="button">Выйти</button></div>
-<div class="table-wrap"><table><thead><tr><th>Участник</th><th>Игровой ник</th><th>Логин</th><th>Статус пароля</th><th>Действие</th></tr></thead><tbody id="participants"></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>Участник</th><th>Игровой ник</th><th>Логин</th><th>Статус пароля</th><th>Действие</th></tr></thead><tbody id="participants"></tbody></table></div><section id="historyPanel" class="panel hidden" style="margin-top:22px;padding:20px"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><div><h2 id="historyTitle">История горизонтиков</h2><p id="historyBalance" class="muted"></p></div><button id="closeHistory" class="secondary" type="button">Закрыть</button></div><div class="table-wrap"><table><thead><tr><th>Дата</th><th>Операция</th><th>Причина</th><th>Сумма</th></tr></thead><tbody id="historyRows"></tbody></table></div><p id="historyStatus" class="muted"></p></section>
 <div id="passwordResult" class="hidden"><strong>Временный пароль создан</strong><p class="muted">Передай его участнику лично. Он будет показан только сейчас.</p><div id="temporaryPassword" class="password"></div><p id="expiry" class="muted"></p><button id="copyPassword" type="button">Скопировать пароль</button></div>
 <div id="dashboardStatus" role="status"></div>
 </section>
@@ -53,7 +53,6 @@ form{display:grid;gap:12px;max-width:420px}.field{display:grid;gap:6px}.hidden{d
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const URL="https://jrvukdqqrmfjbtskrayy.supabase.co";
 const KEY="sb_publishable_AAHg7Xgeq_KRm6PdropyMg_V6op0enJ";
-const EMAIL="esthermoony@login.gorizont.invalid";
 const supabase=createClient(URL,KEY,{auth:{persistSession:false,autoRefreshToken:true}});
 const $=id=>document.getElementById(id);
 let participants=[];
@@ -92,9 +91,35 @@ function render(){
   const saveNick=document.createElement("button");saveNick.type="button";saveNick.textContent="Сохранить ник";saveNick.addEventListener("click",async()=>{saveNick.disabled=true;try{const r=await call("admin-moderate-nickname",{participant_id:p.id,nickname:nickInput.value,reason:"Изменение ника администратором"});p.nickname=r.nickname;name.textContent=p.full_name+(p.nickname?" · "+p.nickname:"");status("Игровой ник изменён.",false,"dashboardStatus");}catch(e){status(e.message,true,"dashboardStatus");}finally{saveNick.disabled=false;}});wrap.append(saveNick);
   const penalty=document.createElement("input");penalty.type="number";penalty.min="0";penalty.max="100";penalty.value="0";penalty.style.width="72px";penalty.setAttribute("aria-label","Штраф в горизонтиках");penalty.placeholder="штраф";
   const fine=document.createElement("button");fine.type="button";fine.textContent="Штраф";fine.addEventListener("click",async()=>{const amount=Math.floor(Number(penalty.value)||0);if(amount<=0)return status("Укажи штраф от 1 до 100 горизонтиков.",true,"dashboardStatus");if(!confirm("Списать "+amount+" горизонтиков за некорректный никнейм?"))return;fine.disabled=true;try{const r=await call("admin-moderate-nickname",{participant_id:p.id,penalty:amount,reason:"Некорректный игровой никнейм"});status("Списано "+r.penalty+" горизонтиков.",false,"dashboardStatus");}catch(e){status(e.message,true,"dashboardStatus");}finally{fine.disabled=false;}});wrap.append(penalty,fine);
+  const history=document.createElement("button");history.type="button";history.textContent="История";history.className="secondary";history.addEventListener("click",()=>showHistory(p,history));wrap.append(history);
   const btn=document.createElement("button");btn.type="button";btn.textContent="Сбросить пароль";btn.addEventListener("click",()=>reset(p.username,btn));wrap.append(btn);action.append(wrap);tr.append(name,nick,login,state,action);body.append(tr);
  }
  if(!filtered.length){const tr=document.createElement("tr");const td=document.createElement("td");td.colSpan=5;td.textContent="Ничего не найдено.";tr.append(td);body.append(tr);}
+}
+async function showHistory(participant,button){
+ button.disabled=true;
+ $("historyPanel").classList.remove("hidden");
+ $("historyTitle").textContent="История горизонтиков · "+participant.full_name;
+ $("historyBalance").textContent="Загружаем баланс...";
+ $("historyRows").replaceChildren();
+ $("historyStatus").textContent="";
+ try{
+  const data=await call("admin-list-point-transactions",{participant_id:participant.id});
+  $("historyBalance").textContent="Текущий баланс: "+Number(data.balance||0).toLocaleString("ru-RU")+" горизонтиков";
+  const rows=data.transactions||[];
+  for(const item of rows){
+   const tr=document.createElement("tr");
+   const date=document.createElement("td");date.textContent=new Date(item.created_at).toLocaleString("ru-RU");
+   const type=document.createElement("td");type.textContent=({achievement:"Достижение",game_reward:"Награда за игру",adjustment:"Ручная корректировка",hint_spend:"Подсказка",penalty:"Штраф",purchase:"Покупка"}[item.transaction_type]||item.transaction_type||"Операция");
+   const desc=document.createElement("td");desc.textContent=item.description||"—";
+   const amount=document.createElement("td");const n=Number(item.amount)||0;amount.textContent=(n>0?"+":"")+n+" горизонтиков";amount.style.fontWeight="700";amount.style.color=n<0?"#b4472f":"#315b43";
+   tr.append(date,type,desc,amount);$("historyRows").append(tr);
+  }
+  if(!rows.length){const tr=document.createElement("tr");const td=document.createElement("td");td.colSpan=4;td.textContent="Операций пока нет.";tr.append(td);$("historyRows").append(tr);}
+  $("historyStatus").textContent="Показаны последние "+rows.length+" операций.";
+  $("historyPanel").scrollIntoView({behavior:"smooth",block:"nearest"});
+ }catch(e){$("historyBalance").textContent="Не удалось загрузить историю";$("historyStatus").textContent=e.message;}
+ finally{button.disabled=false;}
 }
 async function reset(username,button){
  if(!confirm("Создать новый временный пароль для "+username+"? Старый пароль перестанет работать.")) return;
@@ -114,14 +139,15 @@ async function reset(username,button){
 $("loginForm").addEventListener("submit",async e=>{
  e.preventDefault();$("loginButton").disabled=true;status("Проверяем доступ...");
  try{
-  const {data,error}=await supabase.auth.signInWithPassword({email:EMAIL,password:$("adminPassword").value});
+  const username=$("adminUsername").value.trim().toLowerCase();if(!/^[a-z0-9_]{3,32}$/.test(username))throw new Error("Введи корректный логин администратора.");
+  const {data,error}=await supabase.auth.signInWithPassword({email:username+"@login.gorizont.invalid",password:$("adminPassword").value});
   if(error) throw new Error("Не удалось войти. Проверь пароль администратора.");
   await call("admin-list-participants");
   $("loginPanel").classList.add("hidden");$("dashboard").classList.remove("hidden");armIdleTimeout();status("");await load();
  }catch(err){await supabase.auth.signOut();status(err.message,true);}
  finally{$("loginButton").disabled=false;}
 });
-$("search").addEventListener("input",render);$("refresh").addEventListener("click",load);
+$("search").addEventListener("input",render);$("refresh").addEventListener("click",load);$("closeHistory").addEventListener("click",()=>$("historyPanel").classList.add("hidden"));
 $("logout").addEventListener("click",async()=>{await endAdminSession("Вы вышли из админ-панели.");});
 $("copyPassword").addEventListener("click",async()=>{if(!latestPassword)return;try{await navigator.clipboard.writeText(latestPassword);status("Пароль скопирован.",false,"dashboardStatus");}catch{status("Не удалось скопировать автоматически. Выдели пароль и скопируй вручную.",true,"dashboardStatus");}});
 </script>
