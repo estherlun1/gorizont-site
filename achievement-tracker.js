@@ -7,9 +7,9 @@ function toast(item){
  queue.push(item); if(showing)return; showing=true;
  const next=()=>{const data=queue.shift();if(!data){showing=false;return;}
   const node=document.createElement("div");node.style.cssText="position:fixed;z-index:99999;right:18px;bottom:18px;max-width:min(360px,calc(100vw - 36px));padding:13px 16px;border-radius:16px;background:#244d3b;color:#fff8e8;box-shadow:0 8px 30px #142b2090;font:700 14px/1.4 Arial,sans-serif;display:flex;align-items:center;gap:10px";
-  if(data.icon_path){const img=document.createElement("img");img.src=data.icon_path;img.alt="";img.style.cssText="width:48px;height:48px;object-fit:contain";node.appendChild(img);}
+  if(data.icon_path){const img=document.createElement("img");img.src=data.icon_path;img.alt="";img.style.cssText="width:54px;height:54px;object-fit:contain";img.onerror=()=>{img.remove();const fallback=document.createElement("span");fallback.textContent="🏅";fallback.style.fontSize="38px";node.prepend(fallback);};node.appendChild(img);}
   const text=document.createElement("span");text.textContent="Достижение открыто: "+data.name+" · +"+data.reward_points+" горизонтиков";node.appendChild(text);document.body.appendChild(node);
-  setTimeout(()=>{node.remove();setTimeout(next,250);},3600);
+  setTimeout(()=>{node.remove();setTimeout(next,300);},7000);
  };next();
 }
 async function track(event){
