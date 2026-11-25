@@ -153,7 +153,7 @@ footer{background:#244c3b;color:#fff;padding:16px 6vw;display:flex;align-items:c
 .parent-go{background:#0d5c57;color:#fff}
 .parent-go:disabled{opacity:.45;cursor:wait}
 
-.site-footer{min-height:110px;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:28px clamp(22px,5vw,80px);background:#214b3b;color:#fff;font-size:14px}
+.site-footer{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px clamp(18px,4vw,60px);background:#214b3b;color:#fff;font-size:14px}
 .site-footer .footer-name{max-width:850px;line-height:1.5;font-weight:650}
 .site-footer .parent-site-link{display:inline-flex;align-items:center;white-space:nowrap;padding:13px 20px;border-radius:16px;background:#fa7040;color:#fff;text-decoration:none;font-weight:800;border:0;cursor:pointer;transition:transform .2s,filter .2s}
 .site-footer .parent-site-link:hover{transform:translateY(-2px);filter:brightness(1.06)}
@@ -843,7 +843,7 @@ main {
   .day-horizon-arrow { top: 75%; height: 14%; width: 12%; }
   .day-horizon-prev { left: 3%; }
   .day-horizon-next { right: 3%; }
-  .day-horizon-dots { width: 28%; top: 89%; gap: 5px; }
+  .day-horizon-dots { width: 28%; top: 94%; gap: 5px; }
   .day-horizon-dots button { min-width: 7px; min-height: 7px; }
 }
 
@@ -909,8 +909,8 @@ main {
 .games-background{z-index:0;object-position:center;transform:scale(1.025);transition:transform .25s ease-out}
 .games-board{z-index:1;object-fit:fill}
 .games-foreground{z-index:5;object-fit:fill;transition:transform .25s ease-out}
-.games-viewport{position:absolute;z-index:3;left:23.5%;right:23.5%;top:29%;height:43%;overflow:hidden;display:flex;align-items:stretch;cursor:grab;touch-action:pan-y;user-select:none}
-.games-track{display:flex;align-items:stretch;width:100%;height:100%;gap:2.2%;transition:transform .42s cubic-bezier(.2,.75,.2,1);will-change:transform}.games-viewport.is-dragging{cursor:grabbing}.games-viewport.is-dragging .games-track{transition:none}
+.games-viewport{position:absolute;z-index:3;left:23.5%;right:23.5%;top:29%;height:43%;overflow:hidden;display:flex;align-items:stretch;cursor:default;touch-action:pan-y;user-select:none}
+.games-track{display:flex;align-items:stretch;width:100%;height:100%;gap:2.2%;transition:transform .42s cubic-bezier(.2,.75,.2,1);will-change:transform}.games-viewport.is-dragging{cursor:default}.games-viewport.is-dragging .games-track{transition:none}
 .game-preview{flex:0 0 30.5%;min-width:0;height:100%;box-sizing:border-box;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;text-align:center;color:#4a2c18;padding:6px 7px 7px;border:2px solid #d8ad70;border-radius:18px;background:linear-gradient(160deg,#fff0cf 0%,#f8dfae 100%);box-shadow:0 4px 0 #b47a3d,0 9px 18px #56371624;text-decoration:none;cursor:pointer;overflow:hidden;transition:transform .2s,box-shadow .2s,border-color .2s}
 .game-preview-visual{display:block;flex:0 0 40%;min-height:0;width:100%;overflow:hidden;border:2px solid #d7a05b;border-radius:11px;background:#f9e8c4;box-shadow:0 3px 0 #a96e36;transition:box-shadow .2s,border-color .2s}
 .game-preview img{width:100%;height:100%;display:block;object-fit:cover;transition:transform .25s ease}
@@ -2364,6 +2364,13 @@ main {
    default:'Если ты читаешь это письмо, значит, любопытство привело тебя в нужное место. Пусть в Горизонте у тебя будет много открытий, верных друзей и историй, к которым захочется возвращаться.'
   };
   function revealLetter(){if(letterTrigger)letterTrigger.hidden=false;localStorage.setItem('gorizont-letter-discovered','1');}
+  stage.addEventListener('click',event=>{
+    const hotspot=event.target.closest('.counselor-hotspot');
+    if(!hotspot)return;
+    visitedCounselors.add(hotspot.dataset.person);
+    localStorage.setItem('gorizont-visited-counselors',JSON.stringify([...visitedCounselors]));
+    if(visitedCounselors.size>=4)revealLetter();
+  },true);
   function openLetter(){
    const saved=JSON.parse(localStorage.getItem('gorizont-participant')||'null');
    const personality=saved?.avatar_config?.personality?.primary||'default';
@@ -2380,7 +2387,7 @@ main {
     const key=el.dataset.person;
     el.addEventListener('click',()=>{visitedCounselors.add(key);localStorage.setItem('gorizont-visited-counselors',JSON.stringify([...visitedCounselors]));if(visitedCounselors.size===4)revealLetter();open(key);});
   });
-  hitImages.forEach(item=>{
+  if(localStorage.getItem('gorizont-letter-discovered')==='1')revealLetter();\n  hitImages.forEach(item=>{
     item.el.style.pointerEvents='auto';
     item.el.style.cursor='pointer';
     item.el.setAttribute('role','button');
@@ -2735,7 +2742,7 @@ render();
     <p class="auth-intro">Создай аккаунт, собирай горизонтики за игры и меняй их на лагерные подарки.</p>
     <div class="auth-profile" id="authProfile" hidden>
       <div class="auth-profile-avatar" id="authProfileAvatar" aria-label="Аватар профиля">🌲</div>
-      <a class="auth-avatar-edit" href="character/index.html">Изменить аватар в игре →</a>
+      <a class="auth-avatar-edit" href="character/index.html">Создай аватар и выбери свой характер →</a>
       <div class="auth-hero-card" id="authHeroCard" hidden>
         <p class="auth-hero-kicker">ХАРАКТЕР ТВОЕГО ГЕРОЯ</p>
         <strong id="authHeroPrimary"></strong>
@@ -2802,5 +2809,17 @@ render();
 
 <script type="module" src="map-hunt-rewards.js"></script>
 <script type="module" src="achievement-tracker.js"></script>
+<style>
+@media(max-width:600px){
+ #mysteryLetterTrigger{position:fixed;right:16px;bottom:calc(22px + env(safe-area-inset-bottom));top:auto;z-index:100010;width:58px;height:58px}
+ .camp-scene .camp-hotspot-forest{left:2%;top:29%;width:21%;height:8.5%}
+ .camp-scene .camp-hotspot-friends{left:2%;top:40.5%;width:21%;height:8.5%}
+ .camp-scene .camp-hotspot-fire{left:2%;top:52%;width:21%;height:8.5%}
+ .camp-scene .camp-hotspot-games{left:2%;top:63.5%;width:21%;height:8.5%}
+ .camp-scene .camp-flame-sprite{width:26%!important;height:30%!important;left:37%!important;right:auto!important;top:52%!important;bottom:auto!important;background-size:600% 100%!important}
+ .camp-scene .mobile-camp-art{object-position:center center}
+}
+@media(min-width:601px){#mysteryLetterTrigger{position:absolute}}
+</style>
 </body>
 </html>
