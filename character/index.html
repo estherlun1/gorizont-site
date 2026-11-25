@@ -330,7 +330,9 @@ saveAvatarButton.addEventListener('click', async ()=>{
     const nextAllowed=nextPersonalityDate(existingConfig.personality_changed_at);
     const canChange=!hasExistingPersonality||!nextAllowed||Date.now()>=nextAllowed.getTime();
     if(!canChange){
-      personality={primary:existingPersonality.primary,secondary:existingPersonality.secondary,changedAt:existingConfig.personality_changed_at};
+      selectedTraits=orderedTraits([existingPersonality.primary,existingPersonality.secondary]);
+      personality={...pairFromTraits(selectedTraits),changedAt:existingConfig.personality_changed_at};
+      renderPersonality();
     }else if(selectedTraits.length!==2){
       saveAvatarButton.disabled=false;
       saveAvatarButton.textContent='Выбери любые две черты';
@@ -338,7 +340,8 @@ saveAvatarButton.addEventListener('click', async ()=>{
       return;
     }
 
-    const chosenPair=pairFromTraits(selectedTraits);\n    let savedPersonality=existingPersonality;
+    const chosenPair=pairFromTraits(selectedTraits);
+    let savedPersonality=existingPersonality;
     let personalityChangedAt=existingConfig.personality_changed_at||null;
     const samePersonality=existingPersonality.primary===chosenPair.primary&&existingPersonality.secondary===chosenPair.secondary;
     if(!hasExistingPersonality||(canChange&&!samePersonality)){
@@ -346,7 +349,7 @@ saveAvatarButton.addEventListener('click', async ()=>{
       personalityChangedAt=new Date().toISOString();
       personality={...chosenPair,changedAt:personalityChangedAt};
     }else if(canChange&&samePersonality){
-      savedPersonality={primary:personality.primary,secondary:personality.secondary};
+      savedPersonality={primary:chosenPair.primary,secondary:chosenPair.secondary};
     }
 
     const source=document.getElementById('finalDoll');
