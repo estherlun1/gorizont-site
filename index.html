@@ -1851,7 +1851,15 @@ main {
  .profile-tab-panel{padding:11px}
 }
 </style>
-</head>
+<style id="letter-webp-frame-animation">
+#mysteryLetterTrigger{background:none!important;padding:0!important;border:0!important;box-shadow:none!important;overflow:visible!important}
+#mysteryLetterTrigger img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 7px 9px #3a281a55)}
+#mysteryLetterVisual{display:block;width:min(280px,68vw);height:min(280px,68vw);object-fit:contain;margin:0 auto 8px;background:none!important;filter:drop-shadow(0 8px 10px #60401f35)}
+.mystery-letter-modal.opening #mysteryLetterVisual{animation:letterFrameApproach 1.32s cubic-bezier(.16,1,.3,1) both}
+@keyframes letterFrameApproach{0%{opacity:.12;transform:translateY(23vh) scale(.18) rotate(-13deg);filter:blur(4px)}65%{opacity:1;transform:translateY(-5px) scale(1.06) rotate(1deg);filter:blur(0)}100%{opacity:1;transform:none;filter:none}}
+@media(max-width:600px){#mysteryLetterTrigger{width:82px!important;height:82px!important;right:12px!important;bottom:calc(14px + env(safe-area-inset-bottom))!important}}
+@media(prefers-reduced-motion:reduce){.mystery-letter-modal.opening #mysteryLetterVisual{animation:none!important}}
+</style></head>
 <body>
 <div id="celebrationLayer" aria-hidden="true"></div>
 
@@ -1978,10 +1986,10 @@ main {
     <img class="counselors-layer c-lera" src="assets/counselors/polina.webp" alt="Вожатая Полина" loading="lazy" decoding="async">
     <img class="counselors-layer c-ilya" src="assets/counselors/sonya.webp" alt="Вожатая Соня" loading="lazy" decoding="async">
     <img class="counselors-layer c-kids-front" src="assets/counselors/foreground.webp" alt="Дети собрались у костра" loading="lazy" decoding="async">
-    <div class="counselors-hint">нажми на вожатого — познакомимся поближе</div><button id="mysteryLetterTrigger" type="button" aria-label="Открыть найденное письмо" hidden></button>
+    <div class="counselors-hint">нажми на вожатого — познакомимся поближе</div><button id="mysteryLetterTrigger" type="button" aria-label="Открыть найденное письмо" hidden><img id="mysteryLetterNotificationImage" src="assets/letter/letter-1.webp" alt=""></button>
   </div>
 </section>
-<div id="mysteryLetterModal" class="mystery-letter-modal" hidden role="dialog" aria-modal="true" aria-labelledby="mysteryLetterTitle"><div class="mystery-letter-card"><button id="mysteryLetterClose" type="button" aria-label="Закрыть">×</button><div id="mysteryLetterVisual" aria-hidden="true"></div><h2 id="mysteryLetterTitle">Письмо для тебя</h2><p id="mysteryLetterText"></p><small>Твой Горизонт 🌲</small></div></div>
+<div id="mysteryLetterModal" class="mystery-letter-modal" hidden role="dialog" aria-modal="true" aria-labelledby="mysteryLetterTitle"><div class="mystery-letter-card"><button id="mysteryLetterClose" type="button" aria-label="Закрыть">×</button><img id="mysteryLetterVisual" src="assets/letter/letter-1.webp" alt="" aria-hidden="true"><h2 id="mysteryLetterTitle">Письмо для тебя</h2><p id="mysteryLetterText"></p><small>Твой Горизонт 🌲</small></div></div>
 
 <div class="counselors-shade" id="counselorsShade"></div>
 <div class="counselors-modal" id="counselorsModal" role="dialog" aria-modal="true" aria-labelledby="counselorsName">
@@ -2479,6 +2487,7 @@ main {
   const letterTrigger=document.getElementById('mysteryLetterTrigger');
   const letterModal=document.getElementById('mysteryLetterModal');
   const letterText=document.getElementById('mysteryLetterText');
+  const letterVisual=document.getElementById('mysteryLetterVisual');
   const letterClose=document.getElementById('mysteryLetterClose');
   const letterLines={
    explorer:'Ты замечаешь тропинки там, где другие видят только лес. Не теряй любопытства: самые важные открытия часто начинаются с маленького шага в неизвестность.',
@@ -2490,10 +2499,29 @@ main {
    default:'Если ты читаешь это письмо, значит, любопытство привело тебя в нужное место. Пусть в Горизонте у тебя будет много открытий, верных друзей и историй, к которым захочется возвращаться.'
   };
   function revealLetter(){if(letterTrigger&&visitedCounselors.size>=4)letterTrigger.hidden=false;}
+  let letterFrameTimer=null;
+  const letterFrames=Array.from({length:6},(_,i)=>'assets/letter/letter-'+(i+1)+'.webp');
+  letterFrames.forEach(src=>{const preload=new Image();preload.src=src;});
+  function playLetterFrames(image,onComplete){
+    let frame=0;
+    if(letterFrameTimer)clearTimeout(letterFrameTimer);
+    image.src=letterFrames[0];
+    const step=()=>{
+      frame++;
+      if(frame>=letterFrames.length){if(onComplete)onComplete();return;}
+      image.src=letterFrames[frame];
+      letterFrameTimer=setTimeout(step,220);
+    };
+    letterFrameTimer=setTimeout(step,220);
+  }
   function closeLetter(){
+    if(letterFrameTimer)clearTimeout(letterFrameTimer);
+    letterFrameTimer=null;
     letterModal.hidden=true;
     letterModal.classList.remove('opening','opened');
     if(letterTrigger)letterTrigger.hidden=true;
+    const notification=document.getElementById('mysteryLetterNotificationImage');
+    if(notification)notification.src=letterFrames[0];
     visitedCounselors.clear();
     localStorage.removeItem('gorizont-visited-counselors');
   }
@@ -2507,12 +2535,12 @@ main {
     letterModal.classList.remove('opening','opened');
     letterModal.classList.add('opening');
     window.GorizontAchievements?.track('letter_opened','letter-opened-once-v1');
-    window.setTimeout(()=>{
+    playLetterFrames(letterVisual,()=>{
       if(letterModal.hidden)return;
       letterModal.classList.remove('opening');
       letterModal.classList.add('opened');
       letterText.hidden=false;
-    },1350);
+    });
   }
   letterTrigger?.addEventListener('click',openLetter);
   letterClose?.addEventListener('click',closeLetter);
