@@ -186,11 +186,15 @@
 </div>
 <button class="wood-button green" id="saveAvatar" type="button">Сохранить аватарку</button><button class="wood-button" id="again">Собрать ещё один образ</button></section></main>
 <script type="module">
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const SUPABASE_URL = "https://jrvukdqqrmfjbtskrayy.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_AAHg7Xgeq_KRm6PdropyMg_V6op0enJ";
-const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
-  auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false, storageKey: "gorizont-auth-session" }
+// Load Supabase lazily: the character builder must remain interactive even if the SDK CDN is unavailable.
+let supabase = null;
+const supabaseReady = import("https://esm.sh/@supabase/supabase-js@2").then(({createClient}) => {
+  supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false, storageKey: "gorizont-auth-session" }
+  });
+  return supabase;
 });
 const DATA={bases:{mila:'base.webp',misha:'misha_base.webp',rosa:'rosa_base.webp',petya:'petya_base.webp'},pants:Array.from({length:6},(_,i)=>'pants_'+(i+1)+'.webp'),shoes:Array.from({length:10},(_,i)=>'shoe_'+(i+1)+'.webp'),shirts:Array.from({length:12},(_,i)=>'shirt_'+(i+1)+'.webp'),hoodies:Array.from({length:12},(_,i)=>'hoodie_'+(i+1)+'.webp'),shirtHeads:{mila:'shirt_head.webp',misha:'misha_shirt_head.webp',rosa:'rosa_shirt_head.webp',petya:'petya_shirt_head.webp'},hoodieHeads:{mila:[...Array.from({length:11},(_,i)=>'hoodie_head_'+(i+1)+'.webp'),'mila_hoodie_head_12.webp'],misha:Array.from({length:12},(_,i)=>'misha_hoodie_head_'+(i+1)+'.webp'),rosa:Array.from({length:12},(_,i)=>'rosa_hoodie_head_'+(i+1)+'.webp'),petya:Array.from({length:12},(_,i)=>'petya_hoodie_head_'+(i+1)+'.webp')}};
 const A='assets/',cache={};let selectedCharacter='mila',kind='shirts',chosen={top:null,topKind:null,pants:null,shoes:null};
@@ -282,6 +286,7 @@ saveAvatarButton.addEventListener('click', async ()=>{
   const originalLabel=saveAvatarButton.textContent;
   saveAvatarButton.textContent='Сохраняем...';
   try{
+    await supabaseReady;
     const {data:{session},error:sessionError}=await supabase.auth.getSession();
     if(sessionError) throw sessionError;
     if(!session?.user?.id){
@@ -359,6 +364,7 @@ saveAvatarButton.addEventListener('click', async ()=>{
 
 async function restoreSavedAvatar(){
   try{
+    await supabaseReady;
     const {data:{session}}=await supabase.auth.getSession();
     if(!session?.user?.id) return;
     const {data:profile,error}=await supabase.from('participants')
