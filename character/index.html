@@ -178,7 +178,7 @@
 <div class="items-wrap"><div class="items-grid" id="items"></div></div><div class="wardrobe-footer"><div class="wardrobe-hint" id="hint">Нажимай на вещи, чтобы примерить их на героя.</div><div class="footer-buttons"><button class="wood-button" id="randomLook">Случайный образ</button><button class="wood-button green" id="finish">Готово ✓</button></div></div></section></div>
 <section class="result hidden" id="result"><h2>🌲 Образ готов!</h2><p>Герой готов к новым приключениям.</p><div class="result-stage"><canvas id="finalDoll" width="292" height="724"></canvas></div>
 <p id="personalityStatus" class="personality-lock" hidden></p>
-<div class="personality-panel" id="personalityPanel">
+<div class="personality-panel" id="personalityPanel" hidden>
   <h3>Какой характер у твоего героя?</h3>
   <p>Выбери основную и дополнительную черты. Характер выбирается один раз; изменить его снова можно будет через месяц. Внешность героя разрешено менять когда угодно.</p>
   <p class="personality-instruction">Выбери любые две черты, которые лучше всего подходят твоему герою. Порядок не важен.</p>
@@ -420,13 +420,13 @@ async function restoreSavedAvatar(){
       .maybeSingle();
     if(error||!profile?.avatar_config) return;
     const config=profile.avatar_config;
-    if(!['mila','misha','rosa','petya'].includes(config.character)) return;
     if(config.personality?.primary&&config.personality?.secondary){
       const legacyMood={explorer:'curious',creator:'dreamy',energizer:'determined',social:'sociable',guardian:'calm',inventor:'thoughtful'};
       const secondary=legacyMood[config.personality.secondary]||config.personality.secondary;
       selectedTraits=orderedTraits([config.personality.primary,secondary]);
       personality={...pairFromTraits(selectedTraits),changedAt:config.personality_changed_at||null};
     }
+    if(!['mila','misha','rosa','petya'].includes(config.character)) return;
     selectedCharacter=config.character;
     chosen={
       top:Number.isInteger(config.top)&&config.top>=0&&config.top<12?config.top:null,
