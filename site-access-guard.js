@@ -23,6 +23,27 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
       if (!access.profile_only) return;
 
       if (isHome) {
+        let currentSession = session;
+        supabase.auth.onAuthStateChange((_event, nextSession) => {
+          currentSession = nextSession;
+          if (!currentSession) forceLoginOnly();
+        });
+        function forceLoginOnly() {
+          if (currentSession) return;
+          const registerTab = document.getElementById("authRegisterTab");
+          const loginTab = document.getElementById("authLoginTab");
+          const registerForm = document.getElementById("authRegisterForm");
+          const loginForm = document.getElementById("authLoginForm");
+          if (!registerTab || !loginTab || !registerForm || !loginForm) return;
+          registerTab.hidden = true;
+          registerForm.hidden = true;
+          loginTab.hidden = false;
+          loginForm.hidden = false;
+          loginTab.classList.add("active");
+          registerTab.classList.remove("active");
+          loginTab.setAttribute("aria-selected", "true");
+          registerTab.setAttribute("aria-selected", "false");
+        }
         document.querySelectorAll("body > section, main > section, .camp-world, .horizon-map, #guides, #legends, #map, .site-footer, footer, .scroll-cue")
           .forEach(node => { if (!node.classList.contains("hero")) node.hidden = true; });
         document.querySelectorAll(".menu-links, .menu-age").forEach(node => { node.hidden = true; });
@@ -42,6 +63,14 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
         }
         const intro = document.querySelector(".auth-intro");
         if (intro) intro.textContent = "Зимний тест завершён. Сейчас доступен только личный кабинет участника.";
+        const registerFormNode = document.getElementById("authRegisterForm");
+        const registerTabNode = document.getElementById("authRegisterTab");
+        if (registerFormNode && registerTabNode) {
+          const observer = new MutationObserver(forceLoginOnly);
+          observer.observe(registerFormNode, { attributes: true, attributeFilter: ["hidden"] });
+          observer.observe(registerTabNode, { attributes: true, attributeFilter: ["hidden"] });
+          forceLoginOnly();
+        }
         const opener = document.getElementById("campAuthOpen");
         if (opener) opener.setAttribute("aria-label", "Открыть личный кабинет");
         return;
