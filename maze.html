@@ -193,12 +193,25 @@ function solid(x,y){
   const tx=Math.floor(x),ty=Math.floor(y);
   return ty<0||ty>=N||tx<0||tx>=N||(!phaseUntilActive()&&M[ty][tx]!==0);
 }
-const PLAYER_R=.39;
+// Точный круглый хитбокс: проверяем пересечение персонажа со всей площадью каждой стены,
+// а не только восемью точками по периметру. Так персонаж не будет цепляться за углы и проходить сквозь них.
+const PLAYER_R=.34;
 function canOccupy(x,y){
-  if(phaseUntilActive()) return x>0&&y>0&&x<N-1&&y<N-1;
   const r=PLAYER_R;
-  return !solid(x-r,y-r)&&!solid(x+r,y-r)&&!solid(x-r,y+r)&&!solid(x+r,y+r)
-    &&!solid(x-r,y)&&!solid(x+r,y)&&!solid(x,y-r)&&!solid(x,y+r);
+  if(phaseUntilActive()) return x-r>0&&y-r>0&&x+r<N-1&&y+r<N-1;
+  if(x-r<0||y-r<0||x+r>N||y+r>N) return false;
+  const minX=Math.max(0,Math.floor(x-r)), maxX=Math.min(N-1,Math.floor(x+r));
+  const minY=Math.max(0,Math.floor(y-r)), maxY=Math.min(N-1,Math.floor(y+r));
+  for(let ty=minY;ty<=maxY;ty++){
+    for(let tx=minX;tx<=maxX;tx++){
+      if(!M[ty]||M[ty][tx]===0) continue;
+      const nearestX=Math.max(tx,Math.min(x,tx+1));
+      const nearestY=Math.max(ty,Math.min(y,ty+1));
+      const dx=x-nearestX,dy=y-nearestY;
+      if(dx*dx+dy*dy<r*r-1e-8) return false;
+    }
+  }
+  return true;
 }
 function moveAxis(axis,amount){
   const steps=Math.max(1,Math.ceil(Math.abs(amount)/.08)),step=amount/steps;
