@@ -153,6 +153,13 @@
 #personalityPanel button:disabled{opacity:.4;cursor:not-allowed}
 #finish:disabled{opacity:.48;cursor:not-allowed;filter:grayscale(.15)}
 #finalDoll{display:block;max-width:100%;width:auto;height:100%;object-fit:contain}
+</style><style id="personality-click-hardening-20261125">
+#result{position:relative!important;z-index:99999!important;pointer-events:auto!important}
+#result .result-stage,#result .result-stage canvas{pointer-events:none!important}
+#personalityPanel{position:relative!important;z-index:100000!important;pointer-events:auto!important;isolation:isolate}
+#personalityPanel .personality-grid,#personalityPanel .personality-card,#personalityPanel .personality-actions{position:relative;z-index:1;pointer-events:auto!important}
+#personalityPanel button[data-personality],#personalityPanel button[data-mood]{position:relative!important;z-index:100001!important;display:block!important;visibility:visible!important;pointer-events:auto!important;touch-action:manipulation!important;cursor:pointer!important}
+#personalityPanel button[data-personality]:disabled,#personalityPanel button[data-mood]:disabled{opacity:.4;cursor:not-allowed!important}
 </style></head><body><a class="site-back" href="../index.html" aria-label="Вернуться на сайт">← На сайт</a><main class="game-shell">
 
 <div class="layout" id="game"><section class="hero-column">
@@ -205,10 +212,8 @@ function personalityCanChange(){const next=nextPersonalityDate(personality.chang
 function renderPersonality(){
  const grid=document.getElementById('personalityGrid');if(!grid)return;
  const canChange=personalityCanChange();
- // Bind each visible choice directly; this avoids click delegation being intercepted by page-level overlays.
- grid.querySelectorAll('button[data-personality],button[data-mood]').forEach(button=>{
-   button.onclick=event=>{event.preventDefault();event.stopPropagation();if(!button.disabled)choosePersonality(button);};
- });
+ // Button state is handled by the capture-phase listener below.
+ grid.querySelectorAll('button[data-personality],button[data-mood]').forEach(button=>{button.onclick=null;});
  const panel=document.getElementById('personalityPanel'),status=document.getElementById('personalityStatus');
  const hasSaved=!!(personality.primary&&personality.secondary&&personality.changedAt);
  if(panel)panel.hidden=hasSaved&&!canChange;
@@ -216,9 +221,9 @@ function renderPersonality(){
  grid.querySelectorAll('[data-personality]').forEach(button=>{
   const id=button.dataset.personality,role=button.dataset.role;
   button.classList.toggle('active',personality[role]===id);
-  button.disabled=!canChange;
+  button.disabled=hasSaved&&!canChange;
  });
- document.querySelectorAll('.mood-grid [data-mood]').forEach(button=>{button.classList.toggle('active',personality.secondary===button.dataset.mood);button.disabled=!canChange;});
+ document.querySelectorAll('.mood-grid [data-mood]').forEach(button=>{button.classList.toggle('active',personality.secondary===button.dataset.mood);button.disabled=hasSaved&&!canChange;});
  const primary=PERSONALITY_NAMES[personality.primary]||'не выбран';
  const secondary=PERSONALITY_NAMES[personality.secondary]||'не выбран';
  document.getElementById('personalitySummary').textContent='Основной характер: '+primary+' · Дополнительная черта: '+secondary;
@@ -243,12 +248,19 @@ function choosePersonality(button){
  }
  renderPersonality();
 }
-document.getElementById('personalityPanel')?.addEventListener('click',event=>{
- const button=event.target.closest('button[data-personality],button[data-mood]');
- if(!button||button.disabled)return;
- event.preventDefault();event.stopPropagation();
+// Capture before any page-level handlers. The personality cards are a self-contained control.
+document.addEventListener('click',event=>{
+ const button=event.target instanceof Element?event.target.closest('#personalityPanel button[data-personality],#personalityPanel button[data-mood]'):null;
+ if(!button)return;
+ event.preventDefault();
+ event.stopImmediatePropagation();
+ if(button.disabled)return;
  choosePersonality(button);
-});
+},true);
+window.GorizontPersonality={choose(id,role='primary'){
+ const button=document.querySelector(role==='primary'?'#personalityPanel [data-personality="'+id+'"]':'#personalityPanel [data-mood="'+id+'"]');
+ if(button&&!button.disabled)choosePersonality(button);
+},getSelection(){return {...personality};}};
 function image(file){if(!cache[file]){const im=new Image();im.src=A+file;cache[file]=im;im.onload=draw}return cache[file]}
 function drawTo(c){const x=c.getContext('2d');x.clearRect(0,0,292,724);const put=f=>{const im=image(f);if(im.complete&&im.naturalWidth)x.drawImage(im,0,0,292,724)};put(DATA.bases[selectedCharacter]);if(chosen.shoes!==null)put(DATA.shoes[chosen.shoes]);if(chosen.pants!==null)put(DATA.pants[chosen.pants]);if(chosen.top!==null){put((chosen.topKind==='hoodies'?DATA.hoodies:DATA.shirts)[chosen.top]);put(chosen.topKind==='hoodies'?DATA.hoodieHeads[selectedCharacter][chosen.top]:DATA.shirtHeads[selectedCharacter])}}
 function draw(){drawTo(document.getElementById('doll'));if(!document.getElementById('result').classList.contains('hidden'))drawTo(document.getElementById('finalDoll'))}
