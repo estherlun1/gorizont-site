@@ -231,24 +231,42 @@ function pairFromTraits(values){
 }
 function nextPersonalityDate(value){if(!value)return null;const d=new Date(value);if(Number.isNaN(d.getTime()))return null;const day=d.getDate();d.setDate(1);d.setMonth(d.getMonth()+1);d.setDate(Math.min(day,new Date(d.getFullYear(),d.getMonth()+1,0).getDate()));return d}
 function personalityCanChange(){const next=nextPersonalityDate(personality.changedAt);return !next||Date.now()>=next.getTime()}
+let personalityStateReady=false;
+let personalityRestorePromise=null;
 function renderPersonality(){
  const grid=document.getElementById('personalityGrid');if(!grid)return;
- const canChange=personalityCanChange();
  const panel=document.getElementById('personalityPanel'),status=document.getElementById('personalityStatus');
+ if(!personalityStateReady){
+  if(panel)panel.hidden=true;
+  if(status)status.hidden=true;
+  return;
+ }
+ const canChange=personalityCanChange();
  const hasSaved=selectedTraits.length===2&&!!personality.changedAt;
- if(panel)panel.hidden=hasSaved&&!canChange;
- if(status){status.hidden=!(hasSaved&&!canChange);const next=nextPersonalityDate(personality.changedAt);status.textContent='Две черты уже выбраны. Следующее изменение доступно '+next.toLocaleDateString('ru-RU',{day:'numeric',month:'long'})+'. Внешность героя можно менять в любое время.';}
+ const locked=hasSaved&&!canChange;
+ if(panel)panel.hidden=locked;
+ if(status){
+  status.hidden=!locked;
+  if(locked){
+   const next=nextPersonalityDate(personality.changedAt);
+   status.textContent='Две черты уже выбраны. Следующее изменение доступно '+next.toLocaleDateString('ru-RU',{day:'numeric',month:'long'})+'. Внешность героя можно менять в любое время.';
+  }
+ }
  grid.querySelectorAll('input[data-trait]').forEach(input=>{
   const active=selectedTraits.includes(input.dataset.trait);
   input.checked=active;
-  input.disabled=hasSaved&&!canChange;
+  input.disabled=locked;
   input.closest('.personality-card')?.classList.toggle('selected',active);
  });
  const names=selectedTraits.map(id=>PERSONALITY_NAMES[id]);
  document.getElementById('personalitySummary').textContent='Выбрано '+selectedTraits.length+' из 2'+(names.length?' · '+names.join(' + '):'');
  const lock=document.getElementById('personalityLock');
- if(!canChange){const next=nextPersonalityDate(personality.changedAt);lock.textContent='Черты уже выбраны. Следующее изменение будет доступно '+next.toLocaleDateString('ru-RU',{day:'numeric',month:'long'})+'. Внешность героя можно менять и сейчас.';}
- else lock.textContent=selectedTraits.length===2?'Отлично! Теперь можно сохранить своего героя.':'Можно выбрать ещё '+(2-selectedTraits.length)+'. Порядок выбора не важен.';
+ if(locked){
+  const next=nextPersonalityDate(personality.changedAt);
+  lock.textContent='Черты уже выбраны. Следующее изменение будет доступно '+next.toLocaleDateString('ru-RU',{day:'numeric',month:'long'})+'. Внешность героя можно менять и сейчас.';
+ }else{
+  lock.textContent=selectedTraits.length===2?'Отлично! Теперь можно сохранить своего героя.':'Можно выбрать ещё '+(2-selectedTraits.length)+'. Порядок выбора не важен.';
+ }
 }
 function applyTraitSelection(input){
  if(!input||input.disabled||!personalityCanChange())return;
@@ -260,9 +278,10 @@ function applyTraitSelection(input){
  personality={...pairFromTraits(selectedTraits),changedAt:personality.changedAt};
  renderPersonality();
 }
-document.getElementById('personalityPanel')?.addEventListener('change',event=>{
- const input=event.target;
- if(input instanceof HTMLInputElement&&input.matches('input[data-trait]'))applyTraitSelection(input);
+// Вешаем обработчик непосредственно на каждый чекбокс: состояние и счётчик
+// обновляются на самом элементе, без зависимости от всплытия события через карточку.
+document.querySelectorAll('#personalityGrid input[data-trait]').forEach(input=>{
+ input.addEventListener('change',()=>applyTraitSelection(input));
 });
 window.GorizontPersonality={
  choose(id){const input=document.querySelector('#personalityPanel input[data-trait="'+id+'"]');if(input&&!input.disabled){input.checked=!input.checked;applyTraitSelection(input);}},
@@ -309,6 +328,7 @@ saveAvatarButton.addEventListener('click', async ()=>{
   saveAvatarButton.textContent='Сохраняем...';
   try{
     await supabaseReady;
+    await ensurePersonalityLoaded();
     const {data:{session},error:sessionError}=await supabase.auth.getSession();
     if(sessionError) throw sessionError;
     if(!session?.user?.id){
@@ -350,36 +370,13 @@ saveAvatarButton.addEventListener('click', async ()=>{
     }
 
     const source=document.getElementById('finalDoll');
-    // Принудительно перерисовываем готовый комплект непосредственно перед экспортом.
-    // finish уже дождался загрузки всех пяти слоёв, поэтому здесь холст гарантированно актуален.
-    drawTo(source);
     const avatarCanvas=document.createElement('canvas');
     avatarCanvas.width=256; avatarCanvas.height=256;
     const ctx=avatarCanvas.getContext('2d');
     ctx.clearRect(0,0,256,256);
-    const pixels=source.getContext('2d').getImageData(0,0,source.width,source.height).data;
-    let minX=source.width,minY=source.height,maxX=-1,maxY=-1;
-    for(let y=0;y<source.height;y++){
-      for(let x=0;x<source.width;x++){
-        if(pixels[(y*source.width+x)*4+3]>12){
-          if(x<minX)minX=x;if(x>maxX)maxX=x;
-          if(y<minY)minY=y;if(y>maxY)maxY=y;
-        }
-      }
-    }
-    if(maxX>=minX&&maxY>=minY){
-      // Обрезаем прозрачные поля и вписываем весь силуэт в квадрат.
-      const boundsWidth=maxX-minX+1,boundsHeight=maxY-minY+1;
-      const scale=Math.min(232/boundsWidth,232/boundsHeight);
-      const drawWidth=boundsWidth*scale,drawHeight=boundsHeight*scale;
-      ctx.drawImage(source,minX,minY,boundsWidth,boundsHeight,(256-drawWidth)/2,(256-drawHeight)/2,drawWidth,drawHeight);
-    }else{
-      // Резервный вариант: экспортируем весь холст без анализа прозрачности,
-      // чтобы особенности альфа-канала браузера не блокировали сохранение аватара.
-      const scale=Math.min(232/source.width,232/source.height);
-      const drawWidth=source.width*scale,drawHeight=source.height*scale;
-      ctx.drawImage(source,(256-drawWidth)/2,(256-drawHeight)/2,drawWidth,drawHeight);
-    }
+    // Возвращаем проверенную обрезку из первой рабочей версии (19 ноября):
+    // квадратный портрет по плечи, без поиска прозрачных границ и масштабирования всего тела.
+    ctx.drawImage(source,0,0,292,292,0,0,256,256);
     const blob=await new Promise((resolve,reject)=>avatarCanvas.toBlob(b=>b?resolve(b):reject(new Error('Не удалось подготовить изображение.')),'image/webp',0.9));
     const path=`${session.user.id}/avatar.webp`;
     const {error:uploadError}=await supabase.storage.from('participant-avatars').upload(path,blob,{contentType:'image/webp',upsert:true,cacheControl:'3600'});
@@ -429,7 +426,6 @@ async function restoreSavedAvatar(){
       const secondary=legacyMood[config.personality.secondary]||config.personality.secondary;
       selectedTraits=orderedTraits([config.personality.primary,secondary]);
       personality={...pairFromTraits(selectedTraits),changedAt:config.personality_changed_at||null};
-      renderPersonality();
     }
     selectedCharacter=config.character;
     chosen={
@@ -443,7 +439,16 @@ async function restoreSavedAvatar(){
     document.querySelectorAll('[data-switch]').forEach(b=>b.classList.toggle('active',b.dataset.switch===selectedCharacter));
     renderItems();draw();
   }catch(error){console.warn('Не удалось загрузить сохранённый образ:',error)}
+  finally{
+    personalityStateReady=true;
+    renderPersonality();
+  }
 }
-[...DATA.pants,...DATA.shoes,...DATA.shirts,...DATA.hoodies,Object.values(DATA.bases),Object.values(DATA.shirtHeads),...Object.values(DATA.hoodieHeads)].flat().forEach(image);renderItems();draw();renderPersonality();restoreSavedAvatar();
+function ensurePersonalityLoaded(){
+ if(!personalityRestorePromise) personalityRestorePromise=restoreSavedAvatar();
+ return personalityRestorePromise;
+}
+[...DATA.pants,...DATA.shoes,...DATA.shirts,...DATA.hoodies,Object.values(DATA.bases),Object.values(DATA.shirtHeads),...Object.values(DATA.hoodieHeads)].flat().forEach(image);
+renderItems();draw();ensurePersonalityLoaded();
 </script><script src="../achievement-tracker.js?v=20261125-achievements-fixed"></script>
 </body></html>
