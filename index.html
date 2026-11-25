@@ -2387,7 +2387,7 @@ main {
     const key=el.dataset.person;
     el.addEventListener('click',()=>{visitedCounselors.add(key);localStorage.setItem('gorizont-visited-counselors',JSON.stringify([...visitedCounselors]));if(visitedCounselors.size===4)revealLetter();open(key);});
   });
-  if(localStorage.getItem('gorizont-letter-discovered')==='1')revealLetter();\n  hitImages.forEach(item=>{
+  if(localStorage.getItem('gorizont-letter-discovered')==='1'||visitedCounselors.size>=4)revealLetter();\n  hitImages.forEach(item=>{
     item.el.style.pointerEvents='auto';
     item.el.style.cursor='pointer';
     item.el.setAttribute('role','button');
