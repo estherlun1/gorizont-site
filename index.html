@@ -213,9 +213,9 @@ main {
 .camp-flame-sprite{
   position:absolute;
   z-index:7;
-  left:40%;
-  top:49%;
-  width:20%;
+  left:37.5%;
+  top:47%;
+  width:25%;
   aspect-ratio:1 / 1;
   height:auto;
   background-image:url('assets/camp-scene/fire-sprite.webp');
@@ -233,7 +233,7 @@ main {
 .camp-scene.is-visible .camp-flame-sprite.fire-playing{opacity:1 !important;}
 @media(max-width:900px){
   .camp-hotspot-fire{left:2%;top:48%;width:20%;height:10%;}
-  .camp-flame-sprite{left:39%;top:50%;width:22%;}
+  .camp-flame-sprite{left:36%;top:48%;width:28%;}
 }
 @media(max-width:600px){
   .camp-hotspot-fire{left:1%;top:50%;width:28%;height:9%;}
@@ -999,10 +999,10 @@ main {
   }
   /* Кликабельные участки четырёх дощечек на мобильной иллюстрации. */
   .camp-scene .camp-hotspot{z-index:60;left:2.5%;right:auto;width:29%;height:5.2%;border-radius:8px}
-  .camp-scene .camp-hotspot-forest{top:15.2%}
-  .camp-scene .camp-hotspot-friends{top:21.4%}
-  .camp-scene .camp-hotspot-fire{top:27.6%}
-  .camp-scene .camp-hotspot-games{top:33.8%}
+  .camp-scene .camp-hotspot-forest{top:18.5%}
+  .camp-scene .camp-hotspot-friends{top:25.5%}
+  .camp-scene .camp-hotspot-fire{top:32.5%}
+  .camp-scene .camp-hotspot-games{top:39.5%}
   .camp-hotspot:hover{transform:none;filter:none}
 }
 @media (max-width:380px){
@@ -1830,9 +1830,9 @@ main {
     <button class="map-hit" style="left:68%;top:46%" data-map-page="tent" data-location="Костровая площадка" data-photo="assets/map/zone-02-campfire.webp" data-text="Место вечерних встреч у огня: здесь поют песни, играют, делятся историями и создают самые тёплые воспоминания о смене." aria-label="Костровая площадка"></button>
     <button class="map-hit" style="left:84%;top:32%" data-map-page="tent" data-location="Зона спорта" data-photo="assets/map/zone-09-tent-sports.webp" data-text="Спортивная площадка палаточного лагеря для волейбола, командных игр и весёлых соревнований на свежем воздухе." aria-label="Зона спорта"></button>
     <button class="map-hit" style="left:96%;top:36%" data-map-page="tent" data-location="Верёвочный городок" data-photo="assets/map/zone-01-rope-park.webp" data-text="Верёвочные препятствия, мостики и задания на ловкость. Здесь можно проверить равновесие, смелость и поддержать друзей на маршруте." aria-label="Верёвочный городок"></button>
-    <button class="map-hit" style="left:73%;top:52%" data-map-page="tent" data-location="Палаточный городок" data-photo="assets/map/zone-11-tent-town.webp" data-text="Жизнь в палатках — это друзья по отряду, самостоятельность, свежий воздух и маленькие ежедневные приключения на природе." aria-label="Палаточный городок"></button>
-    <button class="map-hit" style="left:89%;top:52%" data-map-page="tent" data-location="Большой шатёр и столовая" data-photo="assets/map/zone-10-big-tent.webp" data-text="Просторный шатёр для общих встреч и занятий. Здесь можно собраться всем вместе и укрыться от солнца или непогоды, а рядом организовано питание." aria-label="Большой шатёр и столовая"></button>
-    <button class="map-hit" style="left:82%;top:65%" data-map-page="tent" data-location="Зона чистоты" data-text="Санитарная зона палаточного лагеря с душевыми и местами для поддержания личной гигиены. Здесь можно освежиться после активного дня." aria-label="Зона чистоты"></button>
+    <button class="map-hit" style="left:73%;top:45%" data-map-page="tent" data-location="Палаточный городок" data-photo="assets/map/zone-11-tent-town.webp" data-text="Жизнь в палатках — это друзья по отряду, самостоятельность, свежий воздух и маленькие ежедневные приключения на природе." aria-label="Палаточный городок"></button>
+    <button class="map-hit" style="left:89%;top:45%" data-map-page="tent" data-location="Большой шатёр и столовая" data-photo="assets/map/zone-10-big-tent.webp" data-text="Просторный шатёр для общих встреч и занятий. Здесь можно собраться всем вместе и укрыться от солнца или непогоды, а рядом организовано питание." aria-label="Большой шатёр и столовая"></button>
+    <button class="map-hit" style="left:82%;top:58%" data-map-page="tent" data-location="Зона чистоты" data-text="Санитарная зона палаточного лагеря с душевыми и местами для поддержания личной гигиены. Здесь можно освежиться после активного дня." aria-label="Зона чистоты"></button>
 
     <div class="description" id="description" aria-live="polite">
       <button class="close" aria-label="Закрыть" type="button">×</button>
@@ -2387,7 +2387,8 @@ main {
     const key=el.dataset.person;
     el.addEventListener('click',()=>{visitedCounselors.add(key);localStorage.setItem('gorizont-visited-counselors',JSON.stringify([...visitedCounselors]));if(visitedCounselors.size===4)revealLetter();open(key);});
   });
-  if(localStorage.getItem('gorizont-letter-discovered')==='1'||visitedCounselors.size>=4)revealLetter();\n  hitImages.forEach(item=>{
+  if(localStorage.getItem('gorizont-letter-discovered')==='1'||visitedCounselors.size>=4)revealLetter();
+  hitImages.forEach(item=>{
     item.el.style.pointerEvents='auto';
     item.el.style.cursor='pointer';
     item.el.setAttribute('role','button');
@@ -2647,7 +2648,7 @@ render();
  if(!scene||!viewport||!track||!prev||!next||!pagination)return;
  const cards=Array.from(track.querySelectorAll('.game-preview'));
  let index=0,toastTimer;
- function visibleCount(){return window.matchMedia('(max-width: 600px)').matches?1:(window.matchMedia('(max-width: 850px)').matches?2:3)}
+ function visibleCount(){return window.matchMedia('(max-width: 850px)').matches?2:3}
  function maxIndex(){return Math.max(0,cards.length-visibleCount())}
  function stepWidth(){if(cards.length>1)return cards[1].offsetLeft-cards[0].offsetLeft;return cards[0]?.getBoundingClientRect().width||0}
  function render(){
@@ -2834,3 +2835,29 @@ render();
 </style>
 </body>
 </html>
+
+<style id="mobile-final-fixes-2026-11-25">
+
+/* Mobile menu: on touch devices the focused account button must not pin the bookmark open. */
+@media(max-width:800px){
+  .menu-bookmark:not(.open){transform:translateY(-100%)}
+  .menu-bookmark.open{transform:translateY(0)}
+}
+/* Compact, centered game arrows on phones; the arrows stay outside the game cards. */
+@media(max-width:850px){
+  #gamesScene .games-arrow-hit{
+    width:clamp(30px,8vw,40px);
+    height:clamp(30px,8vw,40px);
+    top:50%;
+    border:1px solid #b77c43;
+    border-radius:50%;
+    transform:translateY(-50%);
+    background:linear-gradient(145deg,#fff4dc,#e9c58e);
+    box-shadow:0 2px 0 #8b572d,0 4px 10px #34200f44;
+  }
+  #gamesScene .games-arrow-hit::before{font-size:25px;line-height:1}
+  #gamesScene .games-arrow-hit.prev{left:2.5%}
+  #gamesScene .games-arrow-hit.next{right:2.5%}
+}
+
+</style>
