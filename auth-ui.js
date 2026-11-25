@@ -347,6 +347,163 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
     loadAchievements();loadFriends();
   }
 
+  const PROFILE_TRAITS = [
+    ["explorer","🔎","Исследователь","Любознательный, замечает детали и любит открытия."],
+    ["creator","🎨","Творец","Фантазирует, придумывает и создаёт новое."],
+    ["energizer","⚡","Энерджайзер","Активный, решительный, любит движение."],
+    ["social","🤝","Душа компании","Дружелюбный, общительный, объединяет друзей."],
+    ["guardian","🌿","Хранитель","Заботливый, внимательный к людям и природе."],
+    ["inventor","💡","Изобретатель","Находчивый, любит эксперименты и решения."],
+    ["positive","🌞","Позитивный","Часто радуется и старается видеть хорошее."],
+    ["dreamy","☁️","Мечтательный","Любит фантазировать и замечать красоту."],
+    ["sociable","💬","Общительный","Легко знакомится и любит поболтать."],
+    ["calm","🍃","Спокойный","Не торопится и любит размеренность."],
+    ["shy","🌸","Застенчивый","Немного стесняется, но искренне открыт."],
+    ["cheerful","😎","Весёлый","Любит шутить и поднимать настроение."],
+    ["thoughtful","🌙","Задумчивый","Часто размышляет и всё обдумывает."],
+    ["mischievous","🔥","Озорной","Любит добрые шалости и сюрпризы."],
+    ["determined","🧭","Решительный","Не боится пробовать и идти к цели."],
+    ["curious","🔍","Любопытный","Постоянно задаёт вопросы и ищет ответы."]
+  ];
+  const PROFILE_MAIN_TRAITS = new Set(["explorer","creator","energizer","social","guardian","inventor"]);
+  let profilePersonalityEditor = null;
+  function profileNextPersonalityDate(value) {
+    if(!value) return null;
+    const date=new Date(value);
+    if(Number.isNaN(date.getTime())) return null;
+    const day=date.getDate();
+    date.setDate(1);date.setMonth(date.getMonth()+1);
+    date.setDate(Math.min(day,new Date(date.getFullYear(),date.getMonth()+1,0).getDate()));
+    return date;
+  }
+  function profileOrderedTraits(values) {
+    return [...new Set((values||[]).filter(id=>PROFILE_TRAITS.some(trait=>trait[0]===id)))]
+      .sort((a,b)=>PROFILE_TRAITS.findIndex(t=>t[0]===a)-PROFILE_TRAITS.findIndex(t=>t[0]===b));
+  }
+  function profilePairFromTraits(values) {
+    const list=profileOrderedTraits(values);
+    const primary=list.find(id=>PROFILE_MAIN_TRAITS.has(id))||list[0]||null;
+    return {primary,secondary:list.find(id=>id!==primary)||null};
+  }
+  function ensureProfilePersonalityEditor() {
+    if(profilePersonalityEditor || !heroCard) return profilePersonalityEditor;
+    const wrap=document.createElement("section");
+    wrap.className="auth-profile-personality-editor";
+    wrap.style.cssText="margin-top:10px;padding:12px;border:1px solid #e1c18f;border-radius:14px;background:rgba(255,250,239,.78);";
+    const toggle=document.createElement("button");
+    toggle.type="button";
+    toggle.style.cssText="width:100%;border:0;border-radius:10px;padding:10px 12px;background:#315846;color:#fff;font-weight:800;cursor:pointer;";
+    const panel=document.createElement("div");
+    panel.hidden=true;
+    panel.style.cssText="margin-top:12px;";
+    const help=document.createElement("p");
+    help.textContent="Выбери любые две черты. Порядок не важен — мы сами определим основную и дополнительную.";
+    help.style.cssText="margin:0 0 10px;color:#76634d;font-size:12px;line-height:1.45;";
+    const grid=document.createElement("div");
+    grid.style.cssText="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;";
+    PROFILE_TRAITS.forEach(([id,emoji,name,description])=>{
+      const label=document.createElement("label");
+      label.style.cssText="display:flex;gap:7px;align-items:flex-start;padding:9px;border:1px solid #dfbd8d;border-radius:10px;background:#fffaf0;color:#60452f;cursor:pointer;min-width:0;";
+      const input=document.createElement("input");
+      input.type="checkbox";input.value=id;input.dataset.profileTrait=id;
+      input.style.cssText="flex:0 0 auto;margin:2px 0 0;accent-color:#5e7b43;";
+      const copy=document.createElement("span");copy.style.cssText="min-width:0;";
+      const title=document.createElement("strong");title.textContent=emoji+" "+name;title.style.cssText="display:block;font-size:12px;line-height:1.25;";
+      const desc=document.createElement("small");desc.textContent=description;desc.style.cssText="display:block;margin-top:3px;font-size:10px;line-height:1.3;color:#81694f;";
+      copy.append(title,desc);label.append(input,copy);grid.appendChild(label);
+    });
+    const count=document.createElement("p");
+    count.style.cssText="margin:9px 0;color:#536d3e;font-size:12px;font-weight:700;";
+    const message=document.createElement("p");
+    message.style.cssText="margin:0 0 9px;color:#85613d;font-size:11px;line-height:1.4;";
+    const actions=document.createElement("div");
+    actions.style.cssText="display:flex;gap:8px;flex-wrap:wrap;";
+    const save=document.createElement("button");
+    save.type="button";save.textContent="Сохранить характер";
+    save.style.cssText="border:0;border-radius:10px;padding:10px 13px;background:#5f7b43;color:#fff;font-weight:800;cursor:pointer;";
+    const cancel=document.createElement("button");
+    cancel.type="button";cancel.textContent="Отмена";
+    cancel.style.cssText="border:1px solid #d7bd96;border-radius:10px;padding:10px 13px;background:#fff4df;color:#76502f;font-weight:700;cursor:pointer;";
+    actions.append(save,cancel);
+    panel.append(help,grid,count,message,actions);
+    wrap.append(toggle,panel);
+    heroCard.insertAdjacentElement("afterend",wrap);
+    const selected=()=>profileOrderedTraits([...grid.querySelectorAll("input:checked")].map(input=>input.value));
+    const renderCount=()=>{
+      const values=selected();
+      count.textContent="Выбрано "+values.length+" из 2"+(values.length?" · "+values.map(id=>PROFILE_TRAITS.find(t=>t[0]===id)[2]).join(" + "):"");
+      save.disabled=values.length!==2;
+      save.style.opacity=save.disabled?".55":"1";
+      message.textContent=values.length===2?"Отлично! Можно сохранить выбранный характер.":"Отметь ещё "+(2-values.length)+" черты.";
+    };
+    grid.addEventListener("change",event=>{
+      const input=event.target.closest("input[data-profile-trait]");
+      if(!input)return;
+      const checked=[...grid.querySelectorAll("input:checked")];
+      if(checked.length>2){input.checked=false;message.textContent="Можно выбрать только две черты. Сними одну отметку, чтобы выбрать другую.";}
+      renderCount();
+    });
+    toggle.addEventListener("click",()=>{
+      const opening=panel.hidden;
+      panel.hidden=!opening;
+      toggle.textContent=opening?"Скрыть выбор характера":"Выбрать характер";
+      if(opening){
+        const current=profileOrderedTraits([participant?.avatar_config?.personality?.primary,participant?.avatar_config?.personality?.secondary]);
+        grid.querySelectorAll("input[data-profile-trait]").forEach(input=>input.checked=current.includes(input.value));
+        renderCount();
+      }
+    });
+    cancel.addEventListener("click",()=>{panel.hidden=true;toggle.textContent=participant?.avatar_config?.personality?.primary?"Изменить характер":"Выбрать характер";});
+    save.addEventListener("click",async()=>{
+      if(save.disabled||!participant?.id)return;
+      const values=selected(),pair=profilePairFromTraits(values);
+      const config={...(participant.avatar_config||{})};
+      const existing=config.personality||{};
+      const same=existing.primary===pair.primary&&existing.secondary===pair.secondary;
+      const nextAllowed=profileNextPersonalityDate(config.personality_changed_at);
+      if(existing.primary&&existing.secondary&&nextAllowed&&Date.now()<nextAllowed.getTime()&&!same){
+        message.textContent="Новый характер можно будет выбрать с "+nextAllowed.toLocaleDateString("ru-RU",{day:"numeric",month:"long"})+".";
+        return;
+      }
+      if(same){panel.hidden=true;toggle.textContent="Изменить характер";return;}
+      save.disabled=true;save.textContent="Сохраняем...";
+      try{
+        config.personality=pair;
+        config.personality_changed_at=new Date().toISOString();
+        const {error}=await supabase.from("participants").update({avatar_config:config}).eq("id",participant.id);
+        if(error)throw error;
+        participant={...participant,avatar_config:config};
+        localStorage.setItem("gorizont-participant",JSON.stringify(participant));
+        showProfile(participant);
+        setStatus("Характер героя сохранён!");
+      }catch(error){
+        console.error("Не удалось сохранить характер из профиля:",error);
+        message.textContent=error.message||"Не удалось сохранить характер. Попробуй ещё раз.";
+        save.disabled=false;save.textContent="Сохранить характер";
+      }
+    });
+    profilePersonalityEditor={wrap,toggle,panel,grid,count,message,save};
+    return profilePersonalityEditor;
+  }
+  function renderProfilePersonalityEditor() {
+    const editor=ensureProfilePersonalityEditor();
+    if(!editor)return;
+    const hasAvatar=!!participant?.avatar_url;
+    const personality=participant?.avatar_config?.personality||{};
+    const hasPersonality=!!(personality.primary&&personality.secondary);
+    const next=profileNextPersonalityDate(participant?.avatar_config?.personality_changed_at);
+    const locked=hasPersonality&&next&&Date.now()<next.getTime();
+    editor.wrap.hidden=!hasAvatar||!!locked;
+    editor.toggle.textContent=hasPersonality?"Изменить характер":"Выбрать характер";
+    editor.panel.hidden=true;
+    editor.save.disabled=true;
+    editor.save.textContent="Сохранить характер";
+    editor.toggle.style.display=hasAvatar&&!locked?"block":"none";
+    if(locked) {
+      heroNextChange.textContent="Характер можно будет изменить с "+next.toLocaleDateString("ru-RU",{day:"numeric",month:"long"})+".";
+    }
+  }
+
   function showProfile(data) {
     participant = data || null;
     const signedIn = !!participant;
@@ -414,6 +571,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
           profileAvatar.textContent = "🌲";
         }
       }
+      renderProfilePersonalityEditor();
       refreshPoints();
       initSocialAndAchievements();
     } else { socialPanelInitialized = false; }
