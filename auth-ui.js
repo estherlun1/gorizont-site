@@ -250,6 +250,43 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
     button.addEventListener("click",async()=>{button.disabled=true;try{await action.run();button.textContent=action.done||"Готово";}catch(e){button.disabled=false;setStatus(e.message,true);}});
     row.append(name,button);container.appendChild(row);
   }
+  function renderFriendProfile(out,data){
+    out.replaceChildren();
+    const person=data.person||{},config=person.avatar_config||{},traits=config.personality||{};
+    const names={mila:"Мила",misha:"Миша",rosa:"Роза",petya:"Петя"};
+    const personalityNames={explorer:"Исследователь",creator:"Творец",energizer:"Энерджайзер",social:"Душа компании",guardian:"Хранитель",inventor:"Изобретатель",positive:"Позитивный",dreamy:"Мечтательный",sociable:"Общительный",calm:"Спокойный",shy:"Застенчивый",cheerful:"Весёлый",thoughtful:"Задумчивый",mischievous:"Озорной",determined:"Решительный",curious:"Любопытный"};
+    const card=document.createElement("section");card.className="gorizont-friend-profile";
+    card.style.cssText="margin:18px 0 6px;padding:16px;border:1px solid #d7dfd2;border-radius:18px;background:linear-gradient(145deg,#fffdf5,#f2f6e9);box-shadow:0 5px 18px #304b3514";
+    const top=document.createElement("div");top.style.cssText="display:flex;align-items:center;gap:13px;flex-wrap:wrap";
+    const avatar=document.createElement("div");avatar.style.cssText="width:88px;height:88px;flex:0 0 88px;border-radius:22px;overflow:hidden;background:#e8efd9;display:grid;place-items:center;font-size:42px;border:2px solid #d3dfc7";
+    if(person.avatar_url){const img=document.createElement("img");img.src=person.avatar_url;img.alt="Аватар "+(person.nickname||"друга");img.style.cssText="width:100%;height:100%;object-fit:cover";img.onerror=()=>{avatar.textContent="🌲"};avatar.appendChild(img)}else avatar.textContent="🌲";
+    const identity=document.createElement("div");identity.style.cssText="flex:1;min-width:160px";
+    const kicker=document.createElement("small");kicker.textContent="ПРОФИЛЬ ДРУГА";kicker.style.cssText="display:block;font-size:10px;letter-spacing:.12em;color:#71816c;font-weight:800;margin-bottom:4px";
+    const title=document.createElement("h4");title.textContent=person.nickname||person.full_name||"Участник Горизонта";title.style.cssText="font-size:21px;margin:0 0 5px;color:#294b38";
+    const char=document.createElement("p");char.textContent="Герой: "+(names[config.character]||"ещё не выбран");char.style.cssText="margin:0;color:#65735f;font-size:12px";
+    identity.append(kicker,title,char);top.append(avatar,identity);
+    const close=document.createElement("button");close.type="button";close.textContent="Скрыть профиль";close.style.cssText="border:1px solid #cbd8c4;border-radius:999px;background:#fff;color:#49614a;padding:8px 11px;font-weight:700;cursor:pointer";close.addEventListener("click",()=>out.replaceChildren());top.append(close);card.appendChild(top);
+    const hero=document.createElement("div");hero.style.cssText="margin-top:12px;padding:12px;border-radius:13px;background:#e9efd9;color:#405a31";
+    const main=document.createElement("strong");main.style.cssText="display:block;font-size:14px";main.textContent=personalityNames[traits.primary]||"Характер ещё не выбран";
+    const sub=document.createElement("span");sub.style.cssText="display:block;font-size:12px;margin-top:4px";sub.textContent=traits.secondary?"Дополнительная черта: "+(personalityNames[traits.secondary]||"не указана"):"Дополнительная черта пока не выбрана";
+    hero.append(main,sub);card.appendChild(hero);
+    const balance=document.createElement("div");balance.style.cssText="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;padding:13px 14px;border-radius:13px;background:#315846;color:#fff";
+    const balanceLabel=document.createElement("strong");balanceLabel.textContent="Баланс горизонтиков";const balanceValue=document.createElement("strong");balanceValue.style.cssText="font-size:20px;white-space:nowrap";const total=Number(data.balance||0);balanceValue.textContent=total+" "+currencyWord(total)+" ⭐";balance.append(balanceLabel,balanceValue);card.appendChild(balance);
+    const achTitle=document.createElement("h5");achTitle.textContent="Достижения";achTitle.style.cssText="margin:16px 0 9px;color:#315846;font-size:16px";card.appendChild(achTitle);
+    const achievements=data.achievements||[],unlocked=achievements.filter(x=>x.unlocked).length;
+    const count=document.createElement("p");count.textContent="Открыто "+unlocked+" из "+achievements.length;count.style.cssText="margin:-4px 0 10px;color:#71816c;font-size:12px";card.appendChild(count);
+    const grid=document.createElement("div");grid.style.cssText="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px";
+    achievements.forEach(x=>{
+      const item=document.createElement("article");item.style.cssText="min-width:0;padding:10px 8px;border-radius:12px;background:#fff;border:1px solid #e2e9dc;text-align:center";
+      const img=document.createElement("img");img.src=x.icon_path||"assets/achievements/first-look.png";img.alt="";img.loading="lazy";img.style.cssText="width:58px;height:58px;object-fit:contain"+(x.unlocked?"":";filter:grayscale(1);opacity:.5");
+      const name=document.createElement("strong");name.textContent=x.name;name.style.cssText="display:block;margin:5px 0;font-size:12px;color:#3c5140";
+      const desc=document.createElement("small");desc.textContent=x.description||"";desc.style.cssText="display:block;font-size:10px;line-height:1.35;color:#788273";
+      const status=document.createElement("small");status.textContent=x.unlocked?"Получено · уровень "+(x.level||1):"Прогресс "+(x.progress||0)+" / "+(x.thresholds?.[Math.min(x.level||0,(x.thresholds||[1]).length-1)]||1);status.style.cssText="display:block;margin-top:6px;font-size:10px;font-weight:700;color:"+(x.unlocked?"#47734f":"#8b7656");
+      item.append(img,name,desc,status);grid.appendChild(item);
+    });
+    card.appendChild(grid);out.appendChild(card);
+  }
+
   async function loadFriends() {
     const incoming=document.getElementById("gorizont-friend-incoming"), list=document.getElementById("gorizont-friend-list"); if(!incoming||!list)return;
     incoming.textContent="Загружаем…";list.textContent="Загружаем…";
@@ -259,7 +296,21 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
       if(!requests.results.length) incoming.textContent="Новых заявок пока нет.";
       requests.results.forEach(item=>addFriendRow(incoming,item.person||{nickname:"Участник"},{label:"Принять",done:"Принято",run:async()=>{await socialRequest({action:"friend_respond",request_id:item.id,accept:true});await loadFriends();}}));
       if(!friends.results.length) list.textContent="Пока нет друзей. Найди знакомых по игровому нику!";
-      friends.results.forEach(person=>{const row=document.createElement("div");row.style.cssText="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 0;border-bottom:1px solid #e1e8dc";const name=document.createElement("span");name.textContent=person.nickname||person.full_name||"Участник";const btn=document.createElement("button");btn.type="button";btn.textContent="Прогресс";btn.style.cssText="border:0;border-radius:10px;padding:8px 10px;background:#315846;color:white;font-weight:700";btn.addEventListener("click",async()=>{const out=document.getElementById("gorizont-friend-progress");out.textContent="Загружаем достижения…";try{const data=await socialRequest({action:"friend_progress",participant_id:person.id});out.replaceChildren();const title=document.createElement("h5");title.textContent="Достижения · "+(data.person?.nickname||name.textContent);out.appendChild(title);(data.achievements||[]).forEach(x=>{const line=document.createElement("p");line.style.cssText="font-size:12px;margin:5px 0";line.textContent=(x.unlocked?"🏅 ":"🔒 ")+x.name+" · "+(x.unlocked?"открыто · уровень "+x.level:"прогресс "+x.progress+" / "+(x.thresholds?.[Math.min(x.level||0,(x.thresholds||[1]).length-1)]||1));out.appendChild(line);});}catch(e){out.textContent=e.message;}});row.append(name,btn);list.appendChild(row);});
+      friends.results.forEach(person=>{
+        const row=document.createElement("div");row.className="gorizont-friend-row";
+        row.style.cssText="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #e1e8dc";
+        const avatar=document.createElement("span");avatar.style.cssText="width:42px;height:42px;flex:0 0 42px;border-radius:50%;overflow:hidden;background:#e9efd9;display:grid;place-items:center;font-size:22px";
+        if(person.avatar_url){const img=document.createElement("img");img.src=person.avatar_url;img.alt="";img.style.cssText="width:100%;height:100%;object-fit:cover";img.onerror=()=>{avatar.textContent="🌲"};avatar.appendChild(img)}else avatar.textContent="🌲";
+        const name=document.createElement("strong");name.textContent=person.nickname||person.full_name||"Участник";name.style.cssText="flex:1;min-width:0;font-size:14px";
+        const btn=document.createElement("button");btn.type="button";btn.textContent="Профиль";btn.style.cssText="border:0;border-radius:10px;padding:9px 13px;background:#315846;color:white;font-weight:700;cursor:pointer";
+        btn.addEventListener("click",async()=>{
+          const out=document.getElementById("gorizont-friend-progress");out.replaceChildren();
+          const loading=document.createElement("p");loading.textContent="Загружаем профиль…";out.appendChild(loading);
+          try{const data=await socialRequest({action:"friend_progress",participant_id:person.id});renderFriendProfile(out,data)}
+          catch(e){out.textContent=e.message}
+        });
+        row.append(avatar,name,btn);list.appendChild(row);
+      });
     } catch(e) { incoming.textContent=e.message;list.textContent="Не удалось загрузить друзей."; }
   }
   async function loadAchievements() {
