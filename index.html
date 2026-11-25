@@ -1755,17 +1755,51 @@ main {
 .mystery-letter-card #mysteryLetterClose{position:absolute;right:10px;top:9px;z-index:2;width:38px;height:38px;border:0;border-radius:50%;background:#ead1a7;font-size:25px;color:#5b432b;cursor:pointer}
 @media(min-width:851px){.games-arrow-hit.prev{left:19.5%}.games-arrow-hit.next{right:19.5%}}
 @media(max-width:600px){
- .camp-scene .camp-hotspot-forest{top:31%}
- .camp-scene .camp-hotspot-friends{top:42.5%}
- .camp-scene .camp-hotspot-fire{top:54%}
- .camp-scene .camp-hotspot-games{top:65.5%}
+ .camp-scene .camp-hotspot-forest{top:40%}
+ .camp-scene .camp-hotspot-friends{top:51.5%}
+ .camp-scene .camp-hotspot-fire{top:63%}
+ .camp-scene .camp-hotspot-games{top:74.5%}
  .horizon-map{margin-bottom:0!important;padding-bottom:0!important}
  #map{margin-bottom:0!important;padding-bottom:0!important}
  #guides{margin-top:0!important;padding-top:0!important}
 }
 @media(prefers-reduced-motion:reduce){.mystery-letter-card,#mysteryLetterVisual{animation:none!important}}
 </style>
-</head>
+<style id="letter-map-final-fixes-20261125">
+@media(max-width:600px){
+ .camp-scene .camp-hotspot-forest{top:40%!important}
+ .camp-scene .camp-hotspot-friends{top:51.5%!important}
+ .camp-scene .camp-hotspot-fire{top:63%!important}
+ .camp-scene .camp-hotspot-games{top:74.5%!important}
+}
+@media(min-width:851px){
+ .games-arrow-hit{width:5.5%;height:16%;top:47%}
+ .games-arrow-hit.prev{left:19%!important}
+ .games-arrow-hit.next{right:13.5%!important}
+}
+#mysteryLetterTrigger{
+ position:fixed;z-index:100101;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));
+ width:112px;height:112px;padding:0;border:0;border-radius:24px;
+ background-color:transparent;background-image:url('assets/letter/letter-spritesheet.png');
+ background-repeat:no-repeat;background-size:600% 180%;background-position:0 50%;
+ box-shadow:none;font-size:0;cursor:pointer;animation:letterNotificationFloat 2.4s ease-in-out infinite;
+}
+@keyframes letterNotificationFloat{50%{transform:translateY(-6px)}}
+.mystery-letter-modal{position:fixed!important;inset:0!important;z-index:100200!important;display:grid;place-items:center;padding:18px!important;background:rgba(18,36,29,.82)!important;backdrop-filter:blur(5px)}
+.mystery-letter-modal[hidden]{display:none!important}
+.mystery-letter-card{width:min(620px,94vw)!important;max-height:90svh;overflow:auto;padding:22px clamp(18px,4vw,34px) 26px!important;border:3px solid #d9a45e!important;border-radius:24px!important;background:linear-gradient(145deg,#fff8e7,#f4dfb8)!important;color:#4b3824!important;box-shadow:0 24px 80px #0008!important;text-align:center}
+#mysteryLetterVisual{width:min(250px,66vw);height:min(250px,66vw);margin:0 auto 8px;background-image:url('assets/letter/letter-spritesheet.png');background-repeat:no-repeat;background-size:600% 180%;background-position:0 50%;filter:drop-shadow(0 8px 10px #60401f35)}
+.mystery-letter-modal.opening #mysteryLetterVisual{animation:letterSpriteFrames 1.35s steps(5,end) forwards,letterSpriteApproach 1.35s cubic-bezier(.16,1,.3,1) forwards}
+.mystery-letter-modal.opened #mysteryLetterVisual{background-position:100% 50%}
+@keyframes letterSpriteFrames{from{background-position:0 50%}to{background-position:100% 50%}}
+@keyframes letterSpriteApproach{0%{opacity:.15;transform:translateY(23vh) scale(.2) rotate(-12deg);filter:blur(3px)}65%{opacity:1;transform:translateY(-5px) scale(1.06) rotate(1deg);filter:blur(0)}100%{opacity:1;transform:none;filter:none}}
+.mystery-letter-card h2,.mystery-letter-card p,.mystery-letter-card small{opacity:0;transform:translateY(8px);transition:opacity .35s ease,transform .35s ease}
+.mystery-letter-modal.opened .mystery-letter-card h2,.mystery-letter-modal.opened .mystery-letter-card p,.mystery-letter-modal.opened .mystery-letter-card small{opacity:1;transform:none}
+.mystery-letter-card p[hidden]{display:none!important}
+@media(min-width:851px){#mysteryLetterTrigger{width:126px;height:126px;right:5%;bottom:auto;top:34%}}
+@media(max-width:600px){#mysteryLetterTrigger{position:fixed!important;right:12px;bottom:calc(14px + env(safe-area-inset-bottom));width:92px;height:92px;z-index:100101}}
+@media(prefers-reduced-motion:reduce){#mysteryLetterTrigger,.mystery-letter-modal.opening #mysteryLetterVisual{animation:none!important}}
+</style></head>
 <body>
 <div id="celebrationLayer" aria-hidden="true"></div>
 
@@ -1862,9 +1896,9 @@ main {
     <button class="map-hit" style="left:68%;top:46%" data-map-page="tent" data-location="Костровая площадка" data-photo="assets/map/zone-02-campfire.webp" data-text="Место вечерних встреч у огня: здесь поют песни, играют, делятся историями и создают самые тёплые воспоминания о смене." aria-label="Костровая площадка"></button>
     <button class="map-hit" style="left:84%;top:32%" data-map-page="tent" data-location="Зона спорта" data-photo="assets/map/zone-09-tent-sports.webp" data-text="Спортивная площадка палаточного лагеря для волейбола, командных игр и весёлых соревнований на свежем воздухе." aria-label="Зона спорта"></button>
     <button class="map-hit" style="left:96%;top:36%" data-map-page="tent" data-location="Верёвочный городок" data-photo="assets/map/zone-01-rope-park.webp" data-text="Верёвочные препятствия, мостики и задания на ловкость. Здесь можно проверить равновесие, смелость и поддержать друзей на маршруте." aria-label="Верёвочный городок"></button>
-    <button class="map-hit" style="left:73%;top:52%" data-map-page="tent" data-location="Палаточный городок" data-photo="assets/map/zone-11-tent-town.webp" data-text="Жизнь в палатках — это друзья по отряду, самостоятельность, свежий воздух и маленькие ежедневные приключения на природе." aria-label="Палаточный городок"></button>
-    <button class="map-hit" style="left:89%;top:52%" data-map-page="tent" data-location="Большой шатёр и столовая" data-photo="assets/map/zone-10-big-tent.webp" data-text="Просторный шатёр для общих встреч и занятий. Здесь можно собраться всем вместе и укрыться от солнца или непогоды, а рядом организовано питание." aria-label="Большой шатёр и столовая"></button>
-    <button class="map-hit" style="left:82%;top:65%" data-map-page="tent" data-location="Зона чистоты" data-text="Санитарная зона палаточного лагеря с душевыми и местами для поддержания личной гигиены. Здесь можно освежиться после активного дня." aria-label="Зона чистоты"></button>
+    <button class="map-hit" style="left:73%;top:64%" data-map-page="tent" data-location="Палаточный городок" data-photo="assets/map/zone-11-tent-town.webp" data-text="Жизнь в палатках — это друзья по отряду, самостоятельность, свежий воздух и маленькие ежедневные приключения на природе." aria-label="Палаточный городок"></button>
+    <button class="map-hit" style="left:89%;top:59%" data-map-page="tent" data-location="Большой шатёр и столовая" data-photo="assets/map/zone-10-big-tent.webp" data-text="Просторный шатёр для общих встреч и занятий. Здесь можно собраться всем вместе и укрыться от солнца или непогоды, а рядом организовано питание." aria-label="Большой шатёр и столовая"></button>
+    <button class="map-hit" style="left:82%;top:82%" data-map-page="tent" data-location="Зона чистоты" data-text="Санитарная зона палаточного лагеря с душевыми и местами для поддержания личной гигиены. Здесь можно освежиться после активного дня." aria-label="Зона чистоты"></button>
 
     <div class="description" id="description" aria-live="polite">
       <button class="close" aria-label="Закрыть" type="button">×</button>
@@ -1892,7 +1926,7 @@ main {
     <img class="counselors-layer c-lera" src="assets/counselors/polina.webp" alt="Вожатая Полина" loading="lazy" decoding="async">
     <img class="counselors-layer c-ilya" src="assets/counselors/sonya.webp" alt="Вожатая Соня" loading="lazy" decoding="async">
     <img class="counselors-layer c-kids-front" src="assets/counselors/foreground.webp" alt="Дети собрались у костра" loading="lazy" decoding="async">
-    <div class="counselors-hint">нажми на вожатого — познакомимся поближе</div><button id="mysteryLetterTrigger" type="button" aria-label="Открыть найденное письмо" hidden>✉️</button>
+    <div class="counselors-hint">нажми на вожатого — познакомимся поближе</div><button id="mysteryLetterTrigger" type="button" aria-label="Открыть найденное письмо" hidden></button>
   </div>
 </section>
 <div id="mysteryLetterModal" class="mystery-letter-modal" hidden role="dialog" aria-modal="true" aria-labelledby="mysteryLetterTitle"><div class="mystery-letter-card"><button id="mysteryLetterClose" type="button" aria-label="Закрыть">×</button><div id="mysteryLetterVisual" aria-hidden="true"></div><h2 id="mysteryLetterTitle">Письмо для тебя</h2><p id="mysteryLetterText"></p><small>Твой Горизонт 🌲</small></div></div>
@@ -2192,10 +2226,10 @@ main {
       });
       const pinPositions=isMobileMap()?{
         stationary:[[12,37],[67,35],[53,52],[82,61],[17,72]],
-        tent:[[16,34],[45,44],[69,31],[90,37],[51,60],[83,64],[68,50]]
+        tent:[[16,34],[45,44],[69,31],[90,37],[51,57],[83,60],[68,82]]
       }:{
         stationary:[[12,37],[67,35],[53,52],[82,61],[17,72]],
-        tent:[[58,36],[68,46],[84,32],[96,36],[73,52],[89,52],[82,65]]
+        tent:[[58,36],[68,46],[84,32],[96,36],[73,64],[89,59],[82,82]]
       };
       document.querySelectorAll('.map-hit[data-map-page]').forEach(pin=>{
         pin.hidden=page!==pin.dataset.mapPage;
@@ -2398,31 +2432,42 @@ main {
    inventor:'Необычные вопросы приводят к удивительным открытиям. Продолжай искать собственные решения — миру нужны люди, которые умеют смотреть иначе.',
    default:'Если ты читаешь это письмо, значит, любопытство привело тебя в нужное место. Пусть в Горизонте у тебя будет много открытий, верных друзей и историй, к которым захочется возвращаться.'
   };
-  function revealLetter(){if(letterTrigger)letterTrigger.hidden=false;localStorage.setItem('gorizont-letter-discovered','1');}
-  stage.addEventListener('click',event=>{
-    const hotspot=event.target.closest('.counselor-hotspot');
-    if(!hotspot)return;
-    visitedCounselors.add(hotspot.dataset.person);
-    localStorage.setItem('gorizont-visited-counselors',JSON.stringify([...visitedCounselors]));
-    if(visitedCounselors.size>=4)revealLetter();
-  },true);
+  function revealLetter(){if(letterTrigger&&visitedCounselors.size>=4)letterTrigger.hidden=false;}
+  function closeLetter(){
+    letterModal.hidden=true;
+    letterModal.classList.remove('opening','opened');
+    if(letterTrigger)letterTrigger.hidden=true;
+    visitedCounselors.clear();
+    localStorage.removeItem('gorizont-visited-counselors');
+  }
   function openLetter(){
-   const saved=JSON.parse(localStorage.getItem('gorizont-participant')||'null');
-   const personality=saved?.avatar_config?.personality?.primary||'default';
-   letterText.textContent=letterLines[personality]||letterLines.default;
-   letterModal.hidden=false;
-   window.GorizontAchievements?.track('letter_opened');
+    if(!letterModal.hidden)return;
+    const saved=JSON.parse(localStorage.getItem('gorizont-participant')||'null');
+    const personality=saved?.avatar_config?.personality?.primary||'default';
+    letterText.textContent=letterLines[personality]||letterLines.default;
+    letterText.hidden=true;
+    letterModal.hidden=false;
+    letterModal.classList.remove('opening','opened');
+    letterModal.classList.add('opening');
+    window.GorizontAchievements?.track('letter_opened','letter-opened-once-v1');
+    window.setTimeout(()=>{
+      if(letterModal.hidden)return;
+      letterModal.classList.remove('opening');
+      letterModal.classList.add('opened');
+      letterText.hidden=false;
+    },1350);
   }
   letterTrigger?.addEventListener('click',openLetter);
-  letterClose?.addEventListener('click',()=>letterModal.hidden=true);
-  letterModal?.addEventListener('click',e=>{if(e.target===letterModal)letterModal.hidden=true;});
+  letterClose?.addEventListener('click',closeLetter);
+  letterModal?.addEventListener('click',e=>{if(e.target===letterModal)closeLetter();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!letterModal.hidden)closeLetter();});
 
   const mobileHotspots=[...stage.querySelectorAll('.counselor-hotspot')];
   mobileHotspots.forEach(el=>{
     const key=el.dataset.person;
     el.addEventListener('click',()=>{markCounselorVisited(key);open(key);});
   });
-  if(localStorage.getItem('gorizont-letter-discovered')==='1'||visitedCounselors.size>=4)revealLetter();
+  if(visitedCounselors.size>=4)revealLetter();
   hitImages.forEach(item=>{
     item.el.style.pointerEvents='auto';
     item.el.style.cursor='pointer';
@@ -2854,7 +2899,7 @@ render();
 <script type="module" src="auth-ui.js"></script>
 
 <script type="module" src="map-hunt-rewards.js"></script>
-<script type="module" src="achievement-tracker.js"></script>
+<script src="achievement-tracker.js?v=20261125-letter-achievement-fix"></script>
 <style>
 @media(max-width:600px){
  #mysteryLetterTrigger{position:fixed;right:16px;bottom:calc(22px + env(safe-area-inset-bottom));top:auto;z-index:100010;width:58px;height:58px}
