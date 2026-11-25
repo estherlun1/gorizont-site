@@ -506,7 +506,13 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
     setStatus("Ты вышел из аккаунта.");
   });
 
-  openers.forEach(element => element.addEventListener("click", open));
+  openers.forEach(element => element.addEventListener("click", () => {
+    const menuBookmark = document.getElementById("menu");
+    const menuTab = document.getElementById("menuTab");
+    menuBookmark?.classList.remove("open");
+    menuTab?.setAttribute("aria-expanded", "false");
+    open();
+  }));
   closeButton?.addEventListener("click", close);
   registerTab?.addEventListener("click", () => tab("register"));
   loginTab?.addEventListener("click", () => tab("login"));
