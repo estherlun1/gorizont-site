@@ -267,7 +267,7 @@ async function showNextHint() {
   $('.hotspots .spot').forEach((button, index) => {
     if (levels[levelIndex].spots[index]?.id === target.id) button.classList.add('hint');
   });
-  const prefix = cost > 0 ? "Подсказка применена. " : "";
+  const prefix = cost > 0 ? "Списано " + cost + " горизонтиков. " : "";
   status.textContent = prefix + "Присмотрись к области «" + target.label + "».";
   clearTimeout(hintTimer);
   hintTimer = setTimeout(() => $('.spot.hint').forEach((button) => button.classList.remove('hint')), 1800);
