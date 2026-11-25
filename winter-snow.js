@@ -1,4 +1,7 @@
 (() => {
+  // Снег включён с ноября по март; с 1 апреля анимация отключается автоматически.
+  const month = new Date().getMonth();
+  if (month > 2 && month < 10) return;
   if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   const canvas = document.createElement("canvas");
   canvas.id = "winterSnowCanvas";
