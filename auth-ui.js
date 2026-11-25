@@ -40,6 +40,24 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
   let busy = false;
   let participant = null;
 
+  function setProfileTab(name) {
+    const allowed = ["achievements", "friends", "balance"];
+    const active = allowed.includes(name) ? name : "balance";
+    if (profile) profile.dataset.activeTab = active;
+    profile?.querySelectorAll("[data-profile-tab]").forEach(button => {
+      const selected = button.dataset.profileTab === active;
+      button.classList.toggle("active", selected);
+      button.setAttribute("aria-selected", String(selected));
+    });
+    profile?.querySelectorAll("[data-profile-panel]").forEach(panel => {
+      panel.hidden = panel.dataset.profilePanel !== active;
+    });
+  }
+  profile?.addEventListener("click", event => {
+    const button = event.target.closest("[data-profile-tab]");
+    if (button) setProfileTab(button.dataset.profileTab);
+  });
+
   function setStatus(message, error = false) {
     status.textContent = message;
     status.style.color = error ? "#a33d2b" : "#47734f";
@@ -303,6 +321,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
       }
     }
     if (profile) profile.hidden = !signedIn;
+    if (signedIn) setProfileTab(profile?.dataset.activeTab || "balance");
     if (tabs) tabs.hidden = signedIn;
     registerForm.hidden = signedIn || !registerForm.dataset.active;
     loginForm.hidden = signedIn || registerForm.dataset.active;
@@ -317,7 +336,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
       const heroPersonality = participant.avatar_config?.personality;
       if(heroCard){
         const valid = heroPersonality?.primary && heroPersonality?.secondary && personalityNames[heroPersonality.primary] && personalityNames[heroPersonality.secondary];
-        heroCard.hidden = !valid;
+        heroCard.hidden = false;
         if(valid){
           heroPrimary.textContent = personalityNames[heroPersonality.primary];
           heroSecondary.textContent = "Дополнительная черта: " + personalityNames[heroPersonality.secondary];
@@ -326,6 +345,10 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
             const next = new Date(changedAt); const day = next.getDate(); next.setDate(1); next.setMonth(next.getMonth()+1); next.setDate(Math.min(day,new Date(next.getFullYear(),next.getMonth()+1,0).getDate()));
             heroNextChange.textContent = "Характер можно будет изменить с " + next.toLocaleDateString("ru-RU",{day:"numeric",month:"long"}) + ".";
           }else heroNextChange.textContent = "Ты можешь выбрать новый характер в конструкторе героя.";
+        }else{
+          heroPrimary.textContent = "Характер ещё не выбран";
+          heroSecondary.textContent = "Выбери основной и дополнительный характер.";
+          heroNextChange.textContent = "";
         }
       }
       if (profileAvatar) {
@@ -334,6 +357,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
           const image = document.createElement("img");
           image.src = participant.avatar_url;
           image.alt = "Твой персонаж";
+          image.onerror = () => { profileAvatar.replaceChildren(); profileAvatar.textContent = "🌲"; };
           profileAvatar.appendChild(image);
         } else {
           profileAvatar.textContent = "🌲";
