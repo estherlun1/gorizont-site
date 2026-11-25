@@ -108,7 +108,7 @@ async function setAccessMode(mode){
   closed_profile:"Участникам останется доступен только профиль. Игры, задания, магазин и регистрация будут закрыты.",
   open_all:"Полный доступ вернётся всем участникам. Участники зимнего теста снова получат роль «Участник», а новые регистрации — обычную роль."
  };
- if(!confirm(labels[mode]+"?\\n\\n"+explanations[mode]))return;
+ if(!confirm(labels[mode]+"?\n\n"+explanations[mode]))return;
  const buttons=[$("modeWinter"),$("modeClosed"),$("modeOpen")];buttons.forEach(b=>b.disabled=true);
  try{
   const data=await call("admin-manage-site-access",{mode});
