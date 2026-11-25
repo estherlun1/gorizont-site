@@ -2418,6 +2418,11 @@ main {
   ].filter(item => item.el && data[item.key]);
 
 
+  if(localStorage.getItem('gorizont-letter-cycle-version')!=='2'){
+    localStorage.removeItem('gorizont-letter-discovered');
+    localStorage.removeItem('gorizont-visited-counselors');
+    localStorage.setItem('gorizont-letter-cycle-version','2');
+  }
   const visitedCounselors=new Set(JSON.parse(localStorage.getItem('gorizont-visited-counselors')||'[]'));
   const letterTrigger=document.getElementById('mysteryLetterTrigger');
   const letterModal=document.getElementById('mysteryLetterModal');
