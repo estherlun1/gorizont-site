@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Администрирование — Горизонт</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
@@ -41,8 +41,8 @@ form{display:grid;gap:12px;max-width:420px}.field{display:grid;gap:6px}.hidden{d
 </form><div id="status" role="status"></div>
 </section>
 <section id="dashboard" class="panel hidden">
-<h1>Участники лагеря</h1>
-<p class="muted">Найди участника по имени или логину и при необходимости выдай временный пароль. Он действует 24 часа и требует обязательной смены при входе.</p>
+<h1>Участники лагеря · модерация</h1>
+<p class="muted">Найди участника по имени или логину. В колонке «Игровой ник» можно изменить ник, а рядом — списать от 1 до 100 горизонтиков за нарушение. Сброс пароля доступен отдельно.</p>
 <div class="toolbar"><input id="search" type="search" placeholder="Поиск по имени или логину"><button id="refresh" class="secondary" type="button">Обновить список</button><button id="logout" class="secondary" type="button">Выйти</button></div>
 <div class="table-wrap"><table><thead><tr><th>Участник</th><th>Игровой ник</th><th>Логин</th><th>Статус пароля</th><th>Действие</th></tr></thead><tbody id="participants"></tbody></table></div>
 <div id="passwordResult" class="hidden"><strong>Временный пароль создан</strong><p class="muted">Передай его участнику лично. Он будет показан только сейчас.</p><div id="temporaryPassword" class="password"></div><p id="expiry" class="muted"></p><button id="copyPassword" type="button">Скопировать пароль</button></div>
@@ -85,12 +85,12 @@ function render(){
  for(const p of filtered){
   const tr=document.createElement("tr");
   const name=document.createElement("td");name.textContent=p.full_name+(p.nickname?" · "+p.nickname:"");
-  const nick=document.createElement("td");const nickInput=document.createElement("input");nickInput.value=p.nickname||"";nickInput.maxLength=30;nickInput.style.minWidth="140px";nickInput.setAttribute("aria-label","Игровой ник");nick.append(nickInput);
+  const nick=document.createElement("td");const nickInput=document.createElement("input");nickInput.value=p.nickname||"";nickInput.maxLength=30;nickInput.style.minWidth="140px";nickInput.setAttribute("aria-label","Изменить игровой ник");nickInput.placeholder="Игровой ник";nick.append(nickInput);
   const login=document.createElement("td");login.textContent=p.username;
   const state=document.createElement("td");const pill=document.createElement("span");pill.className="status-pill"+(p.must_change_password?" warn":"");pill.textContent=p.must_change_password?"Ожидает смены пароля":"Обычный пароль";state.append(pill);
   const action=document.createElement("td");const wrap=document.createElement("div");wrap.className="row-actions";
-  const saveNick=document.createElement("button");saveNick.type="button";saveNick.textContent="Сохранить ник";saveNick.addEventListener("click",async()=>{saveNick.disabled=true;try{const r=await call("admin-moderate-nickname",{participant_id:p.id,nickname:nickInput.value,reason:"Изменение ника администратором"});p.nickname=r.nickname;status("Игровой ник изменён.",false,"dashboardStatus");}catch(e){status(e.message,true,"dashboardStatus");}finally{saveNick.disabled=false;}});wrap.append(saveNick);
-  const penalty=document.createElement("input");penalty.type="number";penalty.min="0";penalty.max="100";penalty.value="0";penalty.style.width="72px";penalty.setAttribute("aria-label","Штраф в горизонтиках");
+  const saveNick=document.createElement("button");saveNick.type="button";saveNick.textContent="Сохранить ник";saveNick.addEventListener("click",async()=>{saveNick.disabled=true;try{const r=await call("admin-moderate-nickname",{participant_id:p.id,nickname:nickInput.value,reason:"Изменение ника администратором"});p.nickname=r.nickname;name.textContent=p.full_name+(p.nickname?" · "+p.nickname:"");status("Игровой ник изменён.",false,"dashboardStatus");}catch(e){status(e.message,true,"dashboardStatus");}finally{saveNick.disabled=false;}});wrap.append(saveNick);
+  const penalty=document.createElement("input");penalty.type="number";penalty.min="0";penalty.max="100";penalty.value="0";penalty.style.width="72px";penalty.setAttribute("aria-label","Штраф в горизонтиках");penalty.placeholder="штраф";
   const fine=document.createElement("button");fine.type="button";fine.textContent="Штраф";fine.addEventListener("click",async()=>{const amount=Math.floor(Number(penalty.value)||0);if(amount<=0)return status("Укажи штраф от 1 до 100 горизонтиков.",true,"dashboardStatus");if(!confirm("Списать "+amount+" горизонтиков за некорректный никнейм?"))return;fine.disabled=true;try{const r=await call("admin-moderate-nickname",{participant_id:p.id,penalty:amount,reason:"Некорректный игровой никнейм"});status("Списано "+r.penalty+" горизонтиков.",false,"dashboardStatus");}catch(e){status(e.message,true,"dashboardStatus");}finally{fine.disabled=false;}});wrap.append(penalty,fine);
   const btn=document.createElement("button");btn.type="button";btn.textContent="Сбросить пароль";btn.addEventListener("click",()=>reset(p.username,btn));wrap.append(btn);action.append(wrap);tr.append(name,nick,login,state,action);body.append(tr);
  }
