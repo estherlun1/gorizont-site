@@ -129,13 +129,15 @@
 .personality-panel h3{margin:0 0 5px;color:#684326;font-size:20px;text-align:center}
 .personality-panel>p{margin:0 0 12px;color:#876342;font:13px/1.45 Arial,sans-serif;text-align:center}
 .personality-instruction{margin:0 0 12px;color:#876342;font:13px/1.45 Arial,sans-serif;text-align:center}.personality-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.personality-card{padding:10px;border:1px solid #d8b17d;border-radius:13px;background:linear-gradient(#fffdf5,#f2dfbf);color:#684326;text-align:left}
-.personality-card strong{display:block;font:700 14px Georgia,serif;margin-bottom:4px}
+.personality-card{display:block;position:relative;padding:10px;border:1px solid #d8b17d;border-radius:13px;background:linear-gradient(#fffdf5,#f2dfbf);color:#684326;text-align:left;cursor:pointer;transition:border-color .15s,background .15s}
+.personality-card input[type=checkbox]{width:18px;height:18px;margin:0 6px 7px 0;accent-color:#607a43;vertical-align:middle;cursor:pointer}
+.personality-card strong{display:inline;font:700 14px Georgia,serif;margin-bottom:4px}
 .personality-card small{display:block;min-height:34px;font:11px/1.35 Arial,sans-serif;color:#896b4c}
-.personality-actions{display:flex;gap:5px;margin-top:8px}
-.personality-actions button{flex:1;border:1px solid #c89a60;border-radius:8px;background:#fff7e8;color:#704522;padding:6px 4px;font:700 10px Arial;cursor:pointer}
-.personality-actions button.active{background:#607a43;color:#fff;border-color:#4f6636}
-.personality-actions button:disabled{opacity:.4;cursor:not-allowed}
+.personality-card.selected{border:2px solid #607a43;background:#edf3df}
+.personality-card input:disabled{cursor:not-allowed}
+.trait-select-hint{display:block;margin-top:8px;color:#876342;font:700 10px Arial,sans-serif}
+.personality-card.selected .trait-select-hint{color:#405a31}
+.personality-card input:disabled~.trait-select-hint{opacity:.55}
 .personality-summary{margin:12px 0 0;padding:10px;border-radius:11px;background:#e9efd9;color:#405a31;font:12px/1.45 Arial,sans-serif}
 .personality-lock{margin-top:8px;color:#8b6036;font:11px/1.4 Arial,sans-serif}
 @media(max-width:600px){.personality-panel{padding:12px}.personality-card{padding:8px}.personality-card small{min-height:42px}}
@@ -158,7 +160,7 @@
 #result .result-stage,#result .result-stage canvas{pointer-events:none!important}
 #personalityPanel{position:relative!important;z-index:100000!important;pointer-events:auto!important;isolation:isolate}
 #personalityPanel .personality-grid,#personalityPanel .personality-card,#personalityPanel .personality-actions{position:relative;z-index:1;pointer-events:auto!important}
-#personalityPanel button[data-trait]{position:relative!important;z-index:100001!important;display:block!important;visibility:visible!important;pointer-events:auto!important;touch-action:manipulation!important;cursor:pointer!important}
+#personalityPanel input[data-trait]{position:relative!important;z-index:100001!important;display:block!important;visibility:visible!important;pointer-events:auto!important;touch-action:manipulation!important;cursor:pointer!important}
 #personalityPanel button[data-trait]:disabled{opacity:.4;cursor:not-allowed!important}
 </style></head><body><a class="site-back" href="../index.html" aria-label="Вернуться на сайт">← На сайт</a><main class="game-shell">
 
@@ -181,22 +183,22 @@
   <p>Выбери основную и дополнительную черты. Характер выбирается один раз; изменить его снова можно будет через месяц. Внешность героя разрешено менять когда угодно.</p>
   <p class="personality-instruction">Выбери любые две черты, которые лучше всего подходят твоему герою. Порядок не важен.</p>
   <div class="personality-grid" id="personalityGrid">
-    <article class="personality-card"><strong>🔎 Исследователь</strong><small>Любознательный, замечает детали и любит открытия.</small><div class="personality-actions"><button type="button" data-trait="explorer" aria-pressed="false">Выбрать</button></div></article>
-    <article class="personality-card"><strong>🎨 Творец</strong><small>Фантазирует, придумывает и создаёт новое.</small><div class="personality-actions"><button type="button" data-trait="creator" aria-pressed="false">Выбрать</button></div></article>
-    <article class="personality-card"><strong>⚡ Энерджайзер</strong><small>Активный, решительный, любит движение.</small><div class="personality-actions"><button type="button" data-trait="energizer" aria-pressed="false">Выбрать</button></div></article>
-    <article class="personality-card"><strong>🤝 Душа компании</strong><small>Дружелюбный, общительный, объединяет друзей.</small><div class="personality-actions"><button type="button" data-trait="social" aria-pressed="false">Выбрать</button></div></article>
-    <article class="personality-card"><strong>🌿 Хранитель</strong><small>Заботливый, внимательный к людям и природе.</small><div class="personality-actions"><button type="button" data-trait="guardian" aria-pressed="false">Выбрать</button></div></article>
-    <article class="personality-card"><strong>💡 Изобретатель</strong><small>Находчивый, любит эксперименты и решения.</small><div class="personality-actions"><button type="button" data-trait="inventor" aria-pressed="false">Выбрать</button></div></article>
-    <article class="personality-card"><strong>☀️ Позитивный</strong><small>Часто радуется и старается видеть хорошее.</small><div class="personality-actions"><button type="button" data-trait="positive" aria-pressed="false">Выбрать</button></div></article>
-    <article class="personality-card"><strong>☁️ Мечтательный</strong><small>Любит фантазировать и замечать красоту.</small><div class="personality-actions"><button type="button" data-trait="dreamy" aria-pressed="false">Выбрать</button></div></article>
-    <article class="personality-card"><strong>💬 Общительный</strong><small>Легко знакомится и любит поболтать.</small><div class="personality-actions"><button type="button" data-trait="sociable" aria-pressed="false">Выбрать</button></div></article>
-    <article class="personality-card"><strong>🍃 Спокойный</strong><small>Не торопится и любит размеренность.</small><div class="personality-actions"><button type="button" data-trait="calm" aria-pressed="false">Выбрать</button></div></article>
-    <article class="personality-card"><strong>🌸 Застенчивый</strong><small>Немного стесняется, но искренне открыт.</small><div class="personality-actions"><button type="button" data-trait="shy" aria-pressed="false">Выбрать</button></div></article>
-    <article class="personality-card"><strong>😄 Весёлый</strong><small>Любит шутить и поднимать настроение.</small><div class="personality-actions"><button type="button" data-trait="cheerful" aria-pressed="false">Выбрать</button></div></article>
-    <article class="personality-card"><strong>🌙 Задумчивый</strong><small>Часто размышляет и всё обдумывает.</small><div class="personality-actions"><button type="button" data-trait="thoughtful" aria-pressed="false">Выбрать</button></div></article>
-    <article class="personality-card"><strong>🦊 Озорной</strong><small>Любит добрые шалости и сюрпризы.</small><div class="personality-actions"><button type="button" data-trait="mischievous" aria-pressed="false">Выбрать</button></div></article>
-    <article class="personality-card"><strong>🧭 Решительный</strong><small>Не боится пробовать и идти к цели.</small><div class="personality-actions"><button type="button" data-trait="determined" aria-pressed="false">Выбрать</button></div></article>
-    <article class="personality-card"><strong>🔍 Любопытный</strong><small>Постоянно задаёт вопросы и ищет ответы.</small><div class="personality-actions"><button type="button" data-trait="curious" aria-pressed="false">Выбрать</button></div></article>
+    <label class="personality-card"><input type="checkbox" data-trait="explorer"><strong>🔎 Исследователь</strong><small>Любознательный, замечает детали и любит открытия.</small><span class="trait-select-hint">Нажми, чтобы выбрать</span></label>
+    <label class="personality-card"><input type="checkbox" data-trait="creator"><strong>🎨 Творец</strong><small>Фантазирует, придумывает и создаёт новое.</small><span class="trait-select-hint">Нажми, чтобы выбрать</span></label>
+    <label class="personality-card"><input type="checkbox" data-trait="energizer"><strong>⚡ Энерджайзер</strong><small>Активный, решительный, любит движение.</small><span class="trait-select-hint">Нажми, чтобы выбрать</span></label>
+    <label class="personality-card"><input type="checkbox" data-trait="social"><strong>🤝 Душа компании</strong><small>Дружелюбный, общительный, объединяет друзей.</small><span class="trait-select-hint">Нажми, чтобы выбрать</span></label>
+    <label class="personality-card"><input type="checkbox" data-trait="guardian"><strong>🌿 Хранитель</strong><small>Заботливый, внимательный к людям и природе.</small><span class="trait-select-hint">Нажми, чтобы выбрать</span></label>
+    <label class="personality-card"><input type="checkbox" data-trait="inventor"><strong>💡 Изобретатель</strong><small>Находчивый, любит эксперименты и решения.</small><span class="trait-select-hint">Нажми, чтобы выбрать</span></label>
+    <label class="personality-card"><input type="checkbox" data-trait="positive"><strong>☀️ Позитивный</strong><small>Часто радуется и старается видеть хорошее.</small><span class="trait-select-hint">Нажми, чтобы выбрать</span></label>
+    <label class="personality-card"><input type="checkbox" data-trait="dreamy"><strong>☁️ Мечтательный</strong><small>Любит фантазировать и замечать красоту.</small><span class="trait-select-hint">Нажми, чтобы выбрать</span></label>
+    <label class="personality-card"><input type="checkbox" data-trait="sociable"><strong>💬 Общительный</strong><small>Легко знакомится и любит поболтать.</small><span class="trait-select-hint">Нажми, чтобы выбрать</span></label>
+    <label class="personality-card"><input type="checkbox" data-trait="calm"><strong>🍃 Спокойный</strong><small>Не торопится и любит размеренность.</small><span class="trait-select-hint">Нажми, чтобы выбрать</span></label>
+    <label class="personality-card"><input type="checkbox" data-trait="shy"><strong>🌸 Застенчивый</strong><small>Немного стесняется, но искренне открыт.</small><span class="trait-select-hint">Нажми, чтобы выбрать</span></label>
+    <label class="personality-card"><input type="checkbox" data-trait="cheerful"><strong>😄 Весёлый</strong><small>Любит шутить и поднимать настроение.</small><span class="trait-select-hint">Нажми, чтобы выбрать</span></label>
+    <label class="personality-card"><input type="checkbox" data-trait="thoughtful"><strong>🌙 Задумчивый</strong><small>Часто размышляет и всё обдумывает.</small><span class="trait-select-hint">Нажми, чтобы выбрать</span></label>
+    <label class="personality-card"><input type="checkbox" data-trait="mischievous"><strong>🦊 Озорной</strong><small>Любит добрые шалости и сюрпризы.</small><span class="trait-select-hint">Нажми, чтобы выбрать</span></label>
+    <label class="personality-card"><input type="checkbox" data-trait="determined"><strong>🧭 Решительный</strong><small>Не боится пробовать и идти к цели.</small><span class="trait-select-hint">Нажми, чтобы выбрать</span></label>
+    <label class="personality-card"><input type="checkbox" data-trait="curious"><strong>🔍 Любопытный</strong><small>Постоянно задаёт вопросы и ищет ответы.</small><span class="trait-select-hint">Нажми, чтобы выбрать</span></label>
   </div>
   <div class="personality-summary" id="personalitySummary" aria-live="polite">Выбрано 0 из 2</div>
   <div class="personality-lock" id="personalityLock" aria-live="polite"></div>
@@ -236,12 +238,11 @@ function renderPersonality(){
  const hasSaved=selectedTraits.length===2&&!!personality.changedAt;
  if(panel)panel.hidden=hasSaved&&!canChange;
  if(status){status.hidden=!(hasSaved&&!canChange);const next=nextPersonalityDate(personality.changedAt);status.textContent='Две черты уже выбраны. Следующее изменение доступно '+next.toLocaleDateString('ru-RU',{day:'numeric',month:'long'})+'. Внешность героя можно менять в любое время.';}
- grid.querySelectorAll('button[data-trait]').forEach(button=>{
-  const active=selectedTraits.includes(button.dataset.trait);
-  button.classList.toggle('active',active);
-  button.disabled=hasSaved&&!canChange;
-  button.setAttribute('aria-pressed',String(active));
-  button.textContent=active?'Выбрано ✓':'Выбрать';
+ grid.querySelectorAll('input[data-trait]').forEach(input=>{
+  const active=selectedTraits.includes(input.dataset.trait);
+  input.checked=active;
+  input.disabled=hasSaved&&!canChange;
+  input.closest('.personality-card')?.classList.toggle('selected',active);
  });
  const names=selectedTraits.map(id=>PERSONALITY_NAMES[id]);
  document.getElementById('personalitySummary').textContent='Выбрано '+selectedTraits.length+' из 2'+(names.length?' · '+names.join(' + '):'');
@@ -249,26 +250,22 @@ function renderPersonality(){
  if(!canChange){const next=nextPersonalityDate(personality.changedAt);lock.textContent='Черты уже выбраны. Следующее изменение будет доступно '+next.toLocaleDateString('ru-RU',{day:'numeric',month:'long'})+'. Внешность героя можно менять и сейчас.';}
  else lock.textContent=selectedTraits.length===2?'Отлично! Теперь можно сохранить своего героя.':'Можно выбрать ещё '+(2-selectedTraits.length)+'. Порядок выбора не важен.';
 }
-function choosePersonality(button){
- if(!button||button.disabled||!personalityCanChange())return;
- const id=button.dataset.trait;if(!TRAIT_ORDER.includes(id))return;
- if(selectedTraits.includes(id))selectedTraits=selectedTraits.filter(item=>item!==id);
- else if(selectedTraits.length<2)selectedTraits=orderedTraits([...selectedTraits,id]);
- else return;
- const pair=pairFromTraits(selectedTraits);
- personality={...pair,changedAt:personality.changedAt};
+function applyTraitSelection(input){
+ if(!input||input.disabled||!personalityCanChange())return;
+ const id=input.dataset.trait;if(!TRAIT_ORDER.includes(id))return;
+ if(input.checked){
+  if(selectedTraits.length>=2){input.checked=false;document.getElementById('personalityLock').textContent='Можно выбрать только две черты. Сними одну отметку, чтобы выбрать другую.';return;}
+  selectedTraits=orderedTraits([...selectedTraits,id]);
+ }else selectedTraits=selectedTraits.filter(item=>item!==id);
+ personality={...pairFromTraits(selectedTraits),changedAt:personality.changedAt};
  renderPersonality();
 }
-document.addEventListener('click',event=>{
- const target=event.target;
- const button=target instanceof Element?target.closest('#personalityPanel button[data-trait]'):null;
- if(!button)return;
- event.preventDefault();event.stopPropagation();
- if(button.disabled)return;
- choosePersonality(button);
-},true);
+document.getElementById('personalityPanel')?.addEventListener('change',event=>{
+ const input=event.target;
+ if(input instanceof HTMLInputElement&&input.matches('input[data-trait]'))applyTraitSelection(input);
+});
 window.GorizontPersonality={
- choose(id){const button=document.querySelector('#personalityPanel button[data-trait="'+id+'"]');if(button&&!button.disabled)choosePersonality(button);},
+ choose(id){const input=document.querySelector('#personalityPanel input[data-trait="'+id+'"]');if(input&&!input.disabled){input.checked=!input.checked;applyTraitSelection(input);}},
  getSelection(){return {traits:[...selectedTraits],...pairFromTraits(selectedTraits)};}
 };
 function image(file){if(!cache[file]){const im=new Image();im.src=A+file;cache[file]=im;im.onload=draw}return cache[file]}
