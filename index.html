@@ -1747,7 +1747,7 @@ main {
 .mystery-letter-modal[hidden]{display:none!important}
 .mystery-letter-card{position:relative;width:min(620px,94vw);max-height:90svh;overflow:auto;padding:24px clamp(18px,4vw,34px) 26px;border:3px solid #d9a45e;border-radius:24px;background:linear-gradient(145deg,#fff8e7,#f4dfb8);color:#4b3824;box-shadow:0 24px 80px #0008;text-align:center;transform-origin:center;animation:letterApproach .95s cubic-bezier(.16,1,.3,1) both}
 @keyframes letterApproach{0%{opacity:.2;transform:translateY(22vh) scale(.18) rotate(-13deg);filter:blur(4px)}65%{opacity:1;transform:translateY(-5px) scale(1.035) rotate(1deg);filter:blur(0)}100%{opacity:1;transform:none;filter:none}}
-#mysteryLetterVisual{width:min(240px,62vw);height:min(220px,58vw);margin:0 auto 8px;background-image:url('assets/letter/letter-spritesheet.png');background-repeat:no-repeat;background-size:300% 100%;background-position:0 0;animation:letterSpriteUnfold .9s steps(1,end) both;filter:drop-shadow(0 8px 10px #60401f35)}
+#mysteryLetterVisual{width:min(240px,62vw);height:min(220px,58vw);margin:0 auto 8px;background-image:none;background-repeat:no-repeat;background-size:300% 100%;background-position:0 0;animation:letterSpriteUnfold .9s steps(1,end) both;filter:drop-shadow(0 8px 10px #60401f35)}
 @keyframes letterSpriteUnfold{0%{background-position:0 0}33.333%{background-position:50% 0}66.666%,100%{background-position:100% 0}}
 .mystery-letter-card h2{margin:4px 0 10px;color:#704321;font:700 clamp(25px,4vw,34px) Georgia,serif}
 .mystery-letter-card p{margin:0 auto 16px;max-width:510px;white-space:pre-line;line-height:1.55;font:clamp(15px,2vw,18px)/1.55 Georgia,serif}
@@ -1780,7 +1780,7 @@ main {
 #mysteryLetterTrigger{
  position:fixed;z-index:100101;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));
  width:112px;height:112px;padding:0;border:0;border-radius:24px;
- background-color:transparent;background-image:url('assets/letter/letter-spritesheet.png');
+ background-color:transparent;background-image:none;
  background-repeat:no-repeat;background-size:600% 180%;background-position:0 50%;
  box-shadow:none;font-size:0;cursor:pointer;animation:letterNotificationFloat 2.4s ease-in-out infinite;
 }
@@ -1788,7 +1788,7 @@ main {
 .mystery-letter-modal{position:fixed!important;inset:0!important;z-index:100200!important;display:grid;place-items:center;padding:18px!important;background:rgba(18,36,29,.82)!important;backdrop-filter:blur(5px)}
 .mystery-letter-modal[hidden]{display:none!important}
 .mystery-letter-card{width:min(620px,94vw)!important;max-height:90svh;overflow:auto;padding:22px clamp(18px,4vw,34px) 26px!important;border:3px solid #d9a45e!important;border-radius:24px!important;background:linear-gradient(145deg,#fff8e7,#f4dfb8)!important;color:#4b3824!important;box-shadow:0 24px 80px #0008!important;text-align:center}
-#mysteryLetterVisual{width:min(250px,66vw);height:min(250px,66vw);margin:0 auto 8px;background-image:url('assets/letter/letter-spritesheet.png');background-repeat:no-repeat;background-size:600% 180%;background-position:0 50%;filter:drop-shadow(0 8px 10px #60401f35)}
+#mysteryLetterVisual{width:min(250px,66vw);height:min(250px,66vw);margin:0 auto 8px;background-image:none;background-repeat:no-repeat;background-size:600% 180%;background-position:0 50%;filter:drop-shadow(0 8px 10px #60401f35)}
 .mystery-letter-modal.opening #mysteryLetterVisual{animation:letterSpriteFrames 1.35s steps(5,end) forwards,letterSpriteApproach 1.35s cubic-bezier(.16,1,.3,1) forwards}
 .mystery-letter-modal.opened #mysteryLetterVisual{background-position:100% 50%}
 @keyframes letterSpriteFrames{from{background-position:0 50%}to{background-position:100% 50%}}
