@@ -155,6 +155,7 @@
 <div class="category-tabs"><button class="category-tab active" data-kind="shirts"><span class="symbol">👕</span><small>Футболки</small></button><button class="category-tab" data-kind="hoodies"><span class="symbol">🧥</span><small>Толстовки</small></button><button class="category-tab" data-kind="pants"><span class="symbol">👖</span><small>Брюки</small></button><button class="category-tab" data-kind="shoes"><span class="symbol">👟</span><small>Обувь</small></button></div>
 <div class="items-wrap"><div class="items-grid" id="items"></div></div><div class="wardrobe-footer"><div class="wardrobe-hint" id="hint">Нажимай на вещи, чтобы примерить их на героя.</div><div class="footer-buttons"><button class="wood-button" id="randomLook">Случайный образ</button><button class="wood-button green" id="finish">Готово ✓</button></div></div></section></div>
 <section class="result hidden" id="result"><h2>🌲 Образ готов!</h2><p>Герой готов к новым приключениям.</p><div class="result-stage"><canvas id="finalDoll" width="292" height="724"></canvas></div>
+<p id="personalityStatus" class="personality-lock" hidden></p>
 <div class="personality-panel" id="personalityPanel">
   <h3>Какой характер у твоего героя?</h3>
   <p>Выбери основную и дополнительную черты. Характер выбирается один раз; изменить его снова можно будет через месяц. Внешность героя разрешено менять когда угодно.</p>
@@ -187,6 +188,10 @@ function personalityCanChange(){const next=nextPersonalityDate(personality.chang
 function renderPersonality(){
  const grid=document.getElementById('personalityGrid');if(!grid)return;
  const canChange=personalityCanChange();
+ const panel=document.getElementById('personalityPanel'),status=document.getElementById('personalityStatus');
+ const hasSaved=!!(personality.primary&&personality.secondary&&personality.changedAt);
+ if(panel)panel.hidden=hasSaved&&!canChange;
+ if(status){status.hidden=!(hasSaved&&!canChange);const next=nextPersonalityDate(personality.changedAt);status.textContent='Характер уже выбран. Следующее изменение доступно '+next.toLocaleDateString('ru-RU',{day:'numeric',month:'long'})+'. Внешность героя можно менять в любое время.';}
  grid.querySelectorAll('[data-personality]').forEach(button=>{
   const id=button.dataset.personality,role=button.dataset.role;
   button.classList.toggle('active',personality[role]===id);
