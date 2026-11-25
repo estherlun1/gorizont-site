@@ -137,7 +137,9 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
       achievement: "Достижение",
       manual_reward: "Награда от вожатого",
       purchase: "Покупка в магазине",
-      adjustment: "Корректировка баланса"
+      adjustment: "Корректировка баланса",
+      penalty: "Штраф",
+      hint: "Подсказка"
     };
     const list = document.createElement("div");
     list.className = "auth-history-list";
@@ -168,6 +170,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
       title.textContent = friendlyGame
         ? `Награда за игру «${friendlyGame}»`
         : (isTechnicalDailyReward ? "Награда за игру" : (rawDescription || titles[row.transaction_type] || "Операция с горизонтиками"));
+      if (row.wallet_type === "winter_test") title.textContent = "Зимний тест · " + title.textContent;
       const dateLabel = document.createElement("div");
       dateLabel.className = "auth-history-date";
       const date = new Date(row.created_at);
@@ -205,7 +208,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
     }
     const { data: rows, error } = await supabase
       .from("point_transactions")
-      .select("amount, transaction_type, description, created_at")
+      .select("amount, wallet_type, transaction_type, description, created_at")
       .eq("participant_id", participant.id)
       .order("created_at", { ascending: false })
       .limit(10);
@@ -217,14 +220,15 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
     }
     const { data: allRows, error: balanceError } = await supabase
       .from("point_transactions")
-      .select("amount")
+      .select("amount, wallet_type")
       .eq("participant_id", participant.id);
     if (balanceError) {
       console.error("Не удалось рассчитать баланс горизонтиков:", balanceError);
       pointsValue.textContent = "Не удалось загрузить баланс горизонтиков";
     } else {
-      const total = (allRows || []).reduce((sum, row) => sum + Number(row.amount || 0), 0);
-      pointsValue.textContent = `${total} ${currencyWord(total)} на твоём счету`;
+      const regular = (allRows || []).filter(row => row.wallet_type !== "winter_test").reduce((sum, row) => sum + Number(row.amount || 0), 0);
+      const winter = (allRows || []).filter(row => row.wallet_type === "winter_test").reduce((sum, row) => sum + Number(row.amount || 0), 0);
+      pointsValue.textContent = `Доступно: ${regular} ${currencyWord(regular)} · Зимний тест: ${winter} ${currencyWord(winter)} (нельзя тратить)`;
     }
     renderPointsHistory(rows || []);
   }
