@@ -145,6 +145,14 @@
 #personalityPanel button{position:relative;z-index:1;pointer-events:auto;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 #finish:disabled{opacity:.48;cursor:not-allowed;filter:grayscale(.15)}
 #finalDoll{display:block;max-width:100%;width:auto;height:100%;object-fit:contain}
+</style><style id="character-interaction-fixes-20261125">
+#result{position:relative;isolation:isolate}
+#personalityPanel{position:relative!important;z-index:1000!important;isolation:isolate;pointer-events:auto!important;touch-action:manipulation}
+#personalityPanel *{pointer-events:auto}
+#personalityPanel button{position:relative!important;z-index:1001!important;pointer-events:auto!important;touch-action:manipulation;-webkit-tap-highlight-color:transparent;min-height:36px}
+#personalityPanel button:disabled{opacity:.4;cursor:not-allowed}
+#finish:disabled{opacity:.48;cursor:not-allowed;filter:grayscale(.15)}
+#finalDoll{display:block;max-width:100%;width:auto;height:100%;object-fit:contain}
 </style></head><body><a class="site-back" href="../index.html" aria-label="Вернуться на сайт">← На сайт</a><main class="game-shell">
 
 <div class="layout" id="game"><section class="hero-column">
@@ -227,9 +235,13 @@ function choosePersonality(button){
  }
  renderPersonality();
 }
-document.querySelectorAll('.personality-panel [data-personality],.personality-panel [data-mood]').forEach(button=>{
- button.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();choosePersonality(button);});
-});
+document.addEventListener('click',event=>{
+ const button=event.target.closest('#personalityPanel [data-personality],#personalityPanel [data-mood]');
+ if(!button)return;
+ event.preventDefault();event.stopPropagation();
+ if(button.disabled||!personalityCanChange())return;
+ choosePersonality(button);
+},true);
 function image(file){if(!cache[file]){const im=new Image();im.src=A+file;cache[file]=im;im.onload=draw}return cache[file]}
 function drawTo(c){const x=c.getContext('2d');x.clearRect(0,0,292,724);const put=f=>{const im=image(f);if(im.complete&&im.naturalWidth)x.drawImage(im,0,0,292,724)};put(DATA.bases[selectedCharacter]);if(chosen.shoes!==null)put(DATA.shoes[chosen.shoes]);if(chosen.pants!==null)put(DATA.pants[chosen.pants]);if(chosen.top!==null){put((chosen.topKind==='hoodies'?DATA.hoodies:DATA.shirts)[chosen.top]);put(chosen.topKind==='hoodies'?DATA.hoodieHeads[selectedCharacter][chosen.top]:DATA.shirtHeads[selectedCharacter])}}
 function draw(){drawTo(document.getElementById('doll'));if(!document.getElementById('result').classList.contains('hidden'))drawTo(document.getElementById('finalDoll'))}
@@ -376,5 +388,5 @@ async function restoreSavedAvatar(){
   }catch(error){console.warn('Не удалось загрузить сохранённый образ:',error)}
 }
 [...DATA.pants,...DATA.shoes,...DATA.shirts,...DATA.hoodies,Object.values(DATA.bases),Object.values(DATA.shirtHeads),...Object.values(DATA.hoodieHeads)].flat().forEach(image);renderItems();draw();renderPersonality();restoreSavedAvatar();
-</script><script type="module" src="../achievement-tracker.js"></script>
+</script><script src="../achievement-tracker.js?v=20261125-letter-achievement-fix"></script>
 </body></html>
