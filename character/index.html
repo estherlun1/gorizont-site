@@ -140,7 +140,12 @@
 .personality-lock{margin-top:8px;color:#8b6036;font:11px/1.4 Arial,sans-serif}
 @media(max-width:600px){.personality-panel{padding:12px}.personality-card{padding:8px}.personality-card small{min-height:42px}}
 </style><link rel="stylesheet" href="../assets/bear-paw-cursor.css">
-</head><body><a class="site-back" href="../index.html" aria-label="Вернуться на сайт">← На сайт</a><main class="game-shell">
+<style id="character-interaction-fixes">
+#personalityPanel{position:relative;z-index:20;isolation:isolate;pointer-events:auto}
+#personalityPanel button{position:relative;z-index:1;pointer-events:auto;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+#finish:disabled{opacity:.48;cursor:not-allowed;filter:grayscale(.15)}
+#finalDoll{display:block;max-width:100%;width:auto;height:100%;object-fit:contain}
+</style></head><body><a class="site-back" href="../index.html" aria-label="Вернуться на сайт">← На сайт</a><main class="game-shell">
 
 <div class="layout" id="game"><section class="hero-column">
 <div class="character-switch" aria-label="Выбор персонажа">
@@ -207,30 +212,54 @@ function renderPersonality(){
   lock.textContent='Характер уже выбран. Следующее изменение будет доступно '+next.toLocaleDateString('ru-RU',{day:'numeric',month:'long'})+'. Внешность героя можно менять и сейчас.';
  }else lock.textContent='Характер можно будет изменить через месяц. Внешность героя можно менять когда угодно.';
 }
-document.querySelector('.personality-panel')?.addEventListener('click',event=>{
- const moodButton=event.target.closest('[data-mood]');if(moodButton&&!moodButton.disabled){personality.secondary=personality.secondary===moodButton.dataset.mood?null:moodButton.dataset.mood;renderPersonality();return;}
- const button=event.target.closest('[data-personality]');if(!button||button.disabled)return;
- const id=button.dataset.personality,role=button.dataset.role;
- if(role==='primary'){
-  if(personality.primary===id){personality.primary=personality.secondary;personality.secondary=null}
-  else {if(personality.secondary===id)personality.secondary=personality.primary;personality.primary=id}
- }else{
-  if(personality.secondary===id)personality.secondary=null;
-  else if(personality.primary===id)return;
-  else personality.secondary=id;
+function choosePersonality(button){
+ if(!button||button.disabled)return;
+ if(button.dataset.mood){
+  const id=button.dataset.mood;
+  if(personality.primary===id)return;
+  personality.secondary=personality.secondary===id?null:id;
+ }else if(button.dataset.personality){
+  const id=button.dataset.personality,role=button.dataset.role;
+  if(role==='primary'){
+   if(personality.primary===id){personality.primary=personality.secondary;personality.secondary=null}
+   else {if(personality.secondary===id)personality.secondary=personality.primary;personality.primary=id}
+  }
  }
  renderPersonality();
+}
+document.querySelectorAll('.personality-panel [data-personality],.personality-panel [data-mood]').forEach(button=>{
+ button.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();choosePersonality(button);});
 });
 function image(file){if(!cache[file]){const im=new Image();im.src=A+file;cache[file]=im;im.onload=draw}return cache[file]}
 function drawTo(c){const x=c.getContext('2d');x.clearRect(0,0,292,724);const put=f=>{const im=image(f);if(im.complete&&im.naturalWidth)x.drawImage(im,0,0,292,724)};put(DATA.bases[selectedCharacter]);if(chosen.shoes!==null)put(DATA.shoes[chosen.shoes]);if(chosen.pants!==null)put(DATA.pants[chosen.pants]);if(chosen.top!==null){put((chosen.topKind==='hoodies'?DATA.hoodies:DATA.shirts)[chosen.top]);put(chosen.topKind==='hoodies'?DATA.hoodieHeads[selectedCharacter][chosen.top]:DATA.shirtHeads[selectedCharacter])}}
 function draw(){drawTo(document.getElementById('doll'));if(!document.getElementById('result').classList.contains('hidden'))drawTo(document.getElementById('finalDoll'))}
 function setCharacter(ch){selectedCharacter=ch;document.querySelectorAll('[data-switch]').forEach(b=>b.classList.toggle('active',b.dataset.switch===ch));draw();renderItems()}
 function showGame(ch){setCharacter(ch);document.getElementById('result').classList.add('hidden');document.getElementById('game').classList.remove('hidden')}
-function renderItems(){const box=document.getElementById('items');box.innerHTML='';DATA[kind].forEach((file,i)=>{const b=document.createElement('button');b.className='item';const selected=kind==='shirts'?chosen.top===i&&chosen.topKind==='shirts':kind==='hoodies'?chosen.top===i&&chosen.topKind==='hoodies':kind==='pants'?chosen.pants===i:chosen.shoes===i;if(selected)b.classList.add('selected');const im=document.createElement('img');im.src=A+file.replace('.webp','_thumb.webp');im.alt='Вариант одежды';b.append(im);b.onclick=()=>{if(kind==='shirts'||kind==='hoodies'){chosen.top=i;chosen.topKind=kind}else if(kind==='pants')chosen.pants=i;else chosen.shoes=i;renderItems();draw()};box.append(b)});document.querySelectorAll('[data-kind]').forEach(b=>b.classList.toggle('active',b.dataset.kind===kind));document.getElementById('hint').textContent={shirts:'Выбери футболку для своего героя.',hoodies:'Подбери уютную толстовку.',pants:'Выбери брюки или джинсы.',shoes:'Заверши образ подходящей обувью.'}[kind]}
+function updateFinishButton(){
+ const ready=chosen.top!==null&&chosen.pants!==null&&chosen.shoes!==null;
+ const button=document.getElementById('finish');
+ button.disabled=!ready;
+ button.setAttribute('aria-disabled',String(!ready));
+ button.title=ready?'Образ можно завершить':'Сначала выбери верх, низ и обувь';
+ button.textContent=ready?'Готово ✓':'Нужны верх, низ и обувь';
+}
+function renderItems(){const box=document.getElementById('items');box.innerHTML='';DATA[kind].forEach((file,i)=>{const b=document.createElement('button');b.className='item';b.type='button';const selected=kind==='shirts'?chosen.top===i&&chosen.topKind==='shirts':kind==='hoodies'?chosen.top===i&&chosen.topKind==='hoodies':kind==='pants'?chosen.pants===i:chosen.shoes===i;if(selected)b.classList.add('selected');const im=document.createElement('img');im.src=A+file.replace('.webp','_thumb.webp');im.alt='Вариант одежды';b.append(im);b.onclick=()=>{if(kind==='shirts'||kind==='hoodies'){chosen.top=i;chosen.topKind=kind}else if(kind==='pants')chosen.pants=i;else chosen.shoes=i;renderItems();draw()};box.append(b)});document.querySelectorAll('[data-kind]').forEach(b=>b.classList.toggle('active',b.dataset.kind===kind));document.getElementById('hint').textContent={shirts:'Выбери футболку для своего героя.',hoodies:'Подбери уютную толстовку.',pants:'Выбери брюки или джинсы.',shoes:'Заверши образ подходящей обувью.'}[kind];updateFinishButton()}
 document.querySelectorAll('[data-character]').forEach(b=>b.onclick=()=>showGame(b.dataset.character));document.querySelectorAll('[data-switch]').forEach(b=>b.onclick=()=>setCharacter(b.dataset.switch));document.querySelectorAll('[data-kind]').forEach(b=>b.onclick=()=>{kind=b.dataset.kind;renderItems()});
 
-document.getElementById('randomLook').onclick=()=>{const r=n=>Math.floor(Math.random()*n);chosen.topKind=Math.random()<.5?'shirts':'hoodies';chosen.top=r(12);chosen.pants=r(6);chosen.shoes=r(10);kind=chosen.topKind;renderItems();draw()};
-document.getElementById('finish').onclick=()=>{window.GorizontAchievements?.track('character_completed');document.getElementById('game').classList.add('hidden');document.getElementById('result').classList.remove('hidden');renderPersonality();draw()};
+document.getElementById('randomLook').onclick=()=>{const r=n=>Math.floor(Math.random()*n);chosen.topKind=Math.random()<.5?'shirts':'hoodies';chosen.top=r(12);chosen.pants=r(6);chosen.shoes=r(10);kind=chosen.topKind;renderItems();draw();window.GorizontAchievements?.track('character_randomized')};
+document.getElementById('finish').onclick=async()=>{
+ const ready=chosen.top!==null&&chosen.pants!==null&&chosen.shoes!==null;
+ if(!ready)return;
+ const button=document.getElementById('finish');button.disabled=true;
+ try{
+  const files=[DATA.bases[selectedCharacter],DATA.shoes[chosen.shoes],DATA.pants[chosen.pants],(chosen.topKind==='hoodies'?DATA.hoodies:DATA.shirts)[chosen.top],chosen.topKind==='hoodies'?DATA.hoodieHeads[selectedCharacter][chosen.top]:DATA.shirtHeads[selectedCharacter]];
+  await Promise.all(files.map(file=>{const im=image(file);if(im.complete&&im.naturalWidth)return Promise.resolve();return new Promise(resolve=>{im.addEventListener('load',resolve,{once:true});im.addEventListener('error',resolve,{once:true})})}));
+  window.GorizontAchievements?.track('character_completed');
+  document.getElementById('game').classList.add('hidden');
+  document.getElementById('result').classList.remove('hidden');
+  renderPersonality();draw();
+ }finally{button.disabled=false;updateFinishButton()}
+};
 document.getElementById('again').onclick=()=>{chosen={top:null,topKind:null,pants:null,shoes:null};kind='shirts';document.getElementById('result').classList.add('hidden');document.getElementById('game').classList.remove('hidden');renderItems();draw()};
 document.getElementById('backToSite')?.addEventListener('click',()=>{if(history.length>1)history.back();else location.href='../index.html'});
 
