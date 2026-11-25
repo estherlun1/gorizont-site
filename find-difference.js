@@ -120,9 +120,6 @@ const nextButton = $('#next-level-btn');
 
 function render() {
   rewardRequestStarted = false;
-  hintsUsed = 0;
-  hintAttemptId = makeHintId();
-  pendingHintRequest = null;
   syncHintButton();
   const level = levels[levelIndex];
   $('#level-title').textContent = level.title;
@@ -197,7 +194,11 @@ $('#reset-btn').addEventListener('click', () => {
   status.textContent = `Начали заново. Найди все ${levels[levelIndex].total} отличий.`;
 });
 $('#again-btn').addEventListener('click', () => {
+  levelIndex = 0;
   found.clear();
+  hintsUsed = 0;
+  hintAttemptId = makeHintId();
+  pendingHintRequest = null;
   render();
 });
 nextButton.addEventListener('click', () => {
@@ -235,7 +236,7 @@ async function showNextHint() {
           "Authorization": "Bearer " + session.access_token
         },
         body: JSON.stringify({
-          game_slug: "find_difference_" + (levelIndex + 1),
+          game_slug: "find_difference",
           attempt_id: hintAttemptId,
           hint_number: pendingHintRequest.hint_number,
           idempotency_key: pendingHintRequest.idempotency_key
