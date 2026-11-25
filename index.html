@@ -1799,7 +1799,59 @@ main {
 @media(min-width:851px){#mysteryLetterTrigger{width:126px;height:126px;right:5%;bottom:auto;top:34%}}
 @media(max-width:600px){#mysteryLetterTrigger{position:fixed!important;right:12px;bottom:calc(14px + env(safe-area-inset-bottom));width:92px;height:92px;z-index:100101}}
 @media(prefers-reduced-motion:reduce){#mysteryLetterTrigger,.mystery-letter-modal.opening #mysteryLetterVisual{animation:none!important}}
-</style></head>
+</style><style id="profile-dashboard-layout">
+.auth-profile{display:block!important;text-align:left!important}
+.profile-identity{display:flex;align-items:center;gap:16px;margin:0 0 14px;padding:16px;border:1px solid #e1c99f;border-radius:18px;background:linear-gradient(135deg,#fff7e7,#e8efdc);text-align:left}
+.auth-profile-avatar{flex:0 0 112px;width:112px;height:112px;margin:0;border-radius:18px;background:#f0dfbf;border:2px solid #d6b27b;box-shadow:0 5px 14px #59452b20;font-size:42px}
+.auth-profile-avatar img{object-fit:contain;background:#f4e4c6}
+.profile-identity-main{min-width:0;flex:1}
+.profile-identity-main .auth-profile-kicker{margin:0 0 4px}
+.profile-identity-main h3{font-size:clamp(21px,4vw,28px);line-height:1.12;overflow-wrap:anywhere}
+.profile-identity-main .auth-profile-nick{margin:4px 0 8px;font-size:12px}
+.profile-identity-main .auth-hero-card{margin:0 0 7px;padding:8px 10px}
+.profile-identity-main .auth-hero-card strong{font-size:13px}
+.profile-identity-main .auth-hero-card span{font-size:11px}
+.profile-identity-main .auth-hero-card small{font-size:10px}
+.auth-avatar-edit{margin:0;font-size:11px}
+.profile-edit-details{margin:0 0 14px;border:1px solid #e4d3b2;border-radius:12px;background:#fffaf0;text-align:left}
+.profile-edit-details summary{padding:10px 13px;color:#607b43;font-size:12px;font-weight:800;cursor:pointer}
+.profile-edit-details section{padding:0 12px 12px}
+.profile-edit-details form{display:flex;gap:8px;flex-wrap:wrap}
+.profile-edit-details input,.profile-edit-details button{min-height:40px;border-radius:10px;padding:9px 12px}
+.profile-edit-details input{flex:1;min-width:140px;border:1px solid #d8e0d7;background:#fff}
+.profile-edit-details button{border:0;background:#315846;color:#fff;font-weight:800}
+.profile-edit-details small{display:block;margin-top:7px;color:#82694e;font-size:11px}
+.profile-section-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 13px;padding:5px;border-radius:16px;background:#e8e0cf}
+.profile-section-tab{min-height:62px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:1px solid transparent;border-radius:12px;background:transparent;color:#765334;font-size:19px;font-weight:800;cursor:pointer}
+.profile-section-tab span{font-size:12px}
+.profile-section-tab.active{background:#fff8e9;border-color:#dfc49a;color:#315846;box-shadow:0 3px 10px #65441d16}
+.profile-tab-panel{padding:14px;border:1px solid #e4c99f;border-radius:17px;background:rgba(255,255,255,.48);text-align:left}
+.profile-tab-panel[hidden]{display:none!important}
+.profile-tab-panel h4{margin:0 0 8px;color:#315846;font-size:17px}
+.profile-panel-intro{margin:0 0 12px;color:#806b51;font-size:12px;line-height:1.45}
+#gorizont-achievement-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+#gorizont-friend-search{display:flex;gap:8px;margin-bottom:12px}
+#gorizont-friend-search input{flex:1;min-width:0;padding:11px;border:1px solid #cbd8c7;border-radius:12px;background:#fff}
+#gorizont-friend-search button{padding:10px 14px;border:0;border-radius:12px;background:#315846;color:#fff;font-weight:800}
+#gorizont-friends h5{margin:14px 0 7px;color:#315846}
+#gorizont-friend-incoming,#gorizont-friend-list{font-size:13px}
+#gorizont-friend-progress{margin-top:12px}
+.profile-tab-panel .auth-points-preview{margin-bottom:12px;background:#fff8e9}
+.profile-tab-panel .auth-points-preview strong{font-size:16px}
+.profile-tab-panel .auth-points-preview small{font-size:13px}
+.profile-tab-panel .auth-currency-explainer{margin:0 0 12px}
+.profile-tab-panel .auth-points-history{margin:0}
+@media(max-width:600px){
+ .profile-identity{align-items:flex-start;gap:12px;padding:12px}
+ .auth-profile-avatar{flex-basis:88px;width:88px;height:88px;border-radius:15px}
+ .profile-identity-main h3{font-size:22px}
+ .profile-section-tabs{gap:5px;padding:4px}
+ .profile-section-tab{min-height:58px}
+ .profile-section-tab span{font-size:10px}
+ .profile-tab-panel{padding:11px}
+}
+</style>
+</head>
 <body>
 <div id="celebrationLayer" aria-hidden="true"></div>
 
@@ -2837,46 +2889,76 @@ render();
     <h2 id="authTitle">Добро пожаловать в Горизонт!</h2>
     <p class="auth-intro">Создай аккаунт, собирай горизонтики за игры и меняй их на лагерные подарки.</p>
     <div class="auth-profile" id="authProfile" hidden>
-      <div class="auth-profile-avatar" id="authProfileAvatar" aria-label="Аватар профиля">🌲</div>
-      <a class="auth-avatar-edit" href="character/index.html">Создай аватар и выбери свой характер →</a>
-      <div class="auth-hero-card" id="authHeroCard" hidden>
-        <p class="auth-hero-kicker">ХАРАКТЕР ТВОЕГО ГЕРОЯ</p>
-        <strong id="authHeroPrimary"></strong>
-        <span id="authHeroSecondary"></span>
-        <small id="authHeroNextChange"></small>
+      <div class="profile-identity">
+        <div class="auth-profile-avatar" id="authProfileAvatar" aria-label="Аватар профиля">🌲</div>
+        <div class="profile-identity-main">
+          <p class="auth-profile-kicker">ТВОЙ ГЕРОЙ</p>
+          <h3 id="authProfileName">Привет!</h3>
+          <p class="auth-profile-nick" id="authProfileNick"></p>
+          <div class="auth-hero-card" id="authHeroCard">
+            <strong id="authHeroPrimary">Характер ещё не выбран</strong>
+            <span id="authHeroSecondary">Выбери черты своего героя</span>
+            <small id="authHeroNextChange"></small>
+          </div>
+          <a class="auth-avatar-edit" href="character/index.html">Изменить персонажа и характер →</a>
+        </div>
       </div>
-      <p class="auth-profile-kicker">ТЫ УЖЕ В КОМАНДЕ!</p>
-      <h3 id="authProfileName">Привет!</h3>
-      <p class="auth-profile-nick" id="authProfileNick"></p>
-      <div class="auth-points-preview">
-        <span>⭐</span>
-        <span><strong>Баланс горизонтиков</strong><small>Загружаем баланс...</small></span>
-      </div>
-      <div class="auth-currency-explainer">
-        <strong>Что такое горизонтики?</strong>
-        <p>Это валюта лагеря «Горизонт». Зарабатывай её за игры, достижения и участие в мероприятиях, а потом обменивай на мерч и подарки в лагерном магазине!</p>
-      </div>
-      <section id="gorizont-nickname-editor" style="margin:18px 0;padding:14px;border:1px solid #e2d2ad;border-radius:16px;background:#fff9ec"><h4 style="margin:0 0 8px;color:#315846">Игровой ник</h4><form id="gorizont-nickname-form" style="display:flex;gap:8px;flex-wrap:wrap"><input id="gorizont-nickname-input" minlength="2" maxlength="30" required aria-label="Новый игровой ник" style="flex:1;min-width:150px;padding:10px;border:1px solid #d8e0d7;border-radius:10px"><button type="submit" style="border:0;border-radius:10px;padding:10px 14px;background:#315846;color:white;font-weight:700">Сохранить</button></form><small id="gorizont-nickname-status">Ник должен быть корректным и доброжелательным.</small></section>
-      <section id="gorizont-achievements" style="margin:18px 0;padding:16px;border:1px solid #e2d2ad;border-radius:18px;background:#fff9ec">
-        <h4 style="margin:0 0 10px;color:#315846">Мои достижения</h4>
-        <p style="margin:0 0 12px;font-size:13px;color:#76644c">Открывай значки за игры и собирай горизонтики.</p>
-        <div id="gorizont-achievement-list" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px"><p>Загружаем достижения…</p></div>
+
+      <details class="profile-edit-details" id="profileNicknameDetails">
+        <summary>Изменить игровой ник</summary>
+        <section id="gorizont-nickname-editor">
+          <form id="gorizont-nickname-form">
+            <input id="gorizont-nickname-input" minlength="2" maxlength="30" required aria-label="Новый игровой ник" placeholder="Новый игровой ник">
+            <button type="submit">Сохранить</button>
+          </form>
+          <small id="gorizont-nickname-status">Ник должен быть корректным и доброжелательным.</small>
+        </section>
+      </details>
+
+      <nav class="profile-section-tabs" role="tablist" aria-label="Разделы профиля">
+        <button type="button" class="profile-section-tab" data-profile-tab="achievements" role="tab" aria-selected="false">🏅 <span>Достижения</span></button>
+        <button type="button" class="profile-section-tab" data-profile-tab="friends" role="tab" aria-selected="false">👥 <span>Друзья</span></button>
+        <button type="button" class="profile-section-tab active" data-profile-tab="balance" role="tab" aria-selected="true">⭐ <span>Баланс</span></button>
+      </nav>
+
+      <section class="profile-tab-panel" data-profile-panel="achievements" role="tabpanel" hidden>
+        <section id="gorizont-achievements">
+          <h4>Мои достижения</h4>
+          <p class="profile-panel-intro">Все награды, которые ты открыл в приключениях Горизонта.</p>
+          <div id="gorizont-achievement-list"><p>Загружаем достижения…</p></div>
+        </section>
       </section>
-      <section id="gorizont-friends" style="margin:18px 0;padding:16px;border:1px solid #d3e1d2;border-radius:18px;background:#f5fbf3">
-        <h4 style="margin:0 0 10px;color:#315846">Друзья</h4>
-        <form id="gorizont-friend-search" style="display:flex;gap:8px;margin-bottom:12px">
-          <input id="gorizont-friend-query" type="search" minlength="2" placeholder="Найти по игровому нику" aria-label="Найти друга по нику" style="flex:1;min-width:0;padding:11px;border:1px solid #cbd8c7;border-radius:12px">
-          <button type="submit" style="padding:10px 14px;border:0;border-radius:12px;background:#315846;color:white;font-weight:700">Найти</button>
-        </form>
-        <div id="gorizont-friend-search-results" aria-live="polite"></div>
-        <h5 style="margin:14px 0 8px;color:#315846">Входящие заявки</h5>
-        <div id="gorizont-friend-incoming"><p style="font-size:13px">Загружаем…</p></div>
-        <h5 style="margin:14px 0 8px;color:#315846">Мои друзья</h5>
-        <div id="gorizont-friend-list"><p style="font-size:13px">Загружаем…</p></div><div id="gorizont-friend-progress" style="margin-top:12px"></div>
+
+      <section class="profile-tab-panel" data-profile-panel="friends" role="tabpanel" hidden>
+        <section id="gorizont-friends">
+          <h4>Друзья</h4>
+          <p class="profile-panel-intro">Находи друзей по игровому нику и следи за их приключениями.</p>
+          <form id="gorizont-friend-search">
+            <input id="gorizont-friend-query" type="search" minlength="2" placeholder="Найти по игровому нику" aria-label="Найти друга по нику">
+            <button type="submit">Найти</button>
+          </form>
+          <div id="gorizont-friend-search-results" aria-live="polite"></div>
+          <h5>Входящие заявки</h5>
+          <div id="gorizont-friend-incoming"><p>Загружаем…</p></div>
+          <h5>Мои друзья</h5>
+          <div id="gorizont-friend-list"><p>Загружаем…</p></div>
+          <div id="gorizont-friend-progress"></div>
+        </section>
       </section>
-      <section class="auth-points-history" aria-live="polite">
-        <h4>История операций</h4>
-        <div id="authPointsHistory"><p class="auth-history-empty">Загружаем историю...</p></div>
+
+      <section class="profile-tab-panel" data-profile-panel="balance" role="tabpanel">
+        <div class="auth-points-preview">
+          <span>⭐</span>
+          <span><strong>Твой баланс</strong><small>Загружаем баланс...</small></span>
+        </div>
+        <div class="auth-currency-explainer">
+          <strong>Что такое горизонтики?</strong>
+          <p>Это валюта лагеря «Горизонт». Зарабатывай её за игры, достижения и участие в мероприятиях, а потом обменивай на мерч и подарки в лагерном магазине!</p>
+        </div>
+        <section class="auth-points-history" aria-live="polite">
+          <h4>История операций</h4>
+          <div id="authPointsHistory"><p class="auth-history-empty">Загружаем историю...</p></div>
+        </section>
       </section>
       <button class="auth-submit auth-logout" id="authLogout" type="button">Выйти из аккаунта</button>
     </div>
