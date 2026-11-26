@@ -3,16 +3,23 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 (() => {
   const SUPABASE_URL = "https://jrvukdqqrmfjbtskrayy.supabase.co";
   const SUPABASE_KEY = "sb_publishable_AAHg7Xgeq_KRm6PdropyMg_V6op0enJ";
-  const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
-    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false, storageKey: "gorizont-auth-session" }
-  });
   const path = location.pathname;
   if (path.endsWith("/admin.html")) return;
   const isHome = path.endsWith("/") || path.endsWith("/index.html");
+  // На главной странице auth-ui.js уже создал основной Supabase-клиент.
+  // Не создаём второй клиент с тем же storageKey: это может конфликтовать
+  // при обновлении и сохранении refresh-токена.
+  const supabase = window.GorizontAuth ? null : createClient(SUPABASE_URL, SUPABASE_KEY, {
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false, storageKey: "gorizont-auth-session" }
+  });
+  const getCurrentSession = async () => {
+    if (window.GorizontAuth?.getSession) return window.GorizontAuth.getSession();
+    return supabase.auth.getSession();
+  };
 
   async function enforceAccess() {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      const { data: { session } } = await getCurrentSession();
       const headers = { "Content-Type": "application/json", "apikey": SUPABASE_KEY };
       if (session?.access_token) headers.Authorization = "Bearer " + session.access_token;
       const response = await fetch(SUPABASE_URL + "/functions/v1/site-access-status", {
@@ -24,10 +31,19 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
       if (isHome) {
         let currentSession = session;
-        supabase.auth.onAuthStateChange((_event, nextSession) => {
-          currentSession = nextSession;
-          if (!currentSession) forceLoginOnly();
-        });
+        if (supabase) {
+          supabase.auth.onAuthStateChange((_event, nextSession) => {
+            currentSession = nextSession;
+            if (!currentSession) forceLoginOnly();
+          });
+        } else {
+          window.addEventListener("gorizont:auth-changed", () => {
+            void getCurrentSession().then(({data}) => {
+              currentSession = data.session;
+              if (!currentSession) forceLoginOnly();
+            });
+          });
+        }
         function forceLoginOnly() {
           if (currentSession) return;
           const registerTab = document.getElementById("authRegisterTab");
